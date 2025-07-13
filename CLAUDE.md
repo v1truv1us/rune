@@ -62,6 +62,11 @@ Rune is a developer-first CLI productivity platform written in Go that automates
 - `make run` - Run the application (use `ARGS="..."` for arguments)
 - `./bin/rune` - Run built binary directly
 
+### Release Validation
+- `goreleaser check` - Validate .goreleaser.yaml configuration
+- `goreleaser build --snapshot --clean` - Test build without release
+- **IMPORTANT**: Always run `goreleaser check` before pushing new tags to ensure release workflow will succeed
+
 ## Configuration
 
 Rune uses YAML configuration at `~/.rune/config.yaml` with the following structure:

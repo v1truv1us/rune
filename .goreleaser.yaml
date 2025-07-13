@@ -60,27 +60,22 @@ homebrew_casks:
       name: homebrew-tap
       branch: main
       token: "{{ .Env.HOMEBREW_TAP_PAT }}"
-    directory: Formula
+    directory: Casks
     commit_author:
       name: goreleaserbot
       email: bot@goreleaser.com
-    commit_message_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-    install: |
-      bin.install "rune"
-
-      # Install shell completions
-      bash_completion.install "completions/rune.bash" => "rune"
-      zsh_completion.install "completions/rune.zsh" => "_rune"
-      fish_completion.install "completions/rune.fish"
-
-      # Create default config directory
-      (etc/"rune").mkpath
-    test: |
-      system "#{bin}/rune", "--version"
-      system "#{bin}/rune", "--help"
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     dependencies:
-      - name: git
-        type: optional
+      - formula: git
+    completions:
+      bash: completions/rune.bash
+      zsh: completions/rune.zsh
+      fish: completions/rune.fish
+    hooks:
+      post:
+        install: |
+          # Create default config directory
+          system_command "/bin/mkdir", args: ["-p", "#{ENV['HOME']}/.rune"]
     caveats: |
       To get started with rune:
         1. Initialize your configuration: rune init --guided
