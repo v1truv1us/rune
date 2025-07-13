@@ -3,40 +3,40 @@
 ## High Priority (P0) - Must Have for MVP
 
 ### Core Features
-- [ ] **Time Tracking System**
-  - [ ] Basic start/stop/pause/resume functionality
-  - [ ] Git integration for automatic project detection
-  - [ ] Idle detection with configurable thresholds
-  - [ ] Session persistence across restarts
+- [x] **Time Tracking System** ✅ COMPLETED
+  - [x] Basic start/stop/pause/resume functionality
+  - [x] Git integration for automatic project detection
+  - [x] Idle detection with configurable thresholds
+  - [x] Session persistence across restarts (BBolt database)
 
-- [ ] **Ritual Automation Engine**
-  - [ ] YAML configuration parsing and validation
-  - [ ] Command execution with progress indicators
-  - [ ] Conditional execution based on day/project
-  - [ ] Error handling and rollback mechanisms
+- [x] **Ritual Automation Engine** ✅ COMPLETED
+  - [x] YAML configuration parsing and validation
+  - [x] Command execution with progress indicators
+  - [x] Conditional execution based on day/project
+  - [x] Error handling and rollback mechanisms
 
-- [ ] **Configuration Management**
-  - [ ] Schema validation with helpful error messages
+- [x] **Configuration Management** ✅ COMPLETED
+  - [x] Schema validation with helpful error messages
   - [ ] Migration tools from Watson/Timewarrior
   - [ ] Example configurations for common workflows
   - [ ] Configuration file encryption for sensitive data
 
-- [ ] **Cross-Platform DND Automation**
-  - [ ] macOS Do Not Disturb integration
+- [x] **Cross-Platform DND Automation** ✅ COMPLETED
+  - [x] macOS Do Not Disturb integration (via Shortcuts)
   - [ ] Windows Focus Assist integration
   - [ ] Linux desktop environment integration
-  - [ ] Fallback mechanisms for unsupported systems
+  - [x] Fallback mechanisms for unsupported systems
 
-- [ ] **Basic Reporting**
-  - [ ] Daily/weekly time summaries
-  - [ ] Project-based time allocation
-  - [ ] Export to CSV/JSON formats
-  - [ ] Terminal-based visualization
+- [x] **Basic Reporting** ✅ COMPLETED
+  - [x] Daily/weekly time summaries
+  - [x] Project-based time allocation
+  - [x] Export to CSV/JSON formats
+  - [x] Terminal-based visualization
 
-- [ ] **Shell Completions & CLI Polish**
-  - [ ] Bash completion scripts
-  - [ ] Zsh completion scripts
-  - [ ] Fish completion scripts
+- [x] **Shell Completions & CLI Polish** ✅ COMPLETED
+  - [x] Bash completion scripts
+  - [x] Zsh completion scripts
+  - [x] Fish completion scripts
   - [ ] PowerShell completion scripts
   - [ ] **CLI Visual Enhancements**
     - [ ] Add Rune ASCII logo to --version output
@@ -46,13 +46,14 @@
     - [ ] Implement interactive prompts with validation
 
 ### CLI Interface
-- [ ] **Command Structure Implementation**
-  - [ ] `rune init --guided` with interactive setup
-  - [ ] `rune start` with ritual execution
-  - [ ] `rune pause/resume` with state management
-  - [ ] `rune status` with current session info
-  - [ ] `rune stop` with cleanup rituals
-  - [ ] `rune report` with flexible filtering
+- [x] **Command Structure Implementation** ✅ COMPLETED
+  - [x] `rune init --guided` with interactive setup
+  - [x] `rune start` with ritual execution
+  - [x] `rune pause/resume` with state management
+  - [x] `rune status` with current session info
+  - [x] `rune stop` with cleanup rituals
+  - [x] `rune report` with flexible filtering
+  - [x] Additional commands: `config`, `ritual`, `update`, `completion`
 
 ## Medium Priority (P1) - Should Have
 
@@ -158,6 +159,23 @@
   - [ ] Team productivity dashboards
   - [ ] Cross-team ritual sharing
 
+## Recently Identified Issues (January 2025)
+
+### Session Display & UX Issues
+- [ ] **Relative Time Display for Sessions**
+  - [ ] Implement `formatRelativeTime()` function in utils.go
+  - [ ] Add relative time display to session reports (e.g., "2h ago", "yesterday") 
+  - [ ] Update status command to show when current session started
+  - [ ] Handle edge cases: "just now", "yesterday", "2 days ago", etc.
+  - [ ] Issue: Documentation shows example with "(2h 30m ago)" but feature doesn't exist in code
+
+### Release & Distribution
+- [ ] **GoReleaser Configuration**
+  - [x] Fix homebrew_casks syntax issues (completed January 2025)
+  - [x] Add release validation rules to CLAUDE.md (completed January 2025)
+  - [x] Update all documentation to use `--cask` flag (completed January 2025)
+  - [ ] Test actual Homebrew cask installation workflow
+
 ## Technical Debt & Maintenance
 
 ### Code Quality
@@ -225,5 +243,11 @@
 
 ---
 
-**Last Updated**: January 2025  
+**Last Updated**: July 13, 2025  
 **Next Review**: Weekly during active development
+
+### Recent Updates (July 13, 2025)
+- ✅ Updated completion status for MVP core features
+- 📋 Added newly identified relative time display issues
+- 🚀 Added completed GoReleaser/release workflow fixes
+- 📝 Many MVP features are actually complete - project is further along than TODO reflected
