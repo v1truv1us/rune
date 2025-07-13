@@ -71,7 +71,7 @@ if [ "$SKIP_HOMEBREW" = false ] && command -v brew >/dev/null 2>&1; then
     echo ""
     echo -e "${YELLOW}📦 Homebrew detected!${NC}"
     echo "For easier installation and updates, consider using:"
-    echo "  brew install ferg-cod3s/tap/rune"
+    echo "  brew install --cask ferg-cod3s/tap/rune"
     echo ""
     echo "Or continue with direct binary installation..."
     echo ""
@@ -159,7 +159,7 @@ if command -v "$BINARY_NAME" >/dev/null 2>&1; then
     echo ""
     if [ "$SKIP_HOMEBREW" = false ] && command -v brew >/dev/null 2>&1; then
         echo "💡 For future updates, you can also use:"
-        echo "  brew install ferg-cod3s/tap/rune  # Switch to Homebrew"
+        echo "  brew install --cask ferg-cod3s/tap/rune  # Switch to Homebrew"
         echo "  brew upgrade rune                 # Update via Homebrew"
         echo ""
     fi

@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Homebrew Formula**: Enabled Homebrew formula generation in release workflow
 
 ### Fixed
-- **Release Workflow**: Fixed Homebrew tap integration to enable `brew install ferg-cod3s/tap/rune`
+- **Release Workflow**: Fixed Homebrew tap integration to enable `brew install --cask ferg-cod3s/tap/rune`
 
 ## [0.1.0-alpha.3] - 2025-01-09
 

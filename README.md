@@ -29,7 +29,7 @@ Rune is a developer-first CLI productivity platform that automates daily work ri
 
 **Homebrew (Recommended for macOS/Linux)**
 ```bash
-brew install ferg-cod3s/tap/rune
+brew install --cask ferg-cod3s/tap/rune
 ```
 
 **Quick Install Script (Linux/macOS)**

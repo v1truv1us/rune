@@ -19,7 +19,7 @@ curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | s
 ### Homebrew (macOS/Linux)
 ```bash
 brew tap ferg-cod3s/tap
-brew install rune
+brew install --cask rune
 ```
 
 ### Go Install

@@ -22,7 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | s
 - Homebrew formula (requires separate tap repository)
 
 ### 4. Package Managers
-- **Homebrew**: `brew tap ferg-cod3s/tap && brew install rune`
+- **Homebrew**: `brew tap ferg-cod3s/tap && brew install --cask rune`
 - **Debian/Ubuntu**: Download `.deb` from releases
 - **RHEL/CentOS**: Download `.rpm` from releases
 
