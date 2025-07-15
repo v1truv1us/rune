@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Rune CLI - Ancient wisdom for modern workflows">
+  <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+      <div class="text-center">
+        <pre class="text-blue-400 text-sm md:text-base font-mono mb-8 inline-block">
+ ______     __  __     __   __     ______   
+/\  == \   /\ \/\ \   /\ "-.\ \   /\  ___\  
+\ \  __&lt;   \ \ \_\ \  \ \ \-.  \  \ \  __\  
+ \ \_\ \_\  \ \_____\  \ \_\\"\_\  \ \_____\
+  \/_/ /_/   \/_____/   \/_/ \/_/   \/_____/ 
+        </pre>
+        
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+          Ancient wisdom for<br />
+          <span class="text-blue-400">modern workflows</span>
+        </h1>
+        
+        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          A developer-first CLI productivity platform that automates daily work rituals, 
+          enforces healthy work-life boundaries, and integrates seamlessly with existing workflows.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/getting-started" 
+             class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+            Get Started
+          </a>
+          <a href="/docs" 
+             class="px-8 py-3 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 font-semibold rounded-lg transition-colors">
+            Documentation
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl font-bold text-white mb-4">Why Rune?</h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        Built for developers who want to automate their workflow without sacrificing control.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+        <div class="text-blue-400 text-2xl mb-4">⚡</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Ritual Automation</h3>
+        <p class="text-gray-400">
+          Automate your daily start/stop workflows with custom commands and project-specific rituals.
+        </p>
+      </div>
+      
+      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+        <div class="text-blue-400 text-2xl mb-4">⏱️</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Smart Time Tracking</h3>
+        <p class="text-gray-400">
+          Intelligent time tracking with Git integration and automatic project detection.
+        </p>
+      </div>
+      
+      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+        <div class="text-blue-400 text-2xl mb-4">🔒</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Focus Protection</h3>
+        <p class="text-gray-400">
+          OS-level Do Not Disturb automation and intelligent break reminders.
+        </p>
+      </div>
+      
+      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+        <div class="text-blue-400 text-2xl mb-4">🌐</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Cross-Platform</h3>
+        <p class="text-gray-400">
+          Works on macOS, Linux, and Windows with native shell completions.
+        </p>
+      </div>
+      
+      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+        <div class="text-blue-400 text-2xl mb-4">📝</div>
+        <h3 class="text-xl font-semibold text-white mb-2">YAML Configuration</h3>
+        <p class="text-gray-400">
+          Simple, version-controlled configuration that scales with your workflow.
+        </p>
+      </div>
+      
+      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+        <div class="text-blue-400 text-2xl mb-4">🛡️</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Security-First</h3>
+        <p class="text-gray-400">
+          Sandboxed command execution with comprehensive audit logging.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Start Section -->
+  <div class="bg-gray-800/30 py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-white mb-4">Quick Start</h2>
+        <p class="text-gray-400">Get up and running in minutes</p>
+      </div>
+      
+      <div class="bg-gray-900 rounded-lg p-6 font-mono text-sm overflow-x-auto">
+        <div class="text-gray-400 mb-2"># Install via Homebrew</div>
+        <div class="text-green-400">$ brew install --cask ferg-cod3s/tap/rune</div>
+        <br/>
+        <div class="text-gray-400 mb-2"># Initialize your configuration</div>
+        <div class="text-green-400">$ rune init --guided</div>
+        <br/>
+        <div class="text-gray-400 mb-2"># Start your workday</div>
+        <div class="text-green-400">$ rune start</div>
+      </div>
+      
+      <div class="text-center mt-8">
+        <a href="/getting-started" 
+           class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+          View detailed installation guide →
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  docs:
+    build: .
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    
+  # Development service
+  docs-dev:
+    image: oven/bun:1-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "4321:4321"
+    command: sh -c "bun install && bun run dev --host 0.0.0.0"
+    environment:
+      - NODE_ENV=development
+    profiles:
+      - dev
+EOF < /dev/null

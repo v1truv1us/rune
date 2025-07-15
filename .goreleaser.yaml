@@ -18,7 +18,11 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X github.com/ferg-cod3s/rune/internal/commands.version={{.Version}} -X github.com/ferg-cod3s/rune/internal/telemetry.version={{.Version}} -X github.com/ferg-cod3s/rune/internal/telemetry.segmentWriteKey={{.Env.RUNE_SEGMENT_WRITE_KEY}} -X github.com/ferg-cod3s/rune/internal/telemetry.sentryDSN={{.Env.RUNE_SENTRY_DSN}}
+      - -s -w
+      - -X github.com/ferg-cod3s/rune/internal/commands.version={{.Version}}
+      - -X github.com/ferg-cod3s/rune/internal/telemetry.version={{.Version}}
+      - -X github.com/ferg-cod3s/rune/internal/telemetry.segmentWriteKey={{.Env.RUNE_SEGMENT_WRITE_KEY}}
+      - -X github.com/ferg-cod3s/rune/internal/telemetry.sentryDSN={{.Env.RUNE_SENTRY_DSN}}
 
 archives:
   - formats: [tar.gz]

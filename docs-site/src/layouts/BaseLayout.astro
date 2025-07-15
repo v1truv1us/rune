@@ -1,0 +1,80 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Ancient wisdom for modern workflows - Rune CLI Documentation" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-gray-950 text-gray-100 min-h-screen">
+    <nav class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/" class="flex items-center space-x-3">
+              <div class="font-mono text-xl font-bold text-blue-400">RUNE</div>
+              <span class="text-gray-400">CLI</span>
+            </a>
+          </div>
+          <div class="flex items-center space-x-8">
+            <a href="/docs" class="text-gray-300 hover:text-blue-400 transition-colors">Docs</a>
+            <a href="/getting-started" class="text-gray-300 hover:text-blue-400 transition-colors">Getting Started</a>
+            <a href="/examples" class="text-gray-300 hover:text-blue-400 transition-colors">Examples</a>
+            <a href="https://github.com/ferg-cod3s/rune" class="text-gray-300 hover:text-blue-400 transition-colors">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <main>
+      <slot />
+    </main>
+    
+    <footer class="border-t border-gray-800 mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="col-span-2">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="font-mono text-xl font-bold text-blue-400">RUNE</div>
+              <span class="text-gray-400">CLI</span>
+            </div>
+            <p class="text-gray-400 max-w-md">
+              Ancient wisdom for modern workflows. A developer-first CLI productivity platform.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-gray-200 font-semibold mb-4">Documentation</h3>
+            <ul class="space-y-2">
+              <li><a href="/getting-started" class="text-gray-400 hover:text-blue-400 transition-colors">Getting Started</a></li>
+              <li><a href="/docs/commands" class="text-gray-400 hover:text-blue-400 transition-colors">Commands</a></li>
+              <li><a href="/docs/configuration" class="text-gray-400 hover:text-blue-400 transition-colors">Configuration</a></li>
+              <li><a href="/examples" class="text-gray-400 hover:text-blue-400 transition-colors">Examples</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-gray-200 font-semibold mb-4">Community</h3>
+            <ul class="space-y-2">
+              <li><a href="https://github.com/ferg-cod3s/rune" class="text-gray-400 hover:text-blue-400 transition-colors">GitHub</a></li>
+              <li><a href="https://github.com/ferg-cod3s/rune/issues" class="text-gray-400 hover:text-blue-400 transition-colors">Issues</a></li>
+              <li><a href="https://github.com/ferg-cod3s/rune/discussions" class="text-gray-400 hover:text-blue-400 transition-colors">Discussions</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <p>© 2024 Rune CLI. Licensed under MIT.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

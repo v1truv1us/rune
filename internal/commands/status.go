@@ -98,14 +98,25 @@ func runStatus(cmd *cobra.Command, args []string) error {
 
 	nm := notifications.NewNotificationManager(notificationEnabled)
 	dndManager := dnd.NewDNDManager(nm)
-	dndEnabled, err := dndManager.IsEnabled()
-	if err != nil {
-		fmt.Println("Focus Mode:   Unknown (detection failed)")
+	
+	// Check if shortcuts are set up
+	shortcutsOK, shortcutsErr := dndManager.CheckShortcutsSetup()
+	
+	if shortcutsErr != nil {
+		fmt.Println("Focus Mode:   Not supported on this platform")
+	} else if !shortcutsOK {
+		fmt.Println("Focus Mode:   Not configured (run 'rune start' for setup)")
 	} else {
-		if dndEnabled {
-			fmt.Println("Focus Mode:   Enabled")
+		// Try to detect current status
+		dndEnabled, err := dndManager.IsEnabled()
+		if err != nil {
+			fmt.Println("Focus Mode:   Available (detection unavailable)")
 		} else {
-			fmt.Println("Focus Mode:   Disabled")
+			if dndEnabled {
+				fmt.Println("Focus Mode:   Enabled")
+			} else {
+				fmt.Println("Focus Mode:   Available (currently off)")
+			}
 		}
 	}
 

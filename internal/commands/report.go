@@ -96,28 +96,21 @@ func runReport(cmd *cobra.Command, args []string) error {
 	default:
 		// Show text report
 		if today {
-			return showTodayReport()
+			return showTodayReport(tracker)
 		} else if week {
-			return showWeekReport()
+			return showWeekReport(tracker)
 		} else if month {
-			return showMonthReport()
+			return showMonthReport(tracker)
 		} else {
-			return showTodayReport()
+			return showTodayReport(tracker)
 		}
 	}
 }
 
-func showTodayReport() error {
+func showTodayReport(tracker *tracking.Tracker) error {
 	fmt.Println("📈 Today's Report")
 	fmt.Println("=================")
 	fmt.Println()
-
-	// Initialize tracker
-	tracker, err := tracking.NewTracker()
-	if err != nil {
-		return fmt.Errorf("failed to initialize tracker: %w", err)
-	}
-	defer tracker.Close()
 
 	// Get daily total
 	dailyTotal, err := tracker.GetDailyTotal()
@@ -174,17 +167,10 @@ func showTodayReport() error {
 	return nil
 }
 
-func showWeekReport() error {
+func showWeekReport(tracker *tracking.Tracker) error {
 	fmt.Println("📈 This Week's Report")
 	fmt.Println("=====================")
 	fmt.Println()
-
-	// Initialize tracker
-	tracker, err := tracking.NewTracker()
-	if err != nil {
-		return fmt.Errorf("failed to initialize tracker: %w", err)
-	}
-	defer tracker.Close()
 
 	// Get weekly total
 	weeklyTotal, err := tracker.GetWeeklyTotal()
@@ -216,17 +202,10 @@ func showWeekReport() error {
 	return nil
 }
 
-func showMonthReport() error {
+func showMonthReport(tracker *tracking.Tracker) error {
 	fmt.Println("📈 This Month's Report")
 	fmt.Println("======================")
 	fmt.Println()
-
-	// Initialize tracker
-	tracker, err := tracking.NewTracker()
-	if err != nil {
-		return fmt.Errorf("failed to initialize tracker: %w", err)
-	}
-	defer tracker.Close()
 
 	// Get monthly total (approximate - get all sessions and filter)
 	sessions, err := tracker.GetSessionHistory(1000) // Get many sessions

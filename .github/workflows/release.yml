@@ -30,6 +30,24 @@ jobs:
     - name: Run tests
       run: go test -v ./...
 
+    - name: Debug Telemetry Configuration
+      run: |
+        echo "=== Telemetry Debug Information ==="
+        echo "Segment Key present: $([[ -n \"$RUNE_SEGMENT_WRITE_KEY\" ]] && echo 'YES' || echo 'NO')"
+        echo "Sentry DSN present: $([[ -n \"$RUNE_SENTRY_DSN\" ]] && echo 'YES' || echo 'NO')"
+        if [[ -n "$RUNE_SEGMENT_WRITE_KEY" ]]; then
+          echo "Segment Key length: ${#RUNE_SEGMENT_WRITE_KEY}"
+          echo "Segment Key (first 10 chars): ${RUNE_SEGMENT_WRITE_KEY:0:10}..."
+        fi
+        if [[ -n "$RUNE_SENTRY_DSN" ]]; then
+          echo "Sentry DSN length: ${#RUNE_SENTRY_DSN}"
+          echo "Sentry DSN (first 30 chars): ${RUNE_SENTRY_DSN:0:30}..."
+        fi
+        echo "=== End Telemetry Debug ==="
+      env:
+        RUNE_SEGMENT_WRITE_KEY: ${{ secrets.RUNE_SEGMENT_WRITE_KEY }}
+        RUNE_SENTRY_DSN: ${{ secrets.RUNE_SENTRY_DSN }}
+
     - name: Create Sentry Release
       uses: getsentry/action-release@v1
       env:
@@ -60,6 +78,22 @@ jobs:
         HOMEBREW_TAP_PAT: ${{ steps.homebrew-app-token.outputs.token }}
         RUNE_SEGMENT_WRITE_KEY: ${{ secrets.RUNE_SEGMENT_WRITE_KEY }}
         RUNE_SENTRY_DSN: ${{ secrets.RUNE_SENTRY_DSN }}
+
+    - name: Test Telemetry Integration
+      run: |
+        echo "=== Testing Built Binary Telemetry ==="
+        # Find the built binary (GoReleaser puts it in dist/)
+        BINARY_PATH=$(find dist/ -name "rune" -type f | head -1)
+        if [[ -n "$BINARY_PATH" ]]; then
+          echo "Testing binary: $BINARY_PATH"
+          chmod +x "$BINARY_PATH"
+          echo "Running telemetry test with debug output..."
+          RUNE_DEBUG=true "$BINARY_PATH" --version || echo "Binary test failed"
+        else
+          echo "No binary found in dist/ directory"
+          ls -la dist/ || echo "dist/ directory not found"
+        fi
+        echo "=== End Telemetry Test ==="
     - name: Finalize Sentry Release
       uses: getsentry/action-release@v1
       env:
