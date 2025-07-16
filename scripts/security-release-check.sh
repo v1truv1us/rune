@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# Auto-start tmux if not already running inside one
+SESSION_NAME="security-release-check"
+if [ -z "$TMUX" ] && [ -z "$SKIP_AUTO_TMUX" ]; then
+  # Check if tmux is available
+  if command -v tmux >/dev/null 2>&1; then
+    # If session exists, attach; otherwise create new session
+    if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+      echo "Attaching to existing tmux session: $SESSION_NAME"
+      exec tmux attach-session -t "$SESSION_NAME"
+    else
+      echo "Starting new tmux session: $SESSION_NAME"
+      exec tmux new-session -s "$SESSION_NAME" "$0" "$@"
+    fi
+  else
+    # Fallback: check if running in an interactive terminal
+    if [ ! -t 0 ]; then
+      echo "This script must be run in an interactive terminal (tmux not available)."
+      exit 1
+    fi
+  fi
+fi
+
 # Pre-Release Security Verification Script
 # This script performs comprehensive security checks before releasing Rune
 

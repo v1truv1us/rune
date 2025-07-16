@@ -37,7 +37,7 @@ Download the latest release from [GitHub Releases](https://github.com/ferg-cod3s
 ### Package Managers
 
 - **Debian/Ubuntu**: Download `.deb` from releases
-- **RHEL/CentOS**: Download `.rpm` from releases  
+- **RHEL/CentOS**: Download `.rpm` from releases
 - **Arch Linux**: Available in AUR (coming soon)
 
 ## Initial Setup
@@ -49,6 +49,7 @@ rune init --guided
 ```
 
 This interactive setup will help you configure:
+
 - Work hours and break intervals
 - Project detection rules
 - Start/stop rituals
@@ -69,7 +70,7 @@ rune status
 # Start your workday
 rune start
 
-# Check current status  
+# Check current status
 rune status
 
 # Pause for a break
@@ -111,7 +112,7 @@ rune config show
 ## Next Steps
 
 - [Configure your first rituals](/docs/rituals)
-- [Set up project detection](/docs/projects)  
+- [Set up project detection](/docs/projects)
 - [Explore command reference](/docs/commands)
 - [See example workflows](/examples)
 
@@ -121,4 +122,4 @@ rune config show
 - Run `rune <command> --help` for specific command help
 - Visit our [GitHub Discussions](https://github.com/ferg-cod3s/rune/discussions)
 - Report issues on [GitHub Issues](https://github.com/ferg-cod3s/rune/issues)
-EOF < /dev/null
+  EOF < /dev/null

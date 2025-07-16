@@ -17,11 +17,11 @@ version: 1
 settings:
   work_hours: 8.0
   break_interval: 50m
-  
+
 projects:
   - name: "web-app"
     detect: ["git:web-app", "dir:~/projects/web-app"]
-    
+
 rituals:
   start:
     global:
@@ -34,7 +34,7 @@ rituals:
         background: true
       - name: "Open browser"
         command: "open http://localhost:3000"
-        
+
   stop:
     global:
       - name: "Stop dev server"
@@ -42,7 +42,7 @@ rituals:
       - name: "Commit WIP"
         command: "git add -A && git commit -m 'WIP: $(date)'"
         optional: true
-        
+
 integrations:
   git:
     enabled: true
@@ -58,11 +58,11 @@ version: 1
 settings:
   work_hours: 8.0
   break_interval: 45m
-  
+
 projects:
   - name: "api-service"
     detect: ["git:api-service"]
-    
+
 rituals:
   start:
     global:
@@ -71,14 +71,14 @@ rituals:
       - name: "Run migrations"
         command: "go run migrate.go"
       - name: "Start API server"
-        command: "air"  # Hot reload for Go
+        command: "air" # Hot reload for Go
         background: true
-        
+
   stop:
     global:
       - name: "Stop API server"
         command: "pkill -f air"
-      - name: "Stop Docker services" 
+      - name: "Stop Docker services"
         command: "docker-compose down"
       - name: "Run tests"
         command: "go test ./..."
@@ -94,11 +94,11 @@ version: 1
 settings:
   work_hours: 8.0
   break_interval: 60m
-  
+
 projects:
   - name: "infrastructure"
     detect: ["git:infra", "dir:~/infra"]
-    
+
 rituals:
   start:
     global:
@@ -109,7 +109,7 @@ rituals:
       - name: "Update Terraform"
         command: "terraform plan"
         working_dir: "~/infra/terraform"
-        
+
   stop:
     global:
       - name: "Security scan"
@@ -128,24 +128,24 @@ version: 1
 settings:
   work_hours: 6.0
   break_interval: 45m
-  
+
 projects:
   - name: "client-acme"
     detect: ["dir:~/clients/acme"]
     client: "Acme Corp"
     rate: 150.00
-    
+
   - name: "client-beta"
-    detect: ["dir:~/clients/beta"]  
+    detect: ["dir:~/clients/beta"]
     client: "Beta Inc"
     rate: 175.00
-    
+
 rituals:
   start:
     global:
       - name: "Time tracking reminder"
         command: "echo 'Starting work for {{project}} at ${{rate}}/hr'"
-        
+
   stop:
     global:
       - name: "Log time entry"
@@ -163,13 +163,13 @@ rituals:
 projects:
   - name: "frontend"
     detect: ["dir:~/monorepo/apps/web"]
-    
+
   - name: "backend"
     detect: ["dir:~/monorepo/apps/api"]
-    
+
   - name: "mobile"
     detect: ["dir:~/monorepo/apps/mobile"]
-    
+
 rituals:
   start:
     per_project:
@@ -177,12 +177,12 @@ rituals:
         - name: "Start web app"
           command: "pnpm dev:web"
           background: true
-          
+
       backend:
         - name: "Start API"
-          command: "pnpm dev:api"  
+          command: "pnpm dev:api"
           background: true
-          
+
       mobile:
         - name: "Start Metro"
           command: "pnpm dev:mobile"
@@ -198,9 +198,9 @@ settings:
     dnd_on_start: true
     block_websites:
       - "facebook.com"
-      - "twitter.com" 
+      - "twitter.com"
       - "reddit.com"
-      
+
 rituals:
   start:
     global:
@@ -210,12 +210,12 @@ rituals:
         command: "sudo dscacheutil -flushcache"
       - name: "Start focus music"
         command: "open -a Spotify"
-        
+
   break:
     global:
       - name: "Stretch reminder"
         command: "osascript -e 'display notification \"Time to stretch\!\" with title \"Break Time\"'"
-        
+
   stop:
     global:
       - name: "Clear Slack status"
@@ -230,10 +230,10 @@ rituals:
 projects:
   - name: "oss-project-a"
     detect: ["git-remote:github.com/owner/repo-a"]
-    
+
   - name: "oss-project-b"
     detect: ["git-remote:github.com/owner/repo-b"]
-    
+
 rituals:
   start:
     global:
@@ -241,7 +241,7 @@ rituals:
         command: "gh issue list --repo {{git_remote}}"
       - name: "Pull latest"
         command: "git pull upstream main"
-        
+
   stop:
     global:
       - name: "Check if ready for PR"
@@ -264,7 +264,7 @@ integrations:
     status_on_start: "🔨 Working on {{project}}"
     status_on_break: "☕ Taking a break"
     status_on_stop: ""
-    
+
 rituals:
   start:
     global:
@@ -282,7 +282,7 @@ integrations:
     provider: "google"
     block_calendar: true
     meeting_detection: true
-    
+
 rituals:
   start:
     global:
@@ -299,7 +299,7 @@ integrations:
     enabled: true
     auto_detect_project: true
     branch_in_status: true
-    
+
 rituals:
   start:
     global:
@@ -307,7 +307,7 @@ rituals:
         command: "git checkout -b feature/daily-work-$(date +%Y%m%d)"
         optional: true
         when: ["git_clean"]
-        
+
   stop:
     global:
       - name: "Auto-commit progress"
@@ -365,7 +365,7 @@ rituals:
       - name: "Pause music"
         command: "osascript -e 'tell application \"Spotify\" to pause'"
         optional: true
-        
+
   resume:
     global:
       - name: "Resume music"
@@ -386,8 +386,8 @@ rituals:
       - name: "Enable Do Not Disturb"
         command: "shortcuts run 'Enable DND'"
       - name: "Set desktop wallpaper"
-        command: "osascript -e 'tell application \"System Events\" to set picture of every desktop to \"/path/to/work-wallpaper.jpg\"'"
-        
+        command: 'osascript -e ''tell application "System Events" to set picture of every desktop to "/path/to/work-wallpaper.jpg"'''
+
   stop:
     global:
       - name: "Disable Do Not Disturb"
@@ -404,7 +404,7 @@ rituals:
         command: "gsettings set org.gnome.desktop.background picture-uri file:///home/user/wallpapers/work.jpg"
       - name: "Enable focus mode"
         command: "dunstctl set-paused true"
-        
+
   stop:
     global:
       - name: "Disable focus mode"
@@ -418,11 +418,12 @@ rituals:
   start:
     global:
       - name: "Set focus assist"
-        command: "powershell -Command \"& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('^{F1}')}\""
-        
+        command: 'powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(''^{F1}'')}"'
+
   stop:
     global:
       - name: "Disable focus assist"
-        command: "powershell -Command \"& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('^{F1}')}\""
+        command: 'powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(''^{F1}'')}"'
 ```
+
 EOF < /dev/null

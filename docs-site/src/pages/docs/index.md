@@ -32,4 +32,4 @@ description: "Complete documentation for Rune CLI"
 - **[Developer Workflows](/examples/developers)** - Frontend, backend, DevOps examples
 - **[Configuration Examples](/examples/configs)** - Sample configurations
 - **[Ritual Examples](/examples/rituals)** - Common automation patterns
-EOF < /dev/null
+  EOF < /dev/null

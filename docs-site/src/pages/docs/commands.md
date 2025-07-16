@@ -17,11 +17,13 @@ rune start [flags]
 ```
 
 **Flags:**
+
 - `--project <name>` - Start with specific project
 - `--skip-rituals` - Skip start rituals
 - `--dry-run` - Show what would be executed without running
 
 **Examples:**
+
 ```bash
 rune start
 rune start --project my-app
@@ -37,11 +39,13 @@ rune stop [flags]
 ```
 
 **Flags:**
+
 - `--skip-rituals` - Skip stop rituals
 - `--force` - Force stop even if rituals fail
 - `--dry-run` - Show what would be executed
 
 **Examples:**
+
 ```bash
 rune stop
 rune stop --skip-rituals
@@ -57,9 +61,11 @@ rune pause [duration]
 ```
 
 **Arguments:**
+
 - `duration` - Optional pause duration (e.g., 15m, 1h)
 
 **Examples:**
+
 ```bash
 rune pause           # Indefinite pause
 rune pause 15m       # Pause for 15 minutes
@@ -83,10 +89,12 @@ rune status [flags]
 ```
 
 **Flags:**
+
 - `--verbose` - Show detailed information
 - `--json` - Output in JSON format
 
 **Examples:**
+
 ```bash
 rune status
 rune status --verbose
@@ -104,6 +112,7 @@ rune report [flags]
 ```
 
 **Flags:**
+
 - `--today` - Show today's report
 - `--week` - Show this week's report
 - `--month` - Show this month's report
@@ -113,6 +122,7 @@ rune report [flags]
 - `--format <format>` - Output format (table, json, csv)
 
 **Examples:**
+
 ```bash
 rune report --today
 rune report --week
@@ -151,6 +161,7 @@ rune config show [flags]
 ```
 
 **Flags:**
+
 - `--section <name>` - Show specific section
 - `--json` - Output in JSON format
 
@@ -163,6 +174,7 @@ rune config migrate [flags]
 ```
 
 **Flags:**
+
 - `--from <tool>` - Source tool (watson, timewarrior)
 - `--backup` - Create backup before migration
 
@@ -181,6 +193,7 @@ rune ritual list [flags]
 ```
 
 **Flags:**
+
 - `--type <type>` - Filter by type (start, stop, break)
 - `--project <name>` - Filter by project
 
@@ -193,6 +206,7 @@ rune ritual run <name> [flags]
 ```
 
 **Flags:**
+
 - `--dry-run` - Show commands without executing
 - `--verbose` - Show detailed output
 
@@ -215,11 +229,13 @@ rune init [flags]
 ```
 
 **Flags:**
+
 - `--guided` - Interactive setup wizard
 - `--template <name>` - Use configuration template
 - `--force` - Overwrite existing configuration
 
 **Templates:**
+
 - `basic` - Minimal configuration
 - `developer` - Developer workflow preset
 - `freelancer` - Freelancer workflow preset
@@ -233,6 +249,7 @@ rune update [flags]
 ```
 
 **Flags:**
+
 - `--check` - Check for updates without installing
 - `--beta` - Include beta releases
 - `--force` - Force update even if already latest
@@ -246,12 +263,14 @@ rune completion <shell>
 ```
 
 **Supported shells:**
+
 - `bash`
 - `zsh`
 - `fish`
 - `powershell`
 
 **Examples:**
+
 ```bash
 # Bash
 rune completion bash > /etc/bash_completion.d/rune
@@ -279,4 +298,4 @@ These flags are available for all commands:
 - `2` - Configuration error
 - `3` - Runtime error
 - `4` - User interruption (Ctrl+C)
-EOF < /dev/null
+  EOF < /dev/null

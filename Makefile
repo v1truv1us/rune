@@ -111,7 +111,16 @@ security:
 # Test telemetry integration
 test-telemetry:
 	@echo "Testing telemetry integration..."
-	./scripts/test-telemetry.sh
+	SKIP_AUTO_TMUX=1 ./scripts/test-telemetry.sh
+
+# Test auto-tmux functionality
+test-auto-tmux:
+	@echo "Testing auto-tmux functionality..."
+	./scripts/test-auto-tmux-simple.sh
+
+# Test all shell scripts
+test-scripts: test-telemetry test-auto-tmux
+	@echo "All shell script tests completed"
 
 # Build with telemetry (ensures telemetry keys are embedded)
 build-telemetry:
@@ -130,7 +139,7 @@ validate-workflows:
 	@command -v actionlint >/dev/null 2>&1 || { echo "actionlint not found. Install with: brew install actionlint"; exit 1; }
 	@actionlint
 
-pre-commit: fmt vet lint test validate-workflows
+pre-commit: fmt vet lint test test-scripts validate-workflows
 
 # Security targets
 security-deps:
@@ -188,7 +197,7 @@ test-coverage-detailed:
 	fi
 
 # Enhanced pre-commit with security
-pre-commit-security: fmt vet lint test validate-workflows security-static security-vulns
+pre-commit-security: fmt vet lint test test-scripts validate-workflows security-static security-vulns
 	@echo "✅ Pre-commit security checks passed"
 
 # Help
@@ -219,6 +228,8 @@ help:
 	@echo "  security-build - Check binary for embedded secrets"
 	@echo "  security-all - Run all security checks"
 	@echo "  test-telemetry - Test telemetry integration"
+	@echo "  test-auto-tmux - Test auto-tmux functionality"
+	@echo "  test-scripts - Test all shell scripts"
 	@echo "  pre-commit   - Run pre-commit checks"
 	@echo "  pre-commit-security - Run pre-commit checks with security"
 	@echo "  help         - Show this help"

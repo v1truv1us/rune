@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   docs:
@@ -8,7 +8,7 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
-    
+
   # Development service
   docs-dev:
     image: oven/bun:1-alpine
@@ -22,4 +22,3 @@ services:
       - NODE_ENV=development
     profiles:
       - dev
-EOF < /dev/null
