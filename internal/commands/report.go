@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/ferg-cod3s/rune/internal/colors"
 	"github.com/ferg-cod3s/rune/internal/tracking"
 	"github.com/spf13/cobra"
 )
@@ -108,8 +109,8 @@ func runReport(cmd *cobra.Command, args []string) error {
 }
 
 func showTodayReport(tracker *tracking.Tracker) error {
-	fmt.Println("📈 Today's Report")
-	fmt.Println("=================")
+	fmt.Println(colors.Header("📈 Today's Report"))
+	fmt.Println(colors.Secondary("================="))
 	fmt.Println()
 
 	// Get daily total
@@ -142,25 +143,26 @@ func showTodayReport(tracker *tracking.Tracker) error {
 		}
 	}
 
-	fmt.Printf("Total Time:    %s\n", formatDuration(dailyTotal))
-	fmt.Printf("Sessions:      %d\n", len(todaySessions))
+	fmt.Printf("Total Time:    %s\n", colors.Duration(formatDuration(dailyTotal)))
+	fmt.Printf("Sessions:      %s\n", colors.Accent(fmt.Sprintf("%d", len(todaySessions))))
 
 	if len(projectStats) > 0 {
-		fmt.Println("\nProject Breakdown:")
+		fmt.Printf("\n%s\n", colors.Subheader("Project Breakdown:"))
 		for proj, duration := range projectStats {
 			if project == "" || proj == project {
-				fmt.Printf("  %-15s %s\n", proj, formatDuration(duration))
+				fmt.Printf("  %-15s %s\n", colors.Project(proj), colors.Duration(formatDuration(duration)))
 			}
 		}
 	}
 
 	if len(todaySessions) > 0 {
-		fmt.Println("\nToday's Sessions:")
+		fmt.Printf("\n%s\n", colors.Subheader("Today's Sessions:"))
 		for _, session := range todaySessions {
-			fmt.Printf("  %s  %-15s  %s\n",
-				session.StartTime.Format("15:04"),
-				session.Project,
-				formatDuration(session.Duration))
+			fmt.Printf("  %s  %-15s  %s  %s\n",
+				colors.Time(session.StartTime.Format("15:04")),
+				colors.Project(session.Project),
+				colors.Duration(formatDuration(session.Duration)),
+				colors.RelativeTime(formatRelativeTime(session.StartTime)))
 		}
 	}
 
@@ -168,8 +170,8 @@ func showTodayReport(tracker *tracking.Tracker) error {
 }
 
 func showWeekReport(tracker *tracking.Tracker) error {
-	fmt.Println("📈 This Week's Report")
-	fmt.Println("=====================")
+	fmt.Println(colors.Header("📈 This Week's Report"))
+	fmt.Println(colors.Secondary("====================="))
 	fmt.Println()
 
 	// Get weekly total
@@ -187,14 +189,14 @@ func showWeekReport(tracker *tracking.Tracker) error {
 		return fmt.Errorf("failed to get project stats: %w", err)
 	}
 
-	fmt.Printf("Total Time:    %s\n", formatDuration(weeklyTotal))
-	fmt.Printf("Daily Average: %s\n", formatDuration(dailyAverage))
+	fmt.Printf("Total Time:    %s\n", colors.Duration(formatDuration(weeklyTotal)))
+	fmt.Printf("Daily Average: %s\n", colors.Duration(formatDuration(dailyAverage)))
 
 	if len(projectStats) > 0 {
-		fmt.Println("\nProject Breakdown:")
+		fmt.Printf("\n%s\n", colors.Subheader("Project Breakdown:"))
 		for proj, duration := range projectStats {
 			if project == "" || proj == project {
-				fmt.Printf("  %-15s %s\n", proj, formatDuration(duration))
+				fmt.Printf("  %-15s %s\n", colors.Project(proj), colors.Duration(formatDuration(duration)))
 			}
 		}
 	}
@@ -203,8 +205,8 @@ func showWeekReport(tracker *tracking.Tracker) error {
 }
 
 func showMonthReport(tracker *tracking.Tracker) error {
-	fmt.Println("📈 This Month's Report")
-	fmt.Println("======================")
+	fmt.Println(colors.Header("📈 This Month's Report"))
+	fmt.Println(colors.Secondary("======================"))
 	fmt.Println()
 
 	// Get monthly total (approximate - get all sessions and filter)
@@ -239,15 +241,15 @@ func showMonthReport(tracker *tracking.Tracker) error {
 		return fmt.Errorf("failed to get project stats: %w", err)
 	}
 
-	fmt.Printf("Total Time:    %s\n", formatDuration(monthlyTotal))
-	fmt.Printf("Daily Average: %s\n", formatDuration(dailyAverage))
-	fmt.Printf("Sessions:      %d\n", len(monthlySessions))
+	fmt.Printf("Total Time:    %s\n", colors.Duration(formatDuration(monthlyTotal)))
+	fmt.Printf("Daily Average: %s\n", colors.Duration(formatDuration(dailyAverage)))
+	fmt.Printf("Sessions:      %s\n", colors.Accent(fmt.Sprintf("%d", len(monthlySessions))))
 
 	if len(projectStats) > 0 {
-		fmt.Println("\nProject Breakdown:")
+		fmt.Printf("\n%s\n", colors.Subheader("Project Breakdown:"))
 		for proj, duration := range projectStats {
 			if project == "" || proj == project {
-				fmt.Printf("  %-15s %s\n", proj, formatDuration(duration))
+				fmt.Printf("  %-15s %s\n", colors.Project(proj), colors.Duration(formatDuration(duration)))
 			}
 		}
 	}

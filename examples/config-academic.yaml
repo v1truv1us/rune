@@ -1,0 +1,141 @@
+# Academic/Research Rune Configuration
+# Designed for researchers, academics, and students
+
+version: 1
+
+settings:
+  work_hours: 6.0      # Flexible academic schedule
+  break_interval: 50m  # Longer focus periods for deep work
+  idle_threshold: 15m  # Longer threshold for reading/thinking
+  notifications:
+    enabled: true
+    break_reminders: true
+    end_of_day_reminders: false  # Flexible end times
+    session_complete: true
+    idle_detection: false  # Reading doesn't count as idle
+    sound: false  # Quiet for library/office work
+
+projects:
+  - name: "research"
+    detect: ["research/", "papers/", "*.tex", "*.bib"]
+  - name: "writing"
+    detect: ["manuscripts/", "thesis/", "*.md", "*.docx"]
+  - name: "data-analysis"
+    detect: ["data/", "analysis/", "*.py", "*.R", "*.ipynb"]
+  - name: "teaching"
+    detect: ["courses/", "lectures/", "assignments/"]
+  - name: "grants"
+    detect: ["grants/", "proposals/", "funding/"]
+
+rituals:
+  start:
+    global:
+      - name: "Check Research Calendar"
+        command: "gcalcli agenda --calendar research"
+        optional: true
+      - name: "Review Today's Research Goals"
+        command: "cat ~/research/goals/$(date +%Y-%m-%d).md"
+        optional: true
+      - name: "Open Reference Manager"
+        command: "open -a Zotero"
+        background: true
+        optional: true
+
+    per_project:
+      research:
+        - name: "Open Research Notes"
+          command: "code ~/research/notes/"
+          background: true
+          optional: true
+        - name: "Check Literature Updates"
+          command: "python ~/scripts/check_arxiv_updates.py"
+          optional: true
+        - name: "Start Research Log"
+          command: "echo '$(date): Started research session' >> ~/research/log.md"
+          optional: false
+
+      writing:
+        - name: "Open Writing Environment"
+          command: "code ~/manuscripts/"
+          background: true
+          optional: true
+        - name: "Check Word Count Progress"
+          command: "wc -w ~/manuscripts/*.md"
+          optional: true
+        - name: "Backup Writing"
+          command: "git add . && git commit -m 'Auto-backup before writing session'"
+          optional: true
+
+      data-analysis:
+        - name: "Start Jupyter Lab"
+          command: "jupyter lab"
+          background: true
+          optional: true
+        - name: "Activate Research Environment"
+          command: "conda activate research"
+          optional: true
+        - name: "Check Data Integrity"
+          command: "python ~/scripts/data_check.py"
+          optional: true
+
+      teaching:
+        - name: "Open Course Materials"
+          command: "code ~/courses/current/"
+          background: true
+          optional: true
+        - name: "Check Student Submissions"
+          command: "ls ~/courses/submissions/pending/"
+          optional: true
+
+  stop:
+    global:
+      - name: "Save Research Progress"
+        command: "echo '$(date): Research session ended. Progress: ' >> ~/research/daily-log.md"
+        optional: false
+      - name: "Backup All Work"
+        command: "rsync -av ~/research/ ~/Dropbox/research-backup/"
+        background: true
+        optional: true
+      - name: "Update Research Tracker"
+        command: "python ~/scripts/update_research_tracker.py"
+        optional: true
+
+    per_project:
+      research:
+        - name: "Commit Research Notes"
+          command: "git add . && git commit -m 'Research session: $(date +%Y-%m-%d)'"
+          optional: true
+        - name: "Export Bibliography"
+          command: "python ~/scripts/export_bibliography.py"
+          optional: true
+
+      writing:
+        - name: "Count Words Written"
+          command: "echo 'Words today: $(git diff --word-diff=porcelain HEAD~1 | grep -e '^+[^+]' | wc -w)' >> ~/writing-stats.txt"
+          optional: true
+        - name: "Spell Check"
+          command: "aspell check ~/manuscripts/*.md"
+          optional: true
+
+      data-analysis:
+        - name: "Save Analysis Results"
+          command: "jupyter nbconvert --to html *.ipynb"
+          optional: true
+        - name: "Export Data Summary"
+          command: "python ~/scripts/export_analysis_summary.py"
+          optional: true
+
+integrations:
+  git:
+    enabled: true
+    auto_detect_project: true
+  slack:
+    workspace: "research-group"
+    dnd_on_start: true  # Focus time is important
+  calendar:
+    provider: "google"
+    block_calendar: true  # Block time for deep work
+  telemetry:
+    enabled: false
+    segment_write_key: ""
+    sentry_dsn: ""

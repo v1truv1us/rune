@@ -1,0 +1,211 @@
+# Team Lead/Management Rune Configuration
+# Designed for engineering managers, team leads, and project managers
+
+version: 1
+
+settings:
+  work_hours: 8.0
+  break_interval: 25m  # Frequent breaks between meetings
+  idle_threshold: 3m   # Quick response needed for team support
+  notifications:
+    enabled: true
+    break_reminders: true
+    end_of_day_reminders: true
+    session_complete: true
+    idle_detection: true
+    sound: true  # Important for meeting alerts
+
+projects:
+  - name: "meetings"
+    detect: ["meetings/", "1on1/", "standup/"]
+  - name: "planning"
+    detect: ["planning/", "roadmap/", "sprint/", "backlog/"]
+  - name: "reviews"
+    detect: ["reviews/", "performance/", "feedback/"]
+  - name: "hiring"
+    detect: ["hiring/", "interviews/", "candidates/"]
+  - name: "documentation"
+    detect: ["docs/", "processes/", "runbooks/", "*.md"]
+  - name: "metrics"
+    detect: ["metrics/", "reports/", "analytics/", "kpis/"]
+
+rituals:
+  start:
+    global:
+      - name: "Check Team Calendar"
+        command: "gcalcli agenda --calendar team"
+        optional: true
+      - name: "Review Team Slack"
+        command: "python ~/scripts/check_team_slack.py"
+        optional: true
+      - name: "Check Incident Queue"
+        command: "gh issue list --label incident --assignee @me"
+        optional: true
+      - name: "Review Daily Priorities"
+        command: "cat ~/management/priorities/$(date +%Y-%m-%d).md"
+        optional: true
+      - name: "Check Team Availability"
+        command: "python ~/scripts/check_team_availability.py"
+        optional: true
+
+    per_project:
+      meetings:
+        - name: "Prepare Meeting Notes"
+          command: "mkdir -p ~/meetings/$(date +%Y-%m-%d) && cp ~/templates/meeting-template.md ~/meetings/$(date +%Y-%m-%d)/"
+          optional: true
+        - name: "Review Previous Action Items"
+          command: "cat ~/meetings/action-items.md"
+          optional: true
+        - name: "Check Meeting Room Setup"
+          command: "python ~/scripts/check_meeting_setup.py"
+          optional: true
+
+      planning:
+        - name: "Open Project Board"
+          command: "open https://github.com/orgs/company/projects/1"
+          background: true
+          optional: true
+        - name: "Review Sprint Progress"
+          command: "python ~/scripts/sprint_progress.py"
+          optional: true
+        - name: "Check Blockers"
+          command: "gh issue list --label blocked --state open"
+          optional: true
+
+      reviews:
+        - name: "Prepare Review Materials"
+          command: "python ~/scripts/prepare_review_materials.py"
+          optional: true
+        - name: "Check Team Metrics"
+          command: "python ~/scripts/fetch_team_metrics.py"
+          optional: true
+        - name: "Review Feedback Queue"
+          command: "cat ~/reviews/pending-feedback.md"
+          optional: true
+
+      hiring:
+        - name: "Review Candidate Pipeline"
+          command: "python ~/scripts/check_candidate_pipeline.py"
+          optional: true
+        - name: "Prepare Interview Questions"
+          command: "code ~/hiring/interview-questions/"
+          optional: true
+        - name: "Check Interview Schedule"
+          command: "gcalcli agenda --calendar interviews"
+          optional: true
+
+      documentation:
+        - name: "Check Documentation Updates"
+          command: "git log --since='1 week ago' --oneline docs/"
+          optional: true
+        - name: "Review Process Improvements"
+          command: "cat ~/processes/improvement-queue.md"
+          optional: true
+
+      metrics:
+        - name: "Generate Team Dashboard"
+          command: "python ~/scripts/generate_team_dashboard.py"
+          optional: true
+        - name: "Check KPI Status"
+          command: "python ~/scripts/check_kpi_status.py"
+          optional: true
+        - name: "Review Performance Trends"
+          command: "python ~/scripts/analyze_performance_trends.py"
+          optional: true
+
+  stop:
+    global:
+      - name: "Update Team Status"
+        command: "python ~/scripts/update_team_status.py"
+        optional: true
+      - name: "Log Management Activities"
+        command: "echo '$(date): Management session ended' >> ~/management/daily-log.md"
+        optional: false
+      - name: "Send End of Day Summary"
+        command: "python ~/scripts/send_eod_summary.py"
+        optional: true
+      - name: "Plan Tomorrow's Priorities"
+        command: "python ~/scripts/plan_tomorrow.py"
+        optional: true
+      - name: "Check Team Wellbeing"
+        command: "python ~/scripts/check_team_wellbeing.py"
+        optional: true
+
+    per_project:
+      meetings:
+        - name: "Archive Meeting Notes"
+          command: "git add meetings/ && git commit -m 'Meeting notes: $(date +%Y-%m-%d)'"
+          optional: true
+        - name: "Send Action Items"
+          command: "python ~/scripts/send_action_items.py"
+          optional: true
+        - name: "Update Meeting Metrics"
+          command: "python ~/scripts/update_meeting_metrics.py"
+          optional: true
+
+      planning:
+        - name: "Update Sprint Board"
+          command: "python ~/scripts/update_sprint_board.py"
+          optional: true
+        - name: "Generate Planning Report"
+          command: "python ~/scripts/generate_planning_report.py"
+          optional: true
+        - name: "Check Capacity Planning"
+          command: "python ~/scripts/check_capacity.py"
+          optional: true
+
+      reviews:
+        - name: "Complete Review Cycle"
+          command: "python ~/scripts/complete_review_cycle.py"
+          optional: true
+        - name: "Update Performance Database"
+          command: "python ~/scripts/update_performance_db.py"
+          optional: true
+        - name: "Schedule Follow-ups"
+          command: "python ~/scripts/schedule_followups.py"
+          optional: true
+
+      hiring:
+        - name: "Update Candidate Status"
+          command: "python ~/scripts/update_candidate_status.py"
+          optional: true
+        - name: "Send Interview Feedback"
+          command: "python ~/scripts/send_interview_feedback.py"
+          optional: true
+        - name: "Update Hiring Metrics"
+          command: "python ~/scripts/update_hiring_metrics.py"
+          optional: true
+
+      documentation:
+        - name: "Publish Documentation Updates"
+          command: "git add docs/ && git commit -m 'Update team documentation'"
+          optional: true
+        - name: "Review Documentation Gaps"
+          command: "python ~/scripts/check_doc_gaps.py"
+          optional: true
+
+      metrics:
+        - name: "Export Team Metrics"
+          command: "python ~/scripts/export_team_metrics.py"
+          optional: true
+        - name: "Generate Executive Report"
+          command: "python ~/scripts/generate_executive_report.py"
+          optional: true
+        - name: "Update OKR Progress"
+          command: "python ~/scripts/update_okr_progress.py"
+          optional: true
+
+integrations:
+  git:
+    enabled: true
+    auto_detect_project: true
+  slack:
+    workspace: "engineering"
+    dnd_on_start: false  # Need to be available for team
+  calendar:
+    provider: "google"
+    block_calendar: false  # Flexible for team needs
+  telemetry:
+    enabled: true  # Important for team metrics
+    segment_write_key: ""
+    sentry_dsn: ""

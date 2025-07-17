@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ferg-cod3s/rune/internal/colors"
 	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/telemetry"
 	"github.com/spf13/cobra"
@@ -19,13 +20,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "rune",
 	Short: "Ancient wisdom for modern workflows",
-	Long: ` ______     __  __     __   __     ______   
-/\  == \   /\ \/\ \   /\ "-.\ \   /\  ___\  
-\ \  __<   \ \ \_\ \  \ \ \-.  \  \ \  __\  
- \ \_\ \_\  \ \_____\  \ \_\\"\_\  \ \_____\
-  \/_/ /_/   \/_____/   \/_/ \/_/   \/_____/ 
-
-Rune is a developer-first CLI productivity platform that automates daily work 
+	Long: `Rune is a developer-first CLI productivity platform that automates daily work 
 rituals, enforces healthy work-life boundaries, and integrates seamlessly 
 with existing developer workflows.
 
@@ -41,25 +36,18 @@ func Execute() error {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig, initTelemetry)
+	cobra.OnInitialize(initConfig, initTelemetry, initColors)
 
-	// Custom version template with logo
-	rootCmd.SetVersionTemplate(` ______     __  __     __   __     ______   
-/\  == \   /\ \/\ \   /\ "-.\ \   /\  ___\  
-\ \  __<   \ \ \_\ \  \ \ \-.  \  \ \  __\  
- \ \_\ \_\  \ \_____\  \ \_\\"\_\  \ \_____\
-  \/_/ /_/   \/_____/   \/_/ \/_/   \/_____/ 
-
-version {{.Version}}
-
-`)
+	// Version template will be set dynamically in initColors
 
 	// Global flags
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.rune/config.yaml)")
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().Bool("no-color", false, "disable colored output")
 
 	// Bind flags to viper
 	_ = viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+	_ = viper.BindPFlag("no-color", rootCmd.PersistentFlags().Lookup("no-color"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -120,4 +108,34 @@ func initTelemetry() {
 	}
 
 	telemetry.Initialize(segmentWriteKey, sentryDSN)
+}
+
+// initColors initializes the color system
+func initColors() {
+	// Check for --no-color flag
+	if viper.GetBool("no-color") {
+		colors.SetColorMode(colors.ColorNever)
+	} else {
+		colors.Initialize()
+	}
+
+	// Set version template with appropriate coloring
+	logoText := ` ______     __  __     __   __     ______   
+/\  == \   /\ \/\ \   /\ "-.\ \   /\  ___\  
+\ \  __<   \ \ \_\ \  \ \ \-.  \  \ \  __\  
+ \ \_\ \_\  \ \_____\  \ \_\\"\_\  \ \_____\
+  \/_/ /_/   \/_____/   \/_/ \/_/   \/_____/ 
+`
+	rootCmd.SetVersionTemplate(colors.Logo(logoText) + `
+version {{.Version}}
+
+`)
+
+	// Set long description with appropriate coloring
+	rootCmd.Long = colors.Logo(logoText) + `
+` + colors.Glow("Rune is a developer-first CLI productivity platform that automates daily work") + `
+` + colors.Glow("rituals, enforces healthy work-life boundaries, and integrates seamlessly") + `
+` + colors.Glow("with existing developer workflows.") + `
+
+` + colors.Accent("Cast your daily runes and master your workflow.")
 }

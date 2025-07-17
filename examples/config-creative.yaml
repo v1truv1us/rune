@@ -1,0 +1,191 @@
+# Creative/Design Rune Configuration
+# Optimized for designers, artists, and creative professionals
+
+version: 1
+
+settings:
+  work_hours: 7.0      # Creative work often has irregular hours
+  break_interval: 35m  # Regular breaks to prevent creative burnout
+  idle_threshold: 20m  # Longer threshold for ideation and sketching
+  notifications:
+    enabled: true
+    break_reminders: true
+    end_of_day_reminders: false  # Flexible creative schedule
+    session_complete: true
+    idle_detection: false  # Sketching/thinking time is valuable
+    sound: true  # Audio cues can help with creative flow
+
+projects:
+  - name: "design"
+    detect: ["*.psd", "*.ai", "*.sketch", "*.fig", "design/"]
+  - name: "photography"
+    detect: ["*.raw", "*.dng", "photos/", "lightroom/"]
+  - name: "video"
+    detect: ["*.mov", "*.mp4", "*.prproj", "video/", "footage/"]
+  - name: "web-design"
+    detect: ["*.html", "*.css", "*.scss", "assets/", "ui/"]
+  - name: "branding"
+    detect: ["brand/", "logo/", "identity/", "style-guide/"]
+  - name: "client-work"
+    detect: ["clients/", "projects/", "deliverables/"]
+
+rituals:
+  start:
+    global:
+      - name: "Set Creative Mood"
+        command: "osascript -e 'tell application \"Spotify\" to play playlist \"Creative Focus\"'"
+        optional: true
+        background: true
+      - name: "Check Creative Inspiration"
+        command: "open https://dribbble.com/shots/popular"
+        optional: true
+        background: true
+      - name: "Review Today's Creative Goals"
+        command: "cat ~/creative/goals/$(date +%Y-%m-%d).md"
+        optional: true
+
+    per_project:
+      design:
+        - name: "Open Design Tools"
+          command: "open -a 'Adobe Photoshop 2024' && open -a 'Adobe Illustrator 2024'"
+          background: true
+          optional: true
+        - name: "Load Color Palettes"
+          command: "open ~/design/palettes/current-project.ase"
+          optional: true
+        - name: "Check Design System"
+          command: "code ~/design/design-system/"
+          background: true
+          optional: true
+
+      photography:
+        - name: "Open Lightroom"
+          command: "open -a 'Adobe Lightroom Classic'"
+          background: true
+          optional: true
+        - name: "Check Memory Cards"
+          command: "ls /Volumes/*/DCIM/"
+          optional: true
+        - name: "Backup Recent Shoots"
+          command: "rsync -av ~/Photos/Recent/ ~/Backup/Photos/"
+          background: true
+          optional: true
+
+      video:
+        - name: "Open Video Editor"
+          command: "open -a 'Adobe Premiere Pro 2024'"
+          background: true
+          optional: true
+        - name: "Check Storage Space"
+          command: "df -h ~/Video/"
+          optional: true
+        - name: "Start Proxy Generation"
+          command: "python ~/scripts/generate_proxies.py"
+          background: true
+          optional: true
+
+      web-design:
+        - name: "Start Design Server"
+          command: "npm run dev"
+          background: true
+          optional: true
+        - name: "Open Browser Tools"
+          command: "open -a 'Google Chrome' --args --new-window http://localhost:3000"
+          background: true
+          optional: true
+        - name: "Check Design Tokens"
+          command: "code design-tokens.json"
+          optional: true
+
+      branding:
+        - name: "Open Brand Guidelines"
+          command: "open ~/branding/guidelines.pdf"
+          background: true
+          optional: true
+        - name: "Load Brand Assets"
+          command: "code ~/branding/assets/"
+          background: true
+          optional: true
+
+      client-work:
+        - name: "Review Client Brief"
+          command: "open ~/clients/current/brief.pdf"
+          optional: true
+        - name: "Check Project Timeline"
+          command: "cat ~/clients/current/timeline.md"
+          optional: true
+        - name: "Log Client Session Start"
+          command: "echo '$(date): Started client work session' >> ~/clients/time-log.txt"
+          optional: false
+
+  stop:
+    global:
+      - name: "Save Creative Progress"
+        command: "echo '$(date): Creative session ended' >> ~/creative/daily-log.md"
+        optional: false
+      - name: "Backup Creative Work"
+        command: "rsync -av ~/creative/ ~/Dropbox/creative-backup/"
+        background: true
+        optional: true
+      - name: "Export Work Samples"
+        command: "python ~/scripts/export_portfolio_samples.py"
+        optional: true
+
+    per_project:
+      design:
+        - name: "Export Design Assets"
+          command: "python ~/scripts/export_design_assets.py"
+          optional: true
+        - name: "Update Design System"
+          command: "git add design-system/ && git commit -m 'Update design system'"
+          optional: true
+
+      photography:
+        - name: "Export Selected Photos"
+          command: "python ~/scripts/export_selected_photos.py"
+          optional: true
+        - name: "Update Photo Catalog"
+          command: "python ~/scripts/update_photo_catalog.py"
+          optional: true
+
+      video:
+        - name: "Export Video Preview"
+          command: "python ~/scripts/export_video_preview.py"
+          optional: true
+        - name: "Archive Project Files"
+          command: "tar -czf ~/archive/video-$(date +%Y%m%d).tar.gz *.prproj"
+          optional: true
+
+      web-design:
+        - name: "Build Production Assets"
+          command: "npm run build"
+          optional: true
+        - name: "Optimize Images"
+          command: "npm run optimize-images"
+          optional: true
+
+      client-work:
+        - name: "Log Client Session End"
+          command: "echo '$(date): Ended client work session' >> ~/clients/time-log.txt"
+          optional: false
+        - name: "Generate Client Report"
+          command: "python ~/scripts/generate_client_report.py"
+          optional: true
+        - name: "Update Project Status"
+          command: "python ~/scripts/update_project_status.py"
+          optional: true
+
+integrations:
+  git:
+    enabled: true
+    auto_detect_project: true
+  slack:
+    workspace: "creative-team"
+    dnd_on_start: true  # Deep focus is crucial for creative work
+  calendar:
+    provider: "google"
+    block_calendar: true  # Protect creative time
+  telemetry:
+    enabled: false
+    segment_write_key: ""
+    sentry_dsn: ""

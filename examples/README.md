@@ -54,6 +54,71 @@ This directory contains example configurations for different use cases and workf
 
 **Use this if:** You're a freelancer who needs precise time tracking for client billing.
 
+### 5. Academic/Research Configuration (`config-academic.yaml`)
+**Best for:** Researchers, academics, and students
+
+**Features:**
+- Flexible academic schedule with longer focus periods
+- Research project tracking and literature management
+- Data analysis and writing workflow automation
+- Teaching and course management tools
+- Grant and proposal tracking
+- Research progress logging
+
+**Use this if:** You're in academia and need tools for research, writing, and teaching.
+
+### 6. Creative/Design Configuration (`config-creative.yaml`)
+**Best for:** Designers, artists, and creative professionals
+
+**Features:**
+- Creative workflow optimization for design tools
+- Photography and video editing automation
+- Brand and client work management
+- Creative inspiration and mood setting
+- Asset management and portfolio generation
+- Flexible creative scheduling
+
+**Use this if:** You're a creative professional working with design, photography, or video.
+
+### 7. DevOps/Infrastructure Configuration (`config-devops.yaml`)
+**Best for:** DevOps engineers, SREs, and infrastructure teams
+
+**Features:**
+- Infrastructure monitoring and alerting
+- CI/CD pipeline management
+- Security scanning and compliance
+- Incident response automation
+- System health checks and reporting
+- On-call and handoff procedures
+
+**Use this if:** You manage infrastructure, deployments, or site reliability.
+
+### 8. Content Creator Configuration (`config-content-creator.yaml`)
+**Best for:** Bloggers, YouTubers, podcasters, and content creators
+
+**Features:**
+- Multi-platform content creation workflows
+- Analytics and performance tracking
+- Content calendar and scheduling
+- SEO and engagement optimization
+- Audience growth and newsletter management
+- Course and educational content creation
+
+**Use this if:** You create content across multiple platforms and need workflow automation.
+
+### 9. Team Lead/Management Configuration (`config-team-lead.yaml`)
+**Best for:** Engineering managers, team leads, and project managers
+
+**Features:**
+- Meeting and 1-on-1 management
+- Team planning and sprint tracking
+- Performance reviews and feedback cycles
+- Hiring and interview coordination
+- Team metrics and reporting
+- Documentation and process management
+
+**Use this if:** You lead a team and need tools for management and coordination.
+
 ## How to Use These Examples
 
 1. **Choose an example** that matches your workflow
@@ -188,8 +253,8 @@ Have a great configuration for a specific workflow? We'd love to include it! Ple
 4. Submit a pull request
 
 Examples we'd love to see:
-- Academic/research workflows
-- Design/creative workflows
-- DevOps/infrastructure workflows
-- Content creation workflows
-- Team lead/management workflows
+- Data science/ML workflows
+- Sales and business development workflows
+- Legal and compliance workflows
+- Healthcare and medical workflows
+- Education and training workflows

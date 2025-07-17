@@ -492,6 +492,11 @@ func (t *Tracker) GetIdleTime() (time.Duration, error) {
 	return t.idleDetector.GetIdleTime()
 }
 
+// SaveImportedSession saves an imported session to the database
+func (t *Tracker) SaveImportedSession(session *Session) error {
+	return t.saveSession(session)
+}
+
 // generateSessionID generates a unique session ID
 func generateSessionID() string {
 	return fmt.Sprintf("session_%d", time.Now().UnixNano())

@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 
+	"github.com/ferg-cod3s/rune/internal/colors"
 	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/dnd"
 	"github.com/ferg-cod3s/rune/internal/notifications"
@@ -33,8 +34,8 @@ func init() {
 }
 
 func runStatus(cmd *cobra.Command, args []string) error {
-	fmt.Println("📊 Current Session Status")
-	fmt.Println("========================")
+	fmt.Println(colors.Header("📊 Current Session Status"))
+	fmt.Println(colors.Secondary("========================"))
 	fmt.Println()
 
 	// Initialize tracker
@@ -51,18 +52,30 @@ func runStatus(cmd *cobra.Command, args []string) error {
 	}
 
 	if session == nil {
-		fmt.Println("Timer:        Stopped")
-		fmt.Println("Project:      Not detected")
-		fmt.Println("Session:      0h 0m")
+		fmt.Printf("Timer:        %s\n", colors.StatusStopped("Stopped"))
+		fmt.Printf("Project:      %s\n", colors.Muted("Not detected"))
+		fmt.Printf("Session:      %s\n", colors.Duration("0h 0m"))
 	} else {
 		duration, err := tracker.GetSessionDuration()
 		if err != nil {
 			return fmt.Errorf("failed to get session duration: %w", err)
 		}
 
-		fmt.Printf("Timer:        %s\n", session.State)
-		fmt.Printf("Project:      %s\n", session.Project)
-		fmt.Printf("Session:      %s\n", formatDuration(duration))
+		var timerStatus string
+		switch session.State {
+		case tracking.StateRunning:
+			timerStatus = colors.StatusRunning("Running")
+		case tracking.StatePaused:
+			timerStatus = colors.StatusPaused("Paused")
+		case tracking.StateStopped:
+			timerStatus = colors.StatusStopped("Stopped")
+		default:
+			timerStatus = colors.Muted(session.State.String())
+		}
+
+		fmt.Printf("Timer:        %s\n", timerStatus)
+		fmt.Printf("Project:      %s\n", colors.Project(session.Project))
+		fmt.Printf("Session:      %s %s\n", colors.Duration(formatDuration(duration)), colors.RelativeTime("started "+formatRelativeTime(session.StartTime)))
 	}
 
 	// Get daily total
@@ -70,22 +83,22 @@ func runStatus(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to get daily total: %w", err)
 	}
-	fmt.Printf("Today Total:  %s\n", formatDuration(dailyTotal))
+	fmt.Printf("Today Total:  %s\n", colors.Duration(formatDuration(dailyTotal)))
 
 	// Get idle status
 	isIdle, err := tracker.IsIdle()
 	if err != nil {
-		fmt.Println("Idle Status:  Unknown (detection failed)")
+		fmt.Printf("Idle Status:  %s\n", colors.Warning("Unknown (detection failed)"))
 	} else {
 		if isIdle {
 			idleTime, err := tracker.GetIdleTime()
 			if err == nil {
-				fmt.Printf("Idle Status:  Idle for %s\n", formatDuration(idleTime))
+				fmt.Printf("Idle Status:  %s for %s\n", colors.Warning("Idle"), colors.Duration(formatDuration(idleTime)))
 			} else {
-				fmt.Println("Idle Status:  Idle")
+				fmt.Printf("Idle Status:  %s\n", colors.Warning("Idle"))
 			}
 		} else {
-			fmt.Println("Idle Status:  Active")
+			fmt.Printf("Idle Status:  %s\n", colors.Success("Active"))
 		}
 	}
 
@@ -98,24 +111,24 @@ func runStatus(cmd *cobra.Command, args []string) error {
 
 	nm := notifications.NewNotificationManager(notificationEnabled)
 	dndManager := dnd.NewDNDManager(nm)
-	
+
 	// Check if shortcuts are set up
 	shortcutsOK, shortcutsErr := dndManager.CheckShortcutsSetup()
-	
+
 	if shortcutsErr != nil {
-		fmt.Println("Focus Mode:   Not supported on this platform")
+		fmt.Printf("Focus Mode:   %s\n", colors.Muted("Not supported on this platform"))
 	} else if !shortcutsOK {
-		fmt.Println("Focus Mode:   Not configured (run 'rune start' for setup)")
+		fmt.Printf("Focus Mode:   %s\n", colors.Warning("Not configured (run 'rune start' for setup)"))
 	} else {
 		// Try to detect current status
 		dndEnabled, err := dndManager.IsEnabled()
 		if err != nil {
-			fmt.Println("Focus Mode:   Available (detection unavailable)")
+			fmt.Printf("Focus Mode:   %s\n", colors.Glow("Available (detection unavailable)"))
 		} else {
 			if dndEnabled {
-				fmt.Println("Focus Mode:   Enabled")
+				fmt.Printf("Focus Mode:   %s\n", colors.Success("Enabled"))
 			} else {
-				fmt.Println("Focus Mode:   Available (currently off)")
+				fmt.Printf("Focus Mode:   %s\n", colors.Glow("Available (currently off)"))
 			}
 		}
 	}

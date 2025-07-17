@@ -1,0 +1,173 @@
+# DevOps/Infrastructure Rune Configuration
+# Designed for DevOps engineers, SREs, and infrastructure teams
+
+version: 1
+
+settings:
+  work_hours: 8.0
+  break_interval: 30m  # Regular breaks between infrastructure tasks
+  idle_threshold: 5m   # Quick response needed for incidents
+  notifications:
+    enabled: true
+    break_reminders: true
+    end_of_day_reminders: true
+    session_complete: true
+    idle_detection: true
+    sound: true  # Important for alerts
+
+projects:
+  - name: "infrastructure"
+    detect: ["terraform/", "*.tf", "ansible/", "*.yml", "k8s/"]
+  - name: "monitoring"
+    detect: ["prometheus/", "grafana/", "alerts/", "dashboards/"]
+  - name: "ci-cd"
+    detect: [".github/", ".gitlab-ci.yml", "jenkins/", "pipeline/"]
+  - name: "security"
+    detect: ["security/", "vault/", "secrets/", "policies/"]
+  - name: "incident-response"
+    detect: ["incidents/", "runbooks/", "postmortems/"]
+  - name: "automation"
+    detect: ["scripts/", "tools/", "automation/"]
+
+rituals:
+  start:
+    global:
+      - name: "Check System Status"
+        command: "kubectl get nodes && kubectl get pods --all-namespaces | grep -v Running"
+        optional: true
+      - name: "Review Alerts"
+        command: "curl -s http://alertmanager:9093/api/v1/alerts | jq '.data[] | select(.status.state == \"active\")'"
+        optional: true
+      - name: "Check Incident Queue"
+        command: "gh issue list --label incident --state open"
+        optional: true
+      - name: "Update On-Call Status"
+        command: "curl -X POST -H 'Authorization: Bearer $PAGERDUTY_TOKEN' https://api.pagerduty.com/oncalls"
+        optional: true
+
+    per_project:
+      infrastructure:
+        - name: "Validate Terraform State"
+          command: "terraform plan -detailed-exitcode"
+          optional: true
+        - name: "Check Infrastructure Drift"
+          command: "terraform plan -out=tfplan && terraform show -json tfplan | jq '.resource_changes[]'"
+          optional: true
+        - name: "Update Infrastructure Docs"
+          command: "terraform-docs markdown . > README.md"
+          optional: true
+
+      monitoring:
+        - name: "Check Prometheus Targets"
+          command: "curl -s http://prometheus:9090/api/v1/targets | jq '.data.activeTargets[] | select(.health != \"up\")'"
+          optional: true
+        - name: "Validate Alert Rules"
+          command: "promtool check rules alerts/*.yml"
+          optional: true
+        - name: "Test Grafana Dashboards"
+          command: "python ~/scripts/test_grafana_dashboards.py"
+          optional: true
+
+      ci-cd:
+        - name: "Check Pipeline Status"
+          command: "gh workflow list --all"
+          optional: true
+        - name: "Review Failed Builds"
+          command: "gh run list --status failure --limit 10"
+          optional: true
+        - name: "Update Pipeline Dependencies"
+          command: "dependabot check"
+          optional: true
+
+      security:
+        - name: "Check Vault Status"
+          command: "vault status"
+          optional: true
+        - name: "Scan for Vulnerabilities"
+          command: "trivy fs . --severity HIGH,CRITICAL"
+          optional: true
+        - name: "Review Security Policies"
+          command: "opa test policies/"
+          optional: true
+
+      incident-response:
+        - name: "Check Incident Status"
+          command: "cat ~/incidents/active.md"
+          optional: true
+        - name: "Prepare Incident Tools"
+          command: "kubectl config current-context && aws sts get-caller-identity"
+          optional: true
+
+  stop:
+    global:
+      - name: "Final System Check"
+        command: "kubectl get pods --all-namespaces | grep -v Running | wc -l"
+        optional: true
+      - name: "Update Runbook"
+        command: "echo '$(date): Session ended. System status: OK' >> ~/runbooks/daily-log.md"
+        optional: false
+      - name: "Backup Configurations"
+        command: "git add . && git commit -m 'End of shift backup: $(date)'"
+        optional: true
+      - name: "Hand-off Notes"
+        command: "echo 'Shift handoff: $(date)' >> ~/handoff/$(date +%Y-%m-%d).md"
+        optional: true
+
+    per_project:
+      infrastructure:
+        - name: "Apply Infrastructure Changes"
+          command: "terraform apply -auto-approve tfplan"
+          optional: true
+        - name: "Update Infrastructure State"
+          command: "terraform refresh"
+          optional: true
+        - name: "Generate Infrastructure Report"
+          command: "python ~/scripts/generate_infra_report.py"
+          optional: true
+
+      monitoring:
+        - name: "Update Alert Thresholds"
+          command: "python ~/scripts/optimize_alert_thresholds.py"
+          optional: true
+        - name: "Export Metrics"
+          command: "python ~/scripts/export_daily_metrics.py"
+          optional: true
+
+      ci-cd:
+        - name: "Deploy Successful Builds"
+          command: "gh workflow run deploy --ref main"
+          optional: true
+        - name: "Update Pipeline Metrics"
+          command: "python ~/scripts/update_pipeline_metrics.py"
+          optional: true
+
+      security:
+        - name: "Rotate Secrets"
+          command: "python ~/scripts/rotate_expiring_secrets.py"
+          optional: true
+        - name: "Update Security Dashboard"
+          command: "python ~/scripts/update_security_dashboard.py"
+          optional: true
+
+      incident-response:
+        - name: "Close Resolved Incidents"
+          command: "python ~/scripts/close_resolved_incidents.py"
+          optional: true
+        - name: "Update Incident Metrics"
+          command: "python ~/scripts/update_incident_metrics.py"
+          optional: true
+
+integrations:
+  git:
+    enabled: true
+    auto_detect_project: true
+  slack:
+    workspace: "devops-team"
+    dnd_on_start: false  # Need to be available for incidents
+  calendar:
+    provider: "google"
+    block_calendar: false  # Flexible for incident response
+  telemetry:
+    enabled: true  # Important for infrastructure monitoring
+    segment_write_key: ""
+    sentry_dsn: ""

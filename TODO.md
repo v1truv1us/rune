@@ -17,14 +17,14 @@
 
 - [x] **Configuration Management** ✅ COMPLETED
   - [x] Schema validation with helpful error messages
-  - [ ] Migration tools from Watson/Timewarrior
-  - [ ] Example configurations for common workflows
+  - [x] Migration tools from Watson/Timewarrior ✅ COMPLETED
+  - [x] Example configurations for common workflows ✅ COMPLETED
   - [ ] Configuration file encryption for sensitive data
 
 - [x] **Cross-Platform DND Automation** ✅ COMPLETED
   - [x] macOS Do Not Disturb integration (via Shortcuts)
-  - [ ] Windows Focus Assist integration
-  - [ ] Linux desktop environment integration
+  - [x] Windows Focus Assist integration ✅ COMPLETED
+  - [x] Linux desktop environment integration ✅ COMPLETED
   - [x] Fallback mechanisms for unsupported systems
 
 - [x] **Basic Reporting** ✅ COMPLETED
@@ -38,13 +38,12 @@
   - [x] Zsh completion scripts
   - [x] Fish completion scripts
   - [ ] PowerShell completion scripts
-  - [ ] **CLI Visual Enhancements**
-    - [ ] Add Rune ASCII logo to --version output
-    - [ ] Add logo to help command header
-    - [ ] Implement colored output with theme support
-    - [ ] Add progress bars for long-running operations
-    - [ ] Implement interactive prompts with validation
-
+   - [ ] **CLI Visual Enhancements**
+     - [x] Add Rune ASCII logo to --version output ✅ COMPLETED (already implemented)
+     - [x] Add logo to help command header ✅ COMPLETED (already implemented)
+     - [ ] Implement colored output with theme support
+     - [ ] Add progress bars for long-running operations
+     - [ ] Implement interactive prompts with validation
 ### CLI Interface
 - [x] **Command Structure Implementation** ✅ COMPLETED
   - [x] `rune init --guided` with interactive setup
@@ -162,19 +161,19 @@
 ## Recently Identified Issues (January 2025)
 
 ### Session Display & UX Issues
-- [ ] **Relative Time Display for Sessions**
-  - [ ] Implement `formatRelativeTime()` function in utils.go
-  - [ ] Add relative time display to session reports (e.g., "2h ago", "yesterday") 
-  - [ ] Update status command to show when current session started
-  - [ ] Handle edge cases: "just now", "yesterday", "2 days ago", etc.
-  - [ ] Issue: Documentation shows example with "(2h 30m ago)" but feature doesn't exist in code
+- [x] **Relative Time Display for Sessions** ✅ COMPLETED (January 2025)
+  - [x] Implement `formatRelativeTime()` function in utils.go
+  - [x] Add relative time display to session reports (e.g., "2h ago", "yesterday") 
+  - [x] Update status command to show when current session started
+  - [x] Handle edge cases: "just now", "yesterday", "2 days ago", etc.
+  - [x] Issue: Documentation shows example with "(2h 30m ago)" but feature doesn't exist in code
 
 ### Release & Distribution
-- [ ] **GoReleaser Configuration**
+- [x] **GoReleaser Configuration** ✅ COMPLETED (January 2025)
   - [x] Fix homebrew_casks syntax issues (completed January 2025)
   - [x] Add release validation rules to CLAUDE.md (completed January 2025)
   - [x] Update all documentation to use `--cask` flag (completed January 2025)
-  - [ ] Test actual Homebrew cask installation workflow
+  - [x] Test actual Homebrew cask installation workflow ✅ COMPLETED (July 2025)
 
 ## Technical Debt & Maintenance
 

@@ -1,0 +1,225 @@
+# Content Creator Rune Configuration
+# Designed for bloggers, YouTubers, podcasters, and content creators
+
+version: 1
+
+settings:
+  work_hours: 6.0      # Flexible creative schedule
+  break_interval: 40m  # Longer focus periods for content creation
+  idle_threshold: 10m  # Time for thinking and planning
+  notifications:
+    enabled: true
+    break_reminders: true
+    end_of_day_reminders: false  # Irregular content creation hours
+    session_complete: true
+    idle_detection: false  # Planning time is valuable
+    sound: false  # Quiet for recording
+
+projects:
+  - name: "youtube"
+    detect: ["youtube/", "videos/", "*.mp4", "*.mov"]
+  - name: "blog"
+    detect: ["blog/", "posts/", "*.md", "content/"]
+  - name: "podcast"
+    detect: ["podcast/", "episodes/", "*.wav", "*.mp3"]
+  - name: "social-media"
+    detect: ["social/", "instagram/", "twitter/", "tiktok/"]
+  - name: "newsletter"
+    detect: ["newsletter/", "email/", "subscribers/"]
+  - name: "courses"
+    detect: ["courses/", "lessons/", "curriculum/"]
+
+rituals:
+  start:
+    global:
+      - name: "Check Content Calendar"
+        command: "cat ~/content/calendar/$(date +%Y-%m-%d).md"
+        optional: true
+      - name: "Review Analytics"
+        command: "python ~/scripts/fetch_analytics.py"
+        optional: true
+      - name: "Set Creative Environment"
+        command: "osascript -e 'tell application \"Spotify\" to play playlist \"Content Creation\"'"
+        background: true
+        optional: true
+      - name: "Check Trending Topics"
+        command: "python ~/scripts/check_trending_topics.py"
+        optional: true
+
+    per_project:
+      youtube:
+        - name: "Open Video Editor"
+          command: "open -a 'Final Cut Pro'"
+          background: true
+          optional: true
+        - name: "Check Upload Schedule"
+          command: "cat ~/youtube/upload-schedule.md"
+          optional: true
+        - name: "Prepare Recording Setup"
+          command: "python ~/scripts/check_recording_setup.py"
+          optional: true
+        - name: "Review Video Ideas"
+          command: "cat ~/youtube/ideas.md"
+          optional: true
+
+      blog:
+        - name: "Open Writing Environment"
+          command: "code ~/blog/"
+          background: true
+          optional: true
+        - name: "Check SEO Keywords"
+          command: "python ~/scripts/check_seo_keywords.py"
+          optional: true
+        - name: "Review Draft Posts"
+          command: "ls ~/blog/drafts/"
+          optional: true
+        - name: "Start Writing Timer"
+          command: "echo '$(date): Started writing session' >> ~/blog/writing-log.txt"
+          optional: false
+
+      podcast:
+        - name: "Open Audio Editor"
+          command: "open -a 'Logic Pro'"
+          background: true
+          optional: true
+        - name: "Check Recording Quality"
+          command: "python ~/scripts/test_audio_setup.py"
+          optional: true
+        - name: "Review Episode Outline"
+          command: "cat ~/podcast/episodes/current-outline.md"
+          optional: true
+        - name: "Prepare Show Notes"
+          command: "touch ~/podcast/episodes/$(date +%Y-%m-%d)-notes.md"
+          optional: true
+
+      social-media:
+        - name: "Check Scheduled Posts"
+          command: "python ~/scripts/check_scheduled_posts.py"
+          optional: true
+        - name: "Review Engagement"
+          command: "python ~/scripts/fetch_social_metrics.py"
+          optional: true
+        - name: "Generate Content Ideas"
+          command: "python ~/scripts/generate_content_ideas.py"
+          optional: true
+
+      newsletter:
+        - name: "Check Subscriber Count"
+          command: "python ~/scripts/check_subscriber_count.py"
+          optional: true
+        - name: "Review Newsletter Template"
+          command: "code ~/newsletter/templates/current.html"
+          optional: true
+        - name: "Prepare Content Curation"
+          command: "python ~/scripts/curate_newsletter_content.py"
+          optional: true
+
+      courses:
+        - name: "Open Course Platform"
+          command: "open https://teachable.com/dashboard"
+          background: true
+          optional: true
+        - name: "Check Student Progress"
+          command: "python ~/scripts/check_student_progress.py"
+          optional: true
+        - name: "Review Course Outline"
+          command: "cat ~/courses/current/outline.md"
+          optional: true
+
+  stop:
+    global:
+      - name: "Log Content Progress"
+        command: "echo '$(date): Content session ended' >> ~/content/daily-log.md"
+        optional: false
+      - name: "Backup Content"
+        command: "rsync -av ~/content/ ~/Dropbox/content-backup/"
+        background: true
+        optional: true
+      - name: "Update Content Calendar"
+        command: "python ~/scripts/update_content_calendar.py"
+        optional: true
+      - name: "Generate Daily Report"
+        command: "python ~/scripts/generate_content_report.py"
+        optional: true
+
+    per_project:
+      youtube:
+        - name: "Export Video Preview"
+          command: "python ~/scripts/export_video_preview.py"
+          optional: true
+        - name: "Update Video Metadata"
+          command: "python ~/scripts/update_video_metadata.py"
+          optional: true
+        - name: "Schedule Upload"
+          command: "python ~/scripts/schedule_youtube_upload.py"
+          optional: true
+
+      blog:
+        - name: "Count Words Written"
+          command: "wc -w ~/blog/drafts/*.md | tail -1 >> ~/blog/writing-stats.txt"
+          optional: true
+        - name: "Check Grammar"
+          command: "python ~/scripts/grammar_check.py ~/blog/drafts/"
+          optional: true
+        - name: "Generate SEO Report"
+          command: "python ~/scripts/generate_seo_report.py"
+          optional: true
+
+      podcast:
+        - name: "Export Audio Preview"
+          command: "python ~/scripts/export_audio_preview.py"
+          optional: true
+        - name: "Generate Transcript"
+          command: "python ~/scripts/generate_transcript.py"
+          optional: true
+        - name: "Update Podcast Feed"
+          command: "python ~/scripts/update_podcast_feed.py"
+          optional: true
+
+      social-media:
+        - name: "Schedule Posts"
+          command: "python ~/scripts/schedule_social_posts.py"
+          optional: true
+        - name: "Generate Hashtags"
+          command: "python ~/scripts/generate_hashtags.py"
+          optional: true
+        - name: "Update Social Calendar"
+          command: "python ~/scripts/update_social_calendar.py"
+          optional: true
+
+      newsletter:
+        - name: "Generate Newsletter"
+          command: "python ~/scripts/generate_newsletter.py"
+          optional: true
+        - name: "Schedule Send"
+          command: "python ~/scripts/schedule_newsletter.py"
+          optional: true
+        - name: "Update Subscriber Segments"
+          command: "python ~/scripts/update_subscriber_segments.py"
+          optional: true
+
+      courses:
+        - name: "Export Lesson Materials"
+          command: "python ~/scripts/export_lesson_materials.py"
+          optional: true
+        - name: "Update Course Progress"
+          command: "python ~/scripts/update_course_progress.py"
+          optional: true
+        - name: "Generate Student Reports"
+          command: "python ~/scripts/generate_student_reports.py"
+          optional: true
+
+integrations:
+  git:
+    enabled: true
+    auto_detect_project: true
+  slack:
+    workspace: "content-team"
+    dnd_on_start: true  # Focus time for content creation
+  calendar:
+    provider: "google"
+    block_calendar: true  # Protect creative time
+  telemetry:
+    enabled: false
+    segment_write_key: ""
+    sentry_dsn: ""
