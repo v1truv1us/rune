@@ -4,24 +4,23 @@ title: "Getting Started - Rune CLI"
 description: "Get up and running with Rune CLI in minutes"
 ---
 
-# Getting Started
+# Getting Started with Rune CLI Beta
+
+> **🚀 Beta Status**: You're installing v0.9.0-beta.1 - the MVP feature-complete version. [Join the beta program](/beta) for updates and feedback channels.
 
 ## Installation
 
-### Homebrew (Recommended for macOS/Linux)
+### Quick Install Script (Recommended)
+
+```bash
+# macOS/Linux
+curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | bash
+```
+
+### Homebrew (macOS)
 
 ```bash
 brew install --cask ferg-cod3s/tap/rune
-```
-
-### Quick Install Script
-
-```bash
-# With Homebrew suggestion
-curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | sh
-
-# Skip Homebrew suggestion
-curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | sh -s -- --skip-homebrew
 ```
 
 ### Go Install
@@ -30,15 +29,15 @@ curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | s
 go install github.com/ferg-cod3s/rune/cmd/rune@latest
 ```
 
-### Download Binary
+### Manual Installation
 
-Download the latest release from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases) and place it in your PATH.
+1. Download the latest beta from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.9.0-beta.1)
+2. Extract the binary and move to your PATH
+3. Make executable: `chmod +x rune`
 
-### Package Managers
+### Windows Installation
 
-- **Debian/Ubuntu**: Download `.deb` from releases
-- **RHEL/CentOS**: Download `.rpm` from releases
-- **Arch Linux**: Available in AUR (coming soon)
+Download the Windows binary from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.9.0-beta.1) and add to your PATH.
 
 ## Initial Setup
 
@@ -116,10 +115,17 @@ rune config show
 - [Explore command reference](/docs/commands)
 - [See example workflows](/examples)
 
+## Beta Feedback
+
+As a beta user, your feedback is invaluable! Please share:
+
+- **GitHub Discussions**: [General feedback and questions](https://github.com/ferg-cod3s/rune/discussions)
+- **GitHub Issues**: [Bug reports and feature requests](https://github.com/ferg-cod3s/rune/issues)
+- **Email**: beta@rune.dev for private feedback
+
 ## Getting Help
 
 - Run `rune --help` for command overview
 - Run `rune <command> --help` for specific command help
-- Visit our [GitHub Discussions](https://github.com/ferg-cod3s/rune/discussions)
-- Report issues on [GitHub Issues](https://github.com/ferg-cod3s/rune/issues)
-  EOF < /dev/null
+- Check the [Beta Program page](/beta) for known issues
+- Visit [GitHub Discussions](https://github.com/ferg-cod3s/rune/discussions) for community support
