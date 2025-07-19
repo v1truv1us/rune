@@ -1,29 +1,47 @@
-[phases]
-# Install Bun
+[providers]
+# Use Node.js provider as base
+nodejs = "22"
+
 [phases.setup]
-run = [
+# Install Bun
+nixPkgs = ["curl", "unzip"]
+cmds = [
   "curl -fsSL https://bun.sh/install | bash",
-  "export PATH=\"/root/.bun/bin:$PATH\""
+  "echo 'export PATH=\"$HOME/.bun/bin:$PATH\"' >> ~/.bashrc",
+  "export PATH=\"$HOME/.bun/bin:$PATH\""
 ]
 
-# Install dependencies using Bun
 [phases.install]
-run = [
-  "export PATH=\"/root/.bun/bin:$PATH\" && bun install"
+# Install dependencies using Bun
+cmds = [
+  "export PATH=\"$HOME/.bun/bin:$PATH\"",
+  "bun install --frozen-lockfile"
 ]
 
-# Build the application using Bun
 [phases.build]
-run = [
-  "export PATH=\"/root/.bun/bin:$PATH\" && bun run build"
+# Build the application using Bun
+cmds = [
+  "export PATH=\"$HOME/.bun/bin:$PATH\"",
+  "bun run build"
 ]
 
-[environment]
-NODE_ENV="production"
+[start]
+# Start command for production
+cmd = "bun run preview"
+
+[variables]
+NODE_ENV = "production"
+BUN_INSTALL = "$HOME/.bun"
+PATH = "$HOME/.bun/bin:$PATH"
+
+[staticAssets]
+# Serve static files from dist directory
+dir = "dist"
 
 [cache]
-# Cache paths to speed up builds
+# Cache Bun installation and node_modules
 paths = [
-  "/root/.bun",
-  "/root/.local/share/pnpm/store/v3"
+  "$HOME/.bun",
+  "node_modules",
+  ".astro"
 ]
