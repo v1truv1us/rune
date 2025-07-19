@@ -1,0 +1,20 @@
+[phases]
+# Install Bun and dependencies
+setup = "curl -fsSL https://bun.sh/install | bash"
+install = "bun install"
+
+# Build the application using Bun
+build = "bun run build"
+
+[environment]
+# Include Bun in the PATH
+PATH = "/root/.bun/bin:$PATH"
+NODE_ENV = "production"
+NIXPACKS_PATH = "/app/node_modules/.bin"
+
+[cache]
+# Cache paths to speed up builds
+paths = [
+  "/root/.bun",
+  "/root/.local/share/pnpm/store/v3"
+]
