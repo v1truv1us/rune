@@ -3,17 +3,26 @@ providers = ["bun"]
 [variables]
 NODE_ENV = "production"
 
+[phases.setup]
+# Install nginx
+nixPkgs = ["nginx"]
+
 [phases.install]
 # Install dependencies using Bun
 cmds = ["bun install --frozen-lockfile"]
 
 [phases.build]
-# Build the application using Bun
-cmds = ["bun run build"]
+# Build the application using Bun and setup nginx
+cmds = [
+  "bun run build",
+  "mkdir -p /usr/share/nginx/html",
+  "cp -r dist/* /usr/share/nginx/html/",
+  "cp nginx.conf /etc/nginx/nginx.conf"
+]
 
 [start]
-# Start command for production
-cmd = "bun run preview"
+# Start command for production - use nginx to serve static files
+cmd = "nginx -g 'daemon off;'"
 
 [staticAssets]
 # Serve static files from dist directory
