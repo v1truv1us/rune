@@ -1,21 +1,25 @@
 [phases]
 # Install Bun
 [phases.setup]
-run = ["curl -fsSL https://bun.sh/install | bash"]
+run = [
+  "curl -fsSL https://bun.sh/install | bash",
+  "export PATH=\"/root/.bun/bin:$PATH\""
+]
 
 # Install dependencies using Bun
 [phases.install]
-run = ["bun install"]
+run = [
+  "export PATH=\"/root/.bun/bin:$PATH\" && bun install"
+]
 
 # Build the application using Bun
 [phases.build]
-run = ["bun run build"]
+run = [
+  "export PATH=\"/root/.bun/bin:$PATH\" && bun run build"
+]
 
 [environment]
-# Ensure Bun is in the PATH
-PATH = "/root/.bun/bin:$PATH"
-NODE_ENV = "production"
-NIXPACKS_PATH = "/app/node_modules/.bin"
+NODE_ENV="production"
 
 [cache]
 # Cache paths to speed up builds
