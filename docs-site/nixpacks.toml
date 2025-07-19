@@ -1,10 +1,15 @@
 [phases]
-# Install Bun and dependencies
-setup = "curl -fsSL https://bun.sh/install | bash"
-install = "bun install"
+# Define the setup phase as a structured command
+[phases.setup]
+run = ["curl -fsSL https://bun.sh/install | bash"]
 
-# Build the application using Bun
-build = "bun run build"
+# Define the install phase
+[phases.install]
+run = ["bun install"]
+
+# Define the build phase
+[phases.build]
+run = ["bun run build"]
 
 [environment]
 # Include Bun in the PATH
