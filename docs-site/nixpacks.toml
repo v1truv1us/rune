@@ -1,47 +1,27 @@
-[providers]
-# Use Node.js provider as base
-nodejs = "22"
+providers = ["bun"]
 
-[phases.setup]
-# Install Bun
-nixPkgs = ["curl", "unzip"]
-cmds = [
-  "curl -fsSL https://bun.sh/install | bash",
-  "echo 'export PATH=\"$HOME/.bun/bin:$PATH\"' >> ~/.bashrc",
-  "export PATH=\"$HOME/.bun/bin:$PATH\""
-]
+[variables]
+NODE_ENV = "production"
 
 [phases.install]
 # Install dependencies using Bun
-cmds = [
-  "export PATH=\"$HOME/.bun/bin:$PATH\"",
-  "bun install --frozen-lockfile"
-]
+cmds = ["bun install --frozen-lockfile"]
 
 [phases.build]
 # Build the application using Bun
-cmds = [
-  "export PATH=\"$HOME/.bun/bin:$PATH\"",
-  "bun run build"
-]
+cmds = ["bun run build"]
 
 [start]
 # Start command for production
 cmd = "bun run preview"
-
-[variables]
-NODE_ENV = "production"
-BUN_INSTALL = "$HOME/.bun"
-PATH = "$HOME/.bun/bin:$PATH"
 
 [staticAssets]
 # Serve static files from dist directory
 dir = "dist"
 
 [cache]
-# Cache Bun installation and node_modules
+# Cache node_modules and Astro build cache
 paths = [
-  "$HOME/.bun",
   "node_modules",
   ".astro"
 ]
