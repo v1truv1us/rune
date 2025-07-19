@@ -1,20 +1,14 @@
-providers = ["node"]
+providers = ["bun"]
 
 [variables]
 NODE_ENV = "production"
 
 [phases.setup]
-# Install nginx for serving static files
 nixPkgs = ["nginx"]
 
-[phases.install]
-# Install dependencies using npm (compatible with bun.lock)
-cmds = ["npm install"]
-
 [phases.build]
-# Build the application and setup nginx
 cmds = [
-  "npm run build",
+  "bun run build",
   "mkdir -p /usr/share/nginx/html",
   "cp -r dist/* /usr/share/nginx/html/",
   "cp nginx.conf /etc/nginx/nginx.conf"
