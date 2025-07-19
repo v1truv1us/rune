@@ -7,12 +7,14 @@ install = "bun install"
 build = "bun run build"
 
 [environment]
-# Ensure Bun is in the PATH
+# Include Bun in the PATH
 PATH = "/root/.bun/bin:$PATH"
+NODE_ENV = "production"
+NIXPACKS_PATH = "/app/node_modules/.bin"
 
-
-# Optional: Add cache paths for faster builds
 [cache]
+# Cache paths to speed up builds
 paths = [
-  "/root/.bun"
+  "/root/.bun",
+  "/root/.local/share/pnpm/store/v3"
 ]
