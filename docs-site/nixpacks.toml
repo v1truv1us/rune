@@ -1,19 +1,27 @@
-providers = ["bun"]
+providers = ["node"]
 
 [variables]
 NODE_ENV = "production"
 
 [phases.setup]
-# Install nginx
-nixPkgs = ["nginx"]
+# Install nginx and curl for bun installation
+nixPkgs = ["nginx", "curl", "unzip"]
+cmds = [
+  "curl -fsSL https://bun.sh/install | bash",
+  "export PATH=\"$HOME/.bun/bin:$PATH\""
+]
 
 [phases.install]
 # Install dependencies using Bun
-cmds = ["bun install --frozen-lockfile"]
+cmds = [
+  "export PATH=\"$HOME/.bun/bin:$PATH\"",
+  "bun install --frozen-lockfile"
+]
 
 [phases.build]
 # Build the application using Bun and setup nginx
 cmds = [
+  "export PATH=\"$HOME/.bun/bin:$PATH\"",
   "bun run build",
   "mkdir -p /usr/share/nginx/html",
   "cp -r dist/* /usr/share/nginx/html/",
