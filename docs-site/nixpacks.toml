@@ -1,18 +1,18 @@
 [phases]
-# Define the setup phase as a structured command
+# Install Bun
 [phases.setup]
 run = ["curl -fsSL https://bun.sh/install | bash"]
 
-# Define the install phase
+# Install dependencies using Bun
 [phases.install]
 run = ["bun install"]
 
-# Define the build phase
+# Build the application using Bun
 [phases.build]
 run = ["bun run build"]
 
 [environment]
-# Include Bun in the PATH
+# Ensure Bun is in the PATH
 PATH = "/root/.bun/bin:$PATH"
 NODE_ENV = "production"
 NIXPACKS_PATH = "/app/node_modules/.bin"
