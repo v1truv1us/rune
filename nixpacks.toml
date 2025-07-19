@@ -1,0 +1,18 @@
+[phases]
+# Install Bun and dependencies
+setup = "curl -fsSL https://bun.sh/install | bash"
+install = "bun install"
+
+# Build the application using Bun
+build = "bun run build"
+
+[environment]
+# Ensure Bun is in the PATH
+PATH = "/root/.bun/bin:$PATH"
+
+
+# Optional: Add cache paths for faster builds
+[cache]
+paths = [
+  "/root/.bun"
+]
