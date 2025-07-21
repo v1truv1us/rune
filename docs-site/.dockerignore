@@ -1,0 +1,10 @@
+node_modules
+.astro
+dist
+.git
+.github
+README.md
+docker-compose.yml
+.dockerignore
+nixpacks.toml
+pnpm-lock.yaml
