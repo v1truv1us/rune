@@ -26,7 +26,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Set proper permissions for nginx content
+# Set proper permissions for nginx content  
 RUN chmod -R 755 /usr/share/nginx/html
 
 EXPOSE 80

@@ -5,8 +5,8 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     environment:
       - NODE_ENV=production
     restart: unless-stopped
@@ -16,10 +16,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.docs.rule=Host(`${DOMAIN:-localhost}`)"
-      - "traefik.http.services.docs.loadbalancer.server.port=80"
 
   # Development service
   docs-dev:

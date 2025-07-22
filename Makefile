@@ -33,6 +33,11 @@ test:
 	@echo "Running tests..."
 	go test -v ./...
 
+# Run security-specific tests
+test-security:
+	@echo "Running security tests..."
+	go test -v -tags=security ./...
+
 # Run tests with coverage
 test-coverage:
 	@echo "Running tests with coverage..."
@@ -144,12 +149,12 @@ pre-commit: fmt vet lint test test-scripts validate-workflows
 # Security targets
 security-deps:
 	@echo "Checking dependencies for vulnerabilities..."
-	go install github.com/sonatypecommunity/nancy@latest
-	go list -json -deps ./... | nancy sleuth --loud
+	@echo "Using govulncheck for dependency vulnerability scanning..."
+	go install golang.org/x/vuln/cmd/govulncheck@latest
+	govulncheck ./...
 
 security-vulns:
 	@echo "Checking for known vulnerabilities..."
-	go install golang.org/x/vuln/cmd/govulncheck@latest
 	govulncheck ./...
 
 security-static:
