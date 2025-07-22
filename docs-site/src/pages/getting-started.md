@@ -32,12 +32,12 @@ go install github.com/ferg-cod3s/rune/cmd/rune@latest
 ### Manual Installation
 
 1. Download the latest beta from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.9.0-beta.1)
-2. Extract the binary and move to your PATH
+2. Extract the binary and move to your `PATH`
 3. Make executable: `chmod +x rune`
 
 ### Windows Installation
 
-Download the Windows binary from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.9.0-beta.1) and add to your PATH.
+Download the Windows binary from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.9.0-beta.1) and add to your `PATH`.
 
 ## Initial Setup
 
@@ -121,7 +121,7 @@ As a beta user, your feedback is invaluable! Please share:
 
 - **GitHub Discussions**: [General feedback and questions](https://github.com/ferg-cod3s/rune/discussions)
 - **GitHub Issues**: [Bug reports and feature requests](https://github.com/ferg-cod3s/rune/issues)
-- **Email**: beta@rune.dev for private feedback
+- **Email**: `beta@rune.dev` for private feedback
 
 ## Getting Help
 

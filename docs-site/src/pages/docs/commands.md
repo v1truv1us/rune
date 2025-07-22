@@ -298,4 +298,3 @@ These flags are available for all commands:
 - `2` - Configuration error
 - `3` - Runtime error
 - `4` - User interruption (Ctrl+C)
-  EOF < /dev/null

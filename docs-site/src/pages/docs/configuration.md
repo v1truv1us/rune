@@ -338,7 +338,7 @@ rune config validate
 
 Common validation errors:
 
-- Invalid YAML syntax
+- Invalid `YAML` syntax
 - Unknown configuration keys
 - Invalid duration formats
 - Missing required fields
@@ -346,13 +346,13 @@ Common validation errors:
 
 ## Migration
 
-### From Watson
+### From `Watson`
 
 ```bash
 rune config migrate --from watson --backup
 ```
 
-### From Timewarrior
+### From `Timewarrior`
 
 ```bash
 rune config migrate --from timewarrior --backup
@@ -365,4 +365,3 @@ rune config migrate --from timewarrior --backup
 3. **Backup**: Regularly backup your configuration
 4. **Testing**: Test rituals with `--dry-run` flag
 5. **Documentation**: Document custom rituals and integrations
-   EOF < /dev/null
