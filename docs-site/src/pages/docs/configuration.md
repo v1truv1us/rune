@@ -365,4 +365,3 @@ rune config migrate --from timewarrior --backup
 3. **Backup**: Regularly backup your configuration
 4. **Testing**: Test rituals with `--dry-run` flag
 5. **Documentation**: Document custom rituals and integrations
-   EOF < /dev/null
