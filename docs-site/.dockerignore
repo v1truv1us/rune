@@ -8,3 +8,5 @@ docker-compose.yml
 .dockerignore
 nixpacks.toml
 pnpm-lock.yaml
+**/*.test.*
+**/*.spec.*
