@@ -1,7 +1,10 @@
 ---
-layout: ../layouts/BaseLayout.astro
-title: "Getting Started - Rune CLI"
-description: "Get up and running with Rune CLI in minutes"
+layout: ../layouts/DocsLayout.astro
+title: "Getting Started with Rune CLI | Installation & Quick Setup Guide"
+description: "Complete installation guide for Rune CLI. Learn how to install, configure, and start using this developer productivity tool on macOS, Linux, and Windows in minutes."
+image: "/og-getting-started.png"
+category: "Getting Started"
+lastModified: "2024-07-23T00:00:00Z"
 ---
 
 # Getting Started with Rune CLI Beta

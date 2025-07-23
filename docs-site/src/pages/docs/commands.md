@@ -1,7 +1,10 @@
 ---
-layout: ../../layouts/BaseLayout.astro
-title: "Commands Reference - Rune CLI"
-description: "Complete reference for all Rune CLI commands"
+layout: ../../layouts/DocsLayout.astro
+title: "CLI Commands Reference - Rune CLI | Complete Command Guide"
+description: "Complete reference guide for all Rune CLI commands including start, stop, pause, resume, report, config, ritual, and utility commands with examples and flags."
+image: "/og-commands.png"
+category: "Commands Reference"
+lastModified: "2024-07-23T00:00:00Z"
 ---
 
 # Commands Reference

@@ -1,6 +1,10 @@
 ---
-layout: ../layouts/BaseLayout.astro
-title: "Beta Program - Rune CLI"
+layout: ../layouts/DocsLayout.astro
+title: "Beta Program - Rune CLI | Join Early Access Testing"
+description: "Join the Rune CLI beta program and help shape the future of developer productivity automation. Get early access to features, provide feedback, and connect with the developer community."
+image: "/og-beta.png"
+category: "Beta Program"
+lastModified: "2024-07-23T00:00:00Z"
 ---
 
 # 🚀 Rune CLI Beta Program

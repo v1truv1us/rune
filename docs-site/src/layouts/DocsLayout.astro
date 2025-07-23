@@ -1,0 +1,195 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  noindex?: boolean;
+  lastModified?: string;
+  category?: string;
+}
+
+const { 
+  title, 
+  description = "Ancient wisdom for modern workflows - Rune CLI Documentation", 
+  image = "/og-docs.png",
+  canonical,
+  noindex = false,
+  lastModified,
+  category = "Documentation"
+} = Astro.props;
+
+const currentUrl = canonical || Astro.url.href;
+const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
+const keywords = [
+  "CLI documentation", 
+  "developer tools guide", 
+  "productivity automation", 
+  "time tracking setup", 
+  "workflow automation", 
+  "focus mode configuration",
+  "ritual automation",
+  "project detection",
+  category.toLowerCase()
+].join(", ");
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Rune CLI Team" />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    {lastModified && <meta name="article:modified_time" content={lastModified} />}
+    
+    <!-- Canonical URL -->
+    {canonical && <link rel="canonical" href={canonical} />}
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${title} - Rune CLI Documentation`} />
+    <meta property="og:site_name" content="Rune CLI" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:section" content={category} />
+    <meta property="article:tag" content="CLI" />
+    <meta property="article:tag" content="Documentation" />
+    <meta property="article:tag" content="Developer Tools" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={currentUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={fullImageUrl} />
+    <meta property="twitter:image:alt" content={`${title} - Rune CLI Documentation`} />
+    <meta property="twitter:creator" content="@RuneCLI" />
+    <meta property="twitter:site" content="@RuneCLI" />
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="msapplication-TileColor" content="#0f172a" />
+    
+    <!-- Additional Meta -->
+    <meta name="generator" content={Astro.generator} />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Structured Data for Documentation -->
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": title,
+        "description": description,
+        "url": currentUrl,
+        "image": fullImageUrl,
+        "datePublished": "2024-07-16T00:00:00Z",
+        "dateModified": lastModified || "2024-07-23T00:00:00Z",
+        "author": {
+          "@type": "Organization",
+          "name": "Rune CLI Team",
+          "url": "https://github.com/ferg-cod3s"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Rune CLI",
+          "url": "https://rune.dev",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://rune.dev/logo.png"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": currentUrl
+        },
+        "about": {
+          "@type": "SoftwareApplication",
+          "name": "Rune CLI",
+          "applicationCategory": "DeveloperApplication"
+        },
+        "keywords": keywords
+      })}
+    </script>
+  </head>
+  <body class="bg-gray-950 text-gray-100 min-h-screen">
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <nav class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/" class="flex items-center space-x-3">
+              <div class="font-mono text-xl font-bold text-blue-400">RUNE</div>
+              <span class="text-gray-400">CLI</span>
+            </a>
+          </div>
+          <div class="flex items-center space-x-8">
+            <a href="/docs" class="text-gray-300 hover:text-blue-400 transition-colors">Docs</a>
+            <a href="/getting-started" class="text-gray-300 hover:text-blue-400 transition-colors">Getting Started</a>
+            <a href="/examples" class="text-gray-300 hover:text-blue-400 transition-colors">Examples</a>
+            <a href="https://github.com/ferg-cod3s/rune" class="text-gray-300 hover:text-blue-400 transition-colors">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <main id="main">
+      <div class="markdown-content">
+        <slot />
+      </div>
+    </main>
+    
+    <footer class="border-t border-gray-800 mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="col-span-2">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="font-mono text-xl font-bold text-blue-400">RUNE</div>
+              <span class="text-gray-400">CLI</span>
+            </div>
+            <p class="text-gray-400 max-w-md">
+              Ancient wisdom for modern workflows. A developer-first CLI productivity platform.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-gray-200 font-semibold mb-4">Documentation</h3>
+            <ul class="space-y-2">
+              <li><a href="/getting-started" class="text-gray-400 hover:text-blue-400 transition-colors">Getting Started</a></li>
+              <li><a href="/docs/commands" class="text-gray-400 hover:text-blue-400 transition-colors">Commands</a></li>
+              <li><a href="/docs/configuration" class="text-gray-400 hover:text-blue-400 transition-colors">Configuration</a></li>
+              <li><a href="/examples" class="text-gray-400 hover:text-blue-400 transition-colors">Examples</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-gray-200 font-semibold mb-4">Community</h3>
+            <ul class="space-y-2">
+              <li><a href="https://github.com/ferg-cod3s/rune" class="text-gray-400 hover:text-blue-400 transition-colors">GitHub</a></li>
+              <li><a href="https://github.com/ferg-cod3s/rune/issues" class="text-gray-400 hover:text-blue-400 transition-colors">Issues</a></li>
+              <li><a href="https://github.com/ferg-cod3s/rune/discussions" class="text-gray-400 hover:text-blue-400 transition-colors">Discussions</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <p>© 2024 Rune CLI. Licensed under MIT.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
