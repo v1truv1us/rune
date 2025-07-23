@@ -1,7 +1,10 @@
 ---
-layout: ../../layouts/BaseLayout.astro
-title: "Configuration Guide - Rune CLI"
-description: "Complete guide to configuring Rune CLI"
+layout: ../../layouts/DocsLayout.astro
+title: "Configuration Guide - Rune CLI | YAML Setup & Customization"
+description: "Complete configuration guide for Rune CLI. Learn how to set up YAML config files, configure projects, rituals, integrations, focus mode, and customize your developer workflow automation."
+image: "/og-configuration.png"
+category: "Configuration"
+lastModified: "2024-07-23T00:00:00Z"
 ---
 
 # Configuration Guide

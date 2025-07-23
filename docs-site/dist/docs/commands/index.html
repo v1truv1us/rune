@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="en" class="dark"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Primary Meta Tags --><title></title><meta name="title"><meta name="description" content="Ancient wisdom for modern workflows - Rune CLI Documentation"><meta name="keywords" content="CLI documentation, developer tools guide, productivity automation, time tracking setup, workflow automation, focus mode configuration, ritual automation, project detection, documentation"><meta name="author" content="Rune CLI Team"><meta name="robots" content="index, follow"><!-- Canonical URL --><!-- Open Graph / Facebook --><meta property="og:type" content="article"><meta property="og:url" content="https://runecli.dev/docs/commands/"><meta property="og:title"><meta property="og:description" content="Ancient wisdom for modern workflows - Rune CLI Documentation"><meta property="og:image" content="https://runecli.dev/og-docs.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="undefined - Rune CLI Documentation"><meta property="og:site_name" content="Rune CLI"><meta property="og:locale" content="en_US"><meta property="article:section" content="Documentation"><meta property="article:tag" content="CLI"><meta property="article:tag" content="Documentation"><meta property="article:tag" content="Developer Tools"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://runecli.dev/docs/commands/"><meta property="twitter:title"><meta property="twitter:description" content="Ancient wisdom for modern workflows - Rune CLI Documentation"><meta property="twitter:image" content="https://runecli.dev/og-docs.png"><meta property="twitter:image:alt" content="undefined - Rune CLI Documentation"><meta property="twitter:creator" content="@RuneCLI"><meta property="twitter:site" content="@RuneCLI"><!-- Favicons --><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#0f172a"><meta name="msapplication-TileColor" content="#0f172a"><!-- Additional Meta --><meta name="generator" content="Astro v4.16.18"><meta name="format-detection" content="telephone=no"><!-- Structured Data for Documentation --><script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": title,
+        "description": description,
+        "url": currentUrl,
+        "image": fullImageUrl,
+        "datePublished": "2024-07-16T00:00:00Z",
+        "dateModified": lastModified || "2024-07-23T00:00:00Z",
+        "author": {
+          "@type": "Organization",
+          "name": "Rune CLI Team",
+          "url": "https://github.com/ferg-cod3s"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Rune CLI",
+          "url": "https://rune.dev",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://rune.dev/logo.png"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": currentUrl
+        },
+        "about": {
+          "@type": "SoftwareApplication",
+          "name": "Rune CLI",
+          "applicationCategory": "DeveloperApplication"
+        },
+        "keywords": keywords
+      })}
+    </script><link rel="stylesheet" href="/_astro/beta.nzBQ5mV0.css"></head> <body class="bg-gray-950 text-gray-100 min-h-screen"> <a href="#main" class="skip-link">Skip to main content</a> <nav class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between h-16"> <div class="flex items-center"> <a href="/" class="flex items-center space-x-3"> <div class="font-mono text-xl font-bold text-blue-400">RUNE</div> <span class="text-gray-400">CLI</span> </a> </div> <div class="flex items-center space-x-8"> <a href="/docs" class="text-gray-300 hover:text-blue-400 transition-colors">Docs</a> <a href="/getting-started" class="text-gray-300 hover:text-blue-400 transition-colors">Getting Started</a> <a href="/examples" class="text-gray-300 hover:text-blue-400 transition-colors">Examples</a> <a href="https://github.com/ferg-cod3s/rune" class="text-gray-300 hover:text-blue-400 transition-colors">GitHub</a> </div> </div> </div> </nav> <main id="main"> <div class="markdown-content"> <h1 id="commands-reference">Commands Reference</h1>
+<h2 id="core-commands">Core Commands</h2>
+<h3 id="rune-start"><code>rune start</code></h3>
+<p>Start your workday and execute start rituals.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> start</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--project &#x3C;name></code> - Start with specific project</li>
+<li><code>--skip-rituals</code> - Skip start rituals</li>
+<li><code>--dry-run</code> - Show what would be executed without running</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> start</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> start</span><span style="color:#6CB6FF"> --project</span><span style="color:#96D0FF"> my-app</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> start</span><span style="color:#6CB6FF"> --skip-rituals</span></span>
+<span class="line"></span></code></pre>
+<h3 id="rune-stop"><code>rune stop</code></h3>
+<p>End your workday and execute stop rituals.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> stop</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--skip-rituals</code> - Skip stop rituals</li>
+<li><code>--force</code> - Force stop even if rituals fail</li>
+<li><code>--dry-run</code> - Show what would be executed</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> stop</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> stop</span><span style="color:#6CB6FF"> --skip-rituals</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> stop</span><span style="color:#6CB6FF"> --force</span></span>
+<span class="line"></span></code></pre>
+<h3 id="rune-pause"><code>rune pause</code></h3>
+<p>Pause the current work session.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> pause</span><span style="color:#ADBAC7"> [duration]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Arguments:</strong></p>
+<ul>
+<li><code>duration</code> - Optional pause duration (e.g., 15m, 1h)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> pause</span><span style="color:#768390">           # Indefinite pause</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> pause</span><span style="color:#96D0FF"> 15m</span><span style="color:#768390">       # Pause for 15 minutes</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> pause</span><span style="color:#96D0FF"> 1h30m</span><span style="color:#768390">     # Pause for 1 hour 30 minutes</span></span>
+<span class="line"></span></code></pre>
+<h3 id="rune-resume"><code>rune resume</code></h3>
+<p>Resume a paused work session.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> resume</span></span>
+<span class="line"></span></code></pre>
+<h3 id="rune-status"><code>rune status</code></h3>
+<p>Show current session status and statistics.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> status</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--verbose</code> - Show detailed information</li>
+<li><code>--json</code> - Output in JSON format</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> status</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> status</span><span style="color:#6CB6FF"> --verbose</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> status</span><span style="color:#6CB6FF"> --json</span></span>
+<span class="line"></span></code></pre>
+<h2 id="time-tracking-commands">Time Tracking Commands</h2>
+<h3 id="rune-report"><code>rune report</code></h3>
+<p>Generate time tracking reports.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> report</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--today</code> - Show today’s report</li>
+<li><code>--week</code> - Show this week’s report</li>
+<li><code>--month</code> - Show this month’s report</li>
+<li><code>--from &#x3C;date></code> - Start date (YYYY-MM-DD)</li>
+<li><code>--to &#x3C;date></code> - End date (YYYY-MM-DD)</li>
+<li><code>--project &#x3C;name></code> - Filter by project</li>
+<li><code>--format &#x3C;format></code> - Output format (table, json, csv)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> report</span><span style="color:#6CB6FF"> --today</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> report</span><span style="color:#6CB6FF"> --week</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> report</span><span style="color:#6CB6FF"> --from</span><span style="color:#96D0FF"> 2024-01-01</span><span style="color:#6CB6FF"> --to</span><span style="color:#96D0FF"> 2024-01-31</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> report</span><span style="color:#6CB6FF"> --project</span><span style="color:#96D0FF"> my-app</span><span style="color:#6CB6FF"> --format</span><span style="color:#96D0FF"> json</span></span>
+<span class="line"></span></code></pre>
+<h2 id="configuration-commands">Configuration Commands</h2>
+<h3 id="rune-config"><code>rune config</code></h3>
+<p>Manage configuration settings.</p>
+<h4 id="rune-config-edit"><code>rune config edit</code></h4>
+<p>Open configuration file in default editor.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> edit</span></span>
+<span class="line"></span></code></pre>
+<h4 id="rune-config-validate"><code>rune config validate</code></h4>
+<p>Validate configuration file syntax.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> validate</span><span style="color:#ADBAC7"> [file]</span></span>
+<span class="line"></span></code></pre>
+<h4 id="rune-config-show"><code>rune config show</code></h4>
+<p>Display current configuration.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> show</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--section &#x3C;name></code> - Show specific section</li>
+<li><code>--json</code> - Output in JSON format</li>
+</ul>
+<h4 id="rune-config-migrate"><code>rune config migrate</code></h4>
+<p>Migrate from other time tracking tools.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> migrate</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--from &#x3C;tool></code> - Source tool (watson, timewarrior)</li>
+<li><code>--backup</code> - Create backup before migration</li>
+</ul>
+<h2 id="ritual-commands">Ritual Commands</h2>
+<h3 id="rune-ritual"><code>rune ritual</code></h3>
+<p>Manage and execute rituals.</p>
+<h4 id="rune-ritual-list"><code>rune ritual list</code></h4>
+<p>List all available rituals.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> ritual</span><span style="color:#96D0FF"> list</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--type &#x3C;type></code> - Filter by type (start, stop, break)</li>
+<li><code>--project &#x3C;name></code> - Filter by project</li>
+</ul>
+<h4 id="rune-ritual-run"><code>rune ritual run</code></h4>
+<p>Execute a specific ritual.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> ritual</span><span style="color:#96D0FF"> run</span><span style="color:#F47067"> &#x3C;</span><span style="color:#96D0FF">nam</span><span style="color:#ADBAC7">e</span><span style="color:#F47067">></span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--dry-run</code> - Show commands without executing</li>
+<li><code>--verbose</code> - Show detailed output</li>
+</ul>
+<h4 id="rune-ritual-test"><code>rune ritual test</code></h4>
+<p>Test ritual configuration without execution.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> ritual</span><span style="color:#96D0FF"> test</span><span style="color:#F47067"> &#x3C;</span><span style="color:#96D0FF">nam</span><span style="color:#ADBAC7">e</span><span style="color:#F47067">></span></span>
+<span class="line"></span></code></pre>
+<h2 id="utility-commands">Utility Commands</h2>
+<h3 id="rune-init"><code>rune init</code></h3>
+<p>Initialize Rune configuration.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> init</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--guided</code> - Interactive setup wizard</li>
+<li><code>--template &#x3C;name></code> - Use configuration template</li>
+<li><code>--force</code> - Overwrite existing configuration</li>
+</ul>
+<p><strong>Templates:</strong></p>
+<ul>
+<li><code>basic</code> - Minimal configuration</li>
+<li><code>developer</code> - Developer workflow preset</li>
+<li><code>freelancer</code> - Freelancer workflow preset</li>
+</ul>
+<h3 id="rune-update"><code>rune update</code></h3>
+<p>Update Rune to the latest version.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> update</span><span style="color:#ADBAC7"> [flags]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Flags:</strong></p>
+<ul>
+<li><code>--check</code> - Check for updates without installing</li>
+<li><code>--beta</code> - Include beta releases</li>
+<li><code>--force</code> - Force update even if already latest</li>
+</ul>
+<h3 id="rune-completion"><code>rune completion</code></h3>
+<p>Generate shell completion scripts.</p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> completion</span><span style="color:#F47067"> &#x3C;</span><span style="color:#96D0FF">shel</span><span style="color:#ADBAC7">l</span><span style="color:#F47067">></span></span>
+<span class="line"></span></code></pre>
+<p><strong>Supported shells:</strong></p>
+<ul>
+<li><code>bash</code></li>
+<li><code>zsh</code></li>
+<li><code>fish</code></li>
+<li><code>powershell</code></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre class="astro-code github-dark-dimmed" style="background-color:#22272e;color:#adbac7; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#768390"># Bash</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> completion</span><span style="color:#96D0FF"> bash</span><span style="color:#F47067"> ></span><span style="color:#96D0FF"> /etc/bash_completion.d/rune</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#768390"># Zsh</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> completion</span><span style="color:#96D0FF"> zsh</span><span style="color:#F47067"> ></span><span style="color:#96D0FF"> "${</span><span style="color:#ADBAC7">fpath</span><span style="color:#96D0FF">[1]}/_rune"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#768390"># Fish</span></span>
+<span class="line"><span style="color:#F69D50">rune</span><span style="color:#96D0FF"> completion</span><span style="color:#96D0FF"> fish</span><span style="color:#F47067"> ></span><span style="color:#96D0FF"> ~/.config/fish/completions/rune.fish</span></span>
+<span class="line"></span></code></pre>
+<h2 id="global-flags">Global Flags</h2>
+<p>These flags are available for all commands:</p>
+<ul>
+<li><code>--config &#x3C;file></code> - Specify config file (default: ~/.rune/config.yaml)</li>
+<li><code>--verbose, -v</code> - Enable verbose output</li>
+<li><code>--help, -h</code> - Show help for command</li>
+<li><code>--version</code> - Show version information</li>
+</ul>
+<h2 id="exit-codes">Exit Codes</h2>
+<ul>
+<li><code>0</code> - Success</li>
+<li><code>1</code> - General error</li>
+<li><code>2</code> - Configuration error</li>
+<li><code>3</code> - Runtime error</li>
+<li><code>4</code> - User interruption (Ctrl+C)</li>
+</ul> </div> </main> <footer class="border-t border-gray-800 mt-20"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"> <div class="grid grid-cols-1 md:grid-cols-4 gap-8"> <div class="col-span-2"> <div class="flex items-center space-x-3 mb-4"> <div class="font-mono text-xl font-bold text-blue-400">RUNE</div> <span class="text-gray-400">CLI</span> </div> <p class="text-gray-400 max-w-md">
+Ancient wisdom for modern workflows. A developer-first CLI productivity platform.
+</p> </div> <div> <h3 class="text-gray-200 font-semibold mb-4">Documentation</h3> <ul class="space-y-2"> <li><a href="/getting-started" class="text-gray-400 hover:text-blue-400 transition-colors">Getting Started</a></li> <li><a href="/docs/commands" class="text-gray-400 hover:text-blue-400 transition-colors">Commands</a></li> <li><a href="/docs/configuration" class="text-gray-400 hover:text-blue-400 transition-colors">Configuration</a></li> <li><a href="/examples" class="text-gray-400 hover:text-blue-400 transition-colors">Examples</a></li> </ul> </div> <div> <h3 class="text-gray-200 font-semibold mb-4">Community</h3> <ul class="space-y-2"> <li><a href="https://github.com/ferg-cod3s/rune" class="text-gray-400 hover:text-blue-400 transition-colors">GitHub</a></li> <li><a href="https://github.com/ferg-cod3s/rune/issues" class="text-gray-400 hover:text-blue-400 transition-colors">Issues</a></li> <li><a href="https://github.com/ferg-cod3s/rune/discussions" class="text-gray-400 hover:text-blue-400 transition-colors">Discussions</a></li> </ul> </div> </div> <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"> <p>© 2024 Rune CLI. Licensed under MIT.</p> </div> </div> </footer> </body></html>
