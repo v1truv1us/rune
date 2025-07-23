@@ -5,20 +5,33 @@ export interface Props {
   image?: string;
   canonical?: string;
   noindex?: boolean;
-  type?: string;
+  lastModified?: string;
+  category?: string;
 }
 
 const { 
   title, 
   description = "Ancient wisdom for modern workflows - Rune CLI Documentation", 
-  image = "/og-image.png",
+  image = "/og-docs.png",
   canonical,
   noindex = false,
-  type = "website"
+  lastModified,
+  category = "Documentation"
 } = Astro.props;
 
 const currentUrl = canonical || Astro.url.href;
 const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
+const keywords = [
+  "CLI documentation", 
+  "developer tools guide", 
+  "productivity automation", 
+  "time tracking setup", 
+  "workflow automation", 
+  "focus mode configuration",
+  "ritual automation",
+  "project detection",
+  category.toLowerCase()
+].join(", ");
 ---
 
 <!DOCTYPE html>
@@ -31,24 +44,29 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta name="keywords" content="CLI, developer tools, productivity, time tracking, automation, workflow, focus mode, beta, rust, go" />
+    <meta name="keywords" content={keywords} />
     <meta name="author" content="Rune CLI Team" />
     <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    {lastModified && <meta name="article:modified_time" content={lastModified} />}
     
     <!-- Canonical URL -->
     {canonical && <link rel="canonical" href={canonical} />}
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content={type} />
+    <meta property="og:type" content="article" />
     <meta property="og:url" content={currentUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={fullImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Rune CLI - Ancient wisdom for modern workflows" />
+    <meta property="og:image:alt" content={`${title} - Rune CLI Documentation`} />
     <meta property="og:site_name" content="Rune CLI" />
     <meta property="og:locale" content="en_US" />
+    <meta property="article:section" content={category} />
+    <meta property="article:tag" content="CLI" />
+    <meta property="article:tag" content="Documentation" />
+    <meta property="article:tag" content="Developer Tools" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -56,7 +74,7 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={fullImageUrl} />
-    <meta property="twitter:image:alt" content="Rune CLI - Ancient wisdom for modern workflows" />
+    <meta property="twitter:image:alt" content={`${title} - Rune CLI Documentation`} />
     <meta property="twitter:creator" content="@RuneCLI" />
     <meta property="twitter:site" content="@RuneCLI" />
     
@@ -73,28 +91,41 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <meta name="generator" content={Astro.generator} />
     <meta name="format-detection" content="telephone=no" />
     
-    <!-- Structured Data -->
+    <!-- Structured Data for Documentation -->
     <script type="application/ld+json">
       {JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Rune CLI",
-        "description": "Ancient wisdom for modern workflows. A developer-first CLI productivity platform.",
-        "url": "https://rune.dev",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "macOS, Linux, Windows",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
+        "@type": "TechArticle",
+        "headline": title,
+        "description": description,
+        "url": currentUrl,
+        "image": fullImageUrl,
+        "datePublished": "2024-07-16T00:00:00Z",
+        "dateModified": lastModified || "2024-07-23T00:00:00Z",
         "author": {
           "@type": "Organization",
-          "name": "Rune CLI Team"
+          "name": "Rune CLI Team",
+          "url": "https://github.com/ferg-cod3s"
         },
-        "downloadUrl": "https://github.com/ferg-cod3s/rune/releases",
-        "softwareVersion": "0.9.0-beta.1",
-        "releaseNotes": "MVP feature-complete beta release"
+        "publisher": {
+          "@type": "Organization",
+          "name": "Rune CLI",
+          "url": "https://rune.dev",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://rune.dev/logo.png"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": currentUrl
+        },
+        "about": {
+          "@type": "SoftwareApplication",
+          "name": "Rune CLI",
+          "applicationCategory": "DeveloperApplication"
+        },
+        "keywords": keywords
       })}
     </script>
   </head>
@@ -120,7 +151,9 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     </nav>
     
     <main id="main">
-      <slot />
+      <div class="markdown-content">
+        <slot />
+      </div>
     </main>
     
     <footer class="border-t border-gray-800 mt-20">

@@ -414,3 +414,343 @@ a:hover {
   margin: 0 auto;
   padding: 0 1rem;
 }
+
+/* Markdown content styling */
+.markdown-content {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  line-height: 1.7;
+}
+
+.markdown-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  margin-top: 3rem;
+  border-bottom: 2px solid #374151;
+  padding-bottom: 1rem;
+}
+
+.markdown-content h1:first-child {
+  margin-top: 0;
+}
+
+.markdown-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 1.5rem;
+  margin-top: 2.5rem;
+  border-bottom: 1px solid #374151;
+  padding-bottom: 0.5rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.markdown-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.markdown-content h5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.markdown-content h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.markdown-content p {
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.markdown-content a {
+  color: #60a5fa;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.markdown-content a:hover {
+  color: #93c5fd;
+  border-bottom-color: #93c5fd;
+}
+
+.markdown-content a:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.markdown-content strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.markdown-content em {
+  color: #e2e8f0;
+  font-style: italic;
+}
+
+.markdown-content code {
+  background-color: #1e293b;
+  color: #4ade80;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', 'SF Mono', Monaco, Inconsolata, 'Fira Code', 'Droid Sans Mono', Consolas, monospace;
+  font-size: 0.875rem;
+  border: 1px solid #374151;
+}
+
+.markdown-content pre {
+  background-color: #111827;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'SF Mono', Monaco, Inconsolata, 'Fira Code', 'Droid Sans Mono', Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.markdown-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #f1f5f9;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #60a5fa;
+  background-color: rgba(96, 165, 250, 0.1);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: #e2e8f0;
+  position: relative;
+}
+
+.markdown-content blockquote p {
+  margin-bottom: 0;
+  color: #e2e8f0;
+}
+
+.markdown-content blockquote strong {
+  color: #60a5fa;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+  color: #cbd5e1;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.markdown-content li strong {
+  color: #f1f5f9;
+}
+
+.markdown-content li code {
+  background-color: #1e293b;
+  color: #4ade80;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background-color: #1e293b;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.markdown-content th,
+.markdown-content td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #374151;
+}
+
+.markdown-content th {
+  background-color: #374151;
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.markdown-content td {
+  color: #cbd5e1;
+}
+
+.markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-content hr {
+  border: none;
+  height: 1px;
+  background-color: #374151;
+  margin: 3rem 0;
+}
+
+/* Beta banner in markdown */
+.markdown-content blockquote:has(strong:first-child) {
+  border-left-color: #f97316;
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.markdown-content blockquote:has(strong:first-child) strong {
+  color: #fb923c;
+}
+
+/* Focus indicators for accessibility */
+.markdown-content *:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Skip to main content link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #60a5fa;
+  color: #111827;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 100;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Ensure sufficient color contrast */
+.text-gray-400 {
+  color: #9ca3af; /* Improved contrast from #94a3b8 */
+}
+
+.text-gray-300 {
+  color: #d1d5db; /* Improved contrast from #cbd5e1 */
+}
+
+/* Better focus states for navigation */
+nav a:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Improved button focus states */
+.btn:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* Ensure interactive elements have minimum size */
+nav a,
+.btn,
+.markdown-content a {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.markdown-content a {
+  min-height: auto;
+  min-width: auto;
+  display: inline;
+  padding: 0;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast for headings */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  scroll-margin-top: 2rem;
+}
+
+/* Mobile responsiveness for markdown */
+@media (max-width: 768px) {
+  .markdown-content {
+    padding: 1rem;
+  }
+  
+  .markdown-content h1 {
+    font-size: 2rem;
+  }
+  
+  .markdown-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .markdown-content h3 {
+    font-size: 1.25rem;
+  }
+  
+  .markdown-content pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .markdown-content table {
+    font-size: 0.875rem;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    padding: 0.5rem;
+  }
+}

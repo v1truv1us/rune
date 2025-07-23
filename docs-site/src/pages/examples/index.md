@@ -1,7 +1,10 @@
 ---
-layout: ../../layouts/BaseLayout.astro
-title: "Examples - Rune CLI"
-description: "Real-world examples and configurations for Rune CLI"
+layout: ../../layouts/DocsLayout.astro
+title: "Configuration Examples - Rune CLI | Real-World Workflows"
+description: "Real-world configuration examples for Rune CLI including frontend, backend, DevOps, and freelancer workflows. Copy and customize these proven productivity automation setups."
+image: "/og-examples.png"
+category: "Examples"
+lastModified: "2024-07-23T00:00:00Z"
 ---
 
 # Examples

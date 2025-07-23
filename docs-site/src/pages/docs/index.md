@@ -1,7 +1,10 @@
 ---
-layout: ../../layouts/BaseLayout.astro
-title: "Documentation - Rune CLI"
-description: "Complete documentation for Rune CLI"
+layout: ../../layouts/DocsLayout.astro
+title: "Documentation Hub - Rune CLI | Complete Developer Guide"
+description: "Comprehensive documentation for Rune CLI. Learn about commands, configuration, rituals, time tracking, focus mode, and all features of this developer productivity automation tool."
+image: "/og-docs.png"
+category: "Documentation Hub"
+lastModified: "2024-07-23T00:00:00Z"
 ---
 
 # Documentation
