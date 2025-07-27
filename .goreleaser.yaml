@@ -44,6 +44,19 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 
+signs:
+  - artifacts: checksum
+    cmd: cosign
+    env:
+      - COSIGN_EXPERIMENTAL=1
+    certificate: '${artifact}.pem'
+    args:
+      - sign-blob
+      - '--output-certificate=${certificate}'
+      - '--output-signature=${signature}'
+      - '${artifact}'
+      - '--yes' # skip confirmation prompt
+
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
 

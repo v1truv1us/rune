@@ -27,6 +27,11 @@ jobs:
       with:
         go-version: '1.24'
 
+    - name: Install cosign
+      uses: sigstore/cosign-installer@v3.7.0
+      with:
+        cosign-release: 'v2.4.1'
+
     - name: Run tests
       run: go test -v ./... -skip "TestMigrateWatsonCommandErrors|TestMigrateTimewarriorCommandIntegration|TestMigrateTimewarriorCommandErrors|TestMigrateEdgeCases"
 
@@ -78,6 +83,7 @@ jobs:
         HOMEBREW_TAP_PAT: ${{ steps.homebrew-app-token.outputs.token }}
         RUNE_SEGMENT_WRITE_KEY: ${{ secrets.RUNE_SEGMENT_WRITE_KEY }}
         RUNE_SENTRY_DSN: ${{ secrets.RUNE_SENTRY_DSN }}
+        COSIGN_EXPERIMENTAL: 1
 
     - name: Test Telemetry Integration
       run: |

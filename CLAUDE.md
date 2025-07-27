@@ -91,6 +91,14 @@ Rune includes optional telemetry for usage analytics and error reporting:
 - Telemetry can be disabled via `RUNE_TELEMETRY_DISABLED=true`
 - Debug mode: `RUNE_DEBUG=true`
 
+## Code Signing
+
+Releases are signed using cosign for verification and security:
+- **cosign** signs checksums and binaries using keyless signing with GitHub OIDC
+- Requires `COSIGN_EXPERIMENTAL=1` environment variable in CI
+- Users can verify signatures with: `cosign verify-blob --certificate <artifact>.pem --signature <artifact>.sig <artifact>`
+- No additional secrets required - uses GitHub's OIDC token for signing
+
 ## Important Files
 
 - `Makefile` - Comprehensive build and development commands
