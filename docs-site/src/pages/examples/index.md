@@ -7,11 +7,35 @@ category: "Examples"
 lastModified: "2024-07-23T00:00:00Z"
 ---
 
-# Examples
-
 ## Workflow Examples
 
-### Frontend Developer
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">⚛️</span>
+    <h4>Frontend Developer</h4>
+    <p>Perfect for React, Vue, Svelte, or any frontend development workflow with hot reloading and dependency management.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🔧</span>
+    <h4>Backend Developer</h4>
+    <p>Ideal for API development with Docker services, database migrations, and automated testing.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">☁️</span>
+    <h4>DevOps Engineer</h4>
+    <p>Perfect for infrastructure management, Kubernetes monitoring, and deployment automation.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">💼</span>
+    <h4>Freelancer/Consultant</h4>
+    <p>Time tracking focused with client project separation, hourly rate tracking, and automated invoicing.</p>
+  </div>
+</div>
+
+### Frontend Developer Configuration
 
 Perfect for React, Vue, Svelte, or any frontend development workflow.
 
@@ -256,7 +280,27 @@ rituals:
 
 ## Integration Examples
 
-### Slack Integration
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">💬</span>
+    <h4>Slack Integration</h4>
+    <p>Automatically update your Slack status and send notifications when starting/stopping work.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">📅</span>
+    <h4>Calendar Integration</h4>
+    <p>Block focus time and detect meetings automatically with Google Calendar integration.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🔀</span>
+    <h4>Git Automation</h4>
+    <p>Automate branch creation, commits, and status checking with intelligent Git workflows.</p>
+  </div>
+</div>
+
+### Slack Integration Configuration
 
 ```yaml
 integrations:
@@ -380,7 +424,27 @@ rituals:
 
 ## Platform-Specific Examples
 
-### macOS
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">🍎</span>
+    <h4>macOS Integration</h4>
+    <p>Leverage Shortcuts, Do Not Disturb, and system APIs for seamless macOS workflow integration.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🐧</span>
+    <h4>Linux Integration</h4>
+    <p>GNOME, KDE, and other desktop environment support with notification management.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🪟</span>
+    <h4>Windows Integration</h4>
+    <p>Focus Assist and PowerShell automation for Windows productivity workflows.</p>
+  </div>
+</div>
+
+### macOS Configuration
 
 ```yaml
 rituals:

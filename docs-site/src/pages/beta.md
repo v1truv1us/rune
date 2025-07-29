@@ -7,41 +7,75 @@ category: "Beta Program"
 lastModified: "2024-07-23T00:00:00Z"
 ---
 
-# 🚀 Rune CLI Beta Program
-
 Welcome to the Rune CLI Beta! You're among the first to experience the next generation of developer productivity automation.
 
-## 🎯 What is Rune?
+## What is Rune?
 
 Rune is a developer-first CLI that automates your entire work ritual - from time tracking and focus mode to project-specific automation. Think of it as your personal productivity assistant that understands developer workflows.
 
-### ✨ Key Features in Beta
+## Key Features in Beta
 
-- **⏱️ Intelligent Time Tracking**: Automatic project detection via Git, with session persistence
-- **🔕 Cross-Platform Focus Mode**: Do Not Disturb automation for macOS, Windows, and Linux
-- **🤖 Ritual Automation**: Custom commands that run when you start/stop work
-- **📊 Smart Reporting**: Daily/weekly summaries with project breakdowns
-- **🔄 Migration Tools**: Import your data from Watson and Timewarrior
-- **🎨 Beautiful CLI**: Colored output with multiple themes
-- **🌍 Cross-Platform**: Native support for macOS, Linux, and Windows
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">⏱️</span>
+    <h4>Intelligent Time Tracking</h4>
+    <p>Automatic project detection via Git, package.json, go.mod with session persistence across restarts.</p>
+  </div>
 
-## 📥 Installation
+  <div class="feature-card">
+    <span class="emoji">🔕</span>
+    <h4>Cross-Platform Focus Mode</h4>
+    <p>Do Not Disturb automation for macOS, Windows, and Linux with 6+ desktop environment support.</p>
+  </div>
 
-### Quick Install (Recommended)
-```bash
-# macOS/Linux
+  <div class="feature-card">
+    <span class="emoji">🤖</span>
+    <h4>Ritual Automation</h4>
+    <p>Custom commands that run when you start/stop work with YAML configuration and error handling.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">📊</span>
+    <h4>Smart Reporting</h4>
+    <p>Daily/weekly summaries with project breakdowns and colored CLI output with themes.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🔄</span>
+    <h4>Migration Tools</h4>
+    <p>Import your data from Watson and Timewarrior with project mapping and dry-run preview.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🌍</span>
+    <h4>Cross-Platform</h4>
+    <p>Native support for macOS, Linux, and Windows with platform-specific optimizations.</p>
+  </div>
+</div>
+
+## Installation
+
+<div class="installation-cards">
+  <div class="installation-card">
+    <h4>🚀 Quick Install (Recommended)</h4>
+    <pre><code># macOS/Linux
 curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | bash
 
 # Or with Homebrew (macOS)
-brew install --cask ferg-cod3s/tap/rune
-```
+brew install --cask ferg-cod3s/tap/rune</code></pre>
+  </div>
 
-### Manual Installation
-1. Download the latest beta from [GitHub Releases](https://github.com/ferg-cod3s/rune/releases)
-2. Extract and move to your PATH
-3. Run `rune init --guided` to get started
+  <div class="installation-card">
+    <h4>📦 Manual Installation</h4>
+    <ol>
+      <li>Download the latest beta from <a href="https://github.com/ferg-cod3s/rune/releases">GitHub Releases</a></li>
+      <li>Extract and move to your PATH</li>
+      <li>Run <code>rune init --guided</code> to get started</li>
+    </ol>
+  </div>
+</div>
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Initialize Rune with guided setup
@@ -66,16 +100,32 @@ rune stop
 rune report today
 ```
 
-## 💬 Beta Feedback Channels
+## Beta Feedback Channels
 
 We want to hear from you! Your feedback shapes Rune's future.
 
-### 🎯 Primary Feedback Channels
-- **GitHub Discussions**: [Share ideas, ask questions, report bugs](https://github.com/ferg-cod3s/rune/discussions)
-- **GitHub Issues**: [Report bugs and request features](https://github.com/ferg-cod3s/rune/issues)
-- **Email**: beta@rune.dev (for private feedback)
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">💬</span>
+    <h4><a href="https://github.com/ferg-cod3s/rune/discussions">GitHub Discussions</a></h4>
+    <p>Share ideas, ask questions, and connect with other beta testers in our community forum.</p>
+  </div>
 
-### 📋 What We're Looking For
+  <div class="feature-card">
+    <span class="emoji">🐛</span>
+    <h4><a href="https://github.com/ferg-cod3s/rune/issues">GitHub Issues</a></h4>
+    <p>Report bugs and request new features with our issue tracking system.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">📧</span>
+    <h4>Email Feedback</h4>
+    <p>Send private feedback directly to <strong>beta@rune.dev</strong> for sensitive topics.</p>
+  </div>
+</div>
+
+### What We're Looking For
+
 - **Workflow integration**: How does Rune fit into your daily routine?
 - **Feature requests**: What's missing from your ideal productivity tool?
 - **Bug reports**: What's not working as expected?
@@ -85,7 +135,7 @@ We want to hear from you! Your feedback shapes Rune's future.
 
 ## 🚧 Beta Status & Limitations
 
-**Current Version**: v0.9.0-beta.1
+**Current Version**: v0.2.0-beta.1
 
 ### ✅ What's Working Great
 - Core time tracking functionality
@@ -142,7 +192,7 @@ Thank you for being part of the Rune CLI beta! Your feedback and support make th
 
 ---
 
-**Beta Program**: v0.9.0-beta.1  
+**Beta Program**: v0.2.0-beta.1  
 **Last Updated**: July 16, 2025  
 **Next Beta Release**: Weekly (Fridays)
 

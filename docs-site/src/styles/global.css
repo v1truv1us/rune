@@ -423,6 +423,15 @@ a:hover {
   line-height: 1.7;
 }
 
+/* Enhanced markdown content styling for documentation */
+.markdown-content-enhanced {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  line-height: 1.7;
+  position: relative;
+}
+
 .markdown-content h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -722,35 +731,296 @@ nav a,
   scroll-margin-top: 2rem;
 }
 
-/* Mobile responsiveness for markdown */
+/* Enhanced documentation styles */
+.markdown-content-enhanced h1,
+.markdown-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  margin-top: 0;
+  text-align: center;
+  display: none; /* Hidden since we show this in hero section */
+}
+
+.markdown-content-enhanced h2,
+.markdown-content h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 1.5rem;
+  margin-top: 3rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.6));
+  border-left: 4px solid #60a5fa;
+  border-radius: 0.5rem;
+  border: 1px solid #374151;
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+}
+
+.markdown-content-enhanced h2::before,
+.markdown-content h2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #93c5fd);
+}
+
+.markdown-content-enhanced h3,
+.markdown-content h3 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 1rem;
+  margin-top: 2.5rem;
+  padding: 1rem 1.25rem;
+  background-color: rgba(30, 41, 59, 0.5);
+  border-left: 3px solid #4ade80;
+  border-radius: 0.375rem;
+  border: 1px solid #334155;
+}
+
+/* Enhanced section styling for lists */
+.markdown-content-enhanced ul,
+.markdown-content ul {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  background-color: rgba(30, 41, 59, 0.3);
+  border-radius: 0.5rem;
+  border: 1px solid #334155;
+  list-style: none;
+}
+
+.markdown-content-enhanced ul li,
+.markdown-content ul li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.markdown-content-enhanced ul li::before,
+.markdown-content ul li::before {  
+  content: '▸';
+  color: #60a5fa;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Enhanced code block styling */
+.markdown-content-enhanced pre,
+.markdown-content pre {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: 1px solid #374151;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'SF Mono', Monaco, Inconsolata, 'Fira Code', 'Droid Sans Mono', Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-content-enhanced pre::before,
+.markdown-content pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #60a5fa, #4ade80, #fb923c);
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+/* Special styling for installation sections */
+.markdown-content-enhanced h3:has(+ ul),
+.markdown-content h3:has(+ ul) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 197, 94, 0.2));
+  border-left-color: #3b82f6;
+}
+
+/* Installation cards styling */
+.installation-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .installation-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.installation-card {
+  background: rgba(30, 41, 59, 0.5);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #374151;
+  transition: all 0.3s ease;
+}
+
+.installation-card:hover {
+  border-color: #60a5fa;
+  background: rgba(30, 41, 59, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -2px rgba(96, 165, 250, 0.1);
+}
+
+.installation-card h4 {
+  color: #60a5fa;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Feature list styling */
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  background: rgba(30, 41, 59, 0.5);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #374151;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #4ade80);
+}
+
+.feature-card:hover {
+  border-color: #60a5fa;
+  background: rgba(30, 41, 59, 0.7);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px -2px rgba(96, 165, 250, 0.15);
+}
+
+.feature-card .emoji {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.feature-card h4 {
+  color: #f1f5f9;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Beta status banner in content */
+.markdown-content-enhanced blockquote:first-child,
+.markdown-content blockquote:first-child {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(234, 88, 12, 0.1));
+  border-left: 4px solid #f97316;
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  border-radius: 0 0.75rem 0.75rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.markdown-content-enhanced blockquote:first-child::before,
+.markdown-content blockquote:first-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #f97316, #fb923c);
+}
+
+/* Mobile responsiveness for enhanced markdown */
 @media (max-width: 768px) {
-  .markdown-content {
+  .markdown-content,
+  .markdown-content-enhanced {
     padding: 1rem;
   }
   
-  .markdown-content h1 {
+  .markdown-content h1,
+  .markdown-content-enhanced h1 {
     font-size: 2rem;
   }
   
-  .markdown-content h2 {
+  .markdown-content h2,
+  .markdown-content-enhanced h2 {
     font-size: 1.5rem;
+    padding: 1rem;
   }
   
-  .markdown-content h3 {
+  .markdown-content h3,
+  .markdown-content-enhanced h3 {
     font-size: 1.25rem;
+    padding: 0.75rem 1rem;
   }
   
-  .markdown-content pre {
+  .markdown-content pre,
+  .markdown-content-enhanced pre {
     padding: 1rem;
     font-size: 0.8rem;
   }
   
-  .markdown-content table {
+  .markdown-content table,
+  .markdown-content-enhanced table {
     font-size: 0.875rem;
   }
   
   .markdown-content th,
-  .markdown-content td {
+  .markdown-content td,
+  .markdown-content-enhanced th,
+  .markdown-content-enhanced td {
     padding: 0.5rem;
+  }
+  
+  .feature-grid,
+  .installation-cards {
+    grid-template-columns: 1fr;
   }
 }

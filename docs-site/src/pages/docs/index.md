@@ -7,31 +7,112 @@ category: "Documentation Hub"
 lastModified: "2024-07-23T00:00:00Z"
 ---
 
-# Documentation
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">⚡</span>
+    <h4><a href="/docs/commands">Commands</a></h4>
+    <p>Complete command reference with examples, options, and usage patterns for all Rune CLI commands.</p>
+  </div>
 
-## Core Concepts
+  <div class="feature-card">
+    <span class="emoji">⚙️</span>
+    <h4><a href="/docs/configuration">Configuration</a></h4>
+    <p>YAML configuration guide for customizing work hours, projects, integrations, and automation settings.</p>
+  </div>
 
-- **[Commands](/docs/commands)** - Complete command reference
-- **[Configuration](/docs/configuration)** - YAML configuration guide
-- **[Rituals](/docs/rituals)** - Automation and workflow setup
-- **[Projects](/docs/projects)** - Project detection and management
-- **[Time Tracking](/docs/time-tracking)** - Session and time management
+  <div class="feature-card">
+    <span class="emoji">🤖</span>
+    <h4><a href="/docs/rituals">Rituals</a></h4>
+    <p>Automation and workflow setup for custom commands that run when you start and stop work sessions.</p>
+  </div>
 
-## Features
+  <div class="feature-card">
+    <span class="emoji">📁</span>
+    <h4><a href="/docs/projects">Projects</a></h4>
+    <p>Project detection and management using Git repositories, package.json, go.mod, and custom rules.</p>
+  </div>
 
-- **[Focus Mode](/docs/focus-mode)** - Do Not Disturb and break management
-- **[Integrations](/docs/integrations)** - Git, Slack, Calendar integrations
-- **[Notifications](/docs/notifications)** - System notification configuration
-- **[Telemetry](/docs/telemetry)** - Usage analytics and privacy
+  <div class="feature-card">
+    <span class="emoji">⏱️</span>
+    <h4><a href="/docs/time-tracking">Time Tracking</a></h4>
+    <p>Session management, time tracking features, and intelligent break detection for productivity monitoring.</p>
+  </div>
 
-## Advanced
+  <div class="feature-card">
+    <span class="emoji">🔕</span>
+    <h4><a href="/docs/focus-mode">Focus Mode</a></h4>
+    <p>Cross-platform Do Not Disturb automation and break management for maintaining focus during work sessions.</p>
+  </div>
+</div>
 
-- **[Security](/docs/security)** - Security features and best practices
-- **[Troubleshooting](/docs/troubleshooting)** - Common issues and solutions
-- **[Contributing](/docs/contributing)** - Development and contribution guide
+## Platform Integrations
 
-## Examples
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">🔗</span>
+    <h4><a href="/docs/integrations">Integrations</a></h4>
+    <p>Connect with Git, Slack, Calendar, and other tools for seamless workflow automation.</p>
+  </div>
 
-- **[Developer Workflows](/examples/developers)** - Frontend, backend, DevOps examples
-- **[Configuration Examples](/examples/configs)** - Sample configurations
-- **[Ritual Examples](/examples/rituals)** - Common automation patterns
+  <div class="feature-card">
+    <span class="emoji">🔔</span>
+    <h4><a href="/docs/notifications">Notifications</a></h4>
+    <p>System notification configuration for macOS, Linux, and Windows desktop environments.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">📊</span>
+    <h4><a href="/docs/telemetry">Telemetry</a></h4>
+    <p>Privacy-first usage analytics, error reporting, and data transparency options.</p>
+  </div>
+</div>
+
+## Advanced Topics
+
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">🛡️</span>
+    <h4><a href="/docs/security">Security</a></h4>
+    <p>Security features, best practices, and data protection mechanisms built into Rune CLI.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🔧</span>
+    <h4><a href="/docs/troubleshooting">Troubleshooting</a></h4>
+    <p>Common issues, debugging tips, and solutions for platform-specific problems.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">💻</span>
+    <h4><a href="/docs/contributing">Contributing</a></h4>
+    <p>Development setup, contribution guidelines, and project structure for contributors.</p>
+  </div>
+</div>
+
+## Practical Examples
+
+<div class="feature-grid">
+  <div class="feature-card">
+    <span class="emoji">👨‍💻</span>
+    <h4><a href="/examples/developers">Developer Workflows</a></h4>
+    <p>Real-world examples for frontend, backend, DevOps, and full-stack development workflows.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">📝</span>
+    <h4><a href="/examples/configs">Configuration Examples</a></h4>
+    <p>Sample configurations for different development environments and team setups.</p>
+  </div>
+
+  <div class="feature-card">
+    <span class="emoji">🎯</span>
+    <h4><a href="/examples/rituals">Ritual Examples</a></h4>
+    <p>Common automation patterns for Git operations, testing, deployment, and environment setup.</p>
+  </div>
+</div>
+
+## Quick Navigation
+
+- **New to Rune?** Start with the [Getting Started Guide](/getting-started)
+- **Beta Testing?** Check the [Beta Program](/beta) for updates and feedback channels
+- **Need Help?** Visit [GitHub Discussions](https://github.com/ferg-cod3s/rune/discussions) for community support
