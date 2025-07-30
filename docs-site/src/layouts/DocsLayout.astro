@@ -87,6 +87,9 @@ const keywords = [
     <meta name="theme-color" content="#0f172a" />
     <meta name="msapplication-TileColor" content="#0f172a" />
     
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    
     <!-- Additional Meta -->
     <meta name="generator" content={Astro.generator} />
     <meta name="format-detection" content="telephone=no" />
@@ -129,22 +132,22 @@ const keywords = [
       })}
     </script>
   </head>
-  <body class="bg-gray-950 text-gray-100 min-h-screen">
+  <body>
     <a href="#main" class="skip-link">Skip to main content</a>
-    <nav class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <a href="/" class="flex items-center space-x-3">
-              <div class="font-mono text-xl font-bold text-blue-400">RUNE</div>
-              <span class="text-gray-400">CLI</span>
+    <nav>
+      <div class="nav-container">
+        <div class="nav-content">
+          <div class="nav-brand">
+            <a href="/">
+              <div class="nav-logo">RUNE</div>
+              <span class="nav-subtitle">CLI</span>
             </a>
           </div>
-          <div class="flex items-center space-x-8">
-            <a href="/docs" class="text-gray-300 hover:text-blue-400 transition-colors">Docs</a>
-            <a href="/getting-started" class="text-gray-300 hover:text-blue-400 transition-colors">Getting Started</a>
-            <a href="/examples" class="text-gray-300 hover:text-blue-400 transition-colors">Examples</a>
-            <a href="https://github.com/ferg-cod3s/rune" class="text-gray-300 hover:text-blue-400 transition-colors">GitHub</a>
+          <div class="nav-links">
+            <a href="/docs">Docs</a>
+            <a href="/getting-started">Getting Started</a>
+            <a href="/examples">Examples</a>
+            <a href="https://github.com/ferg-cod3s/rune">GitHub</a>
           </div>
         </div>
       </div>
@@ -152,21 +155,21 @@ const keywords = [
     
     <main id="main">
       <!-- Documentation Hero Section -->
-      <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-          <div class="text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+      <div class="docs-hero">
+        <div class="docs-hero-container">
+          <div class="docs-hero-content">
+            <h1 class="docs-title">
               {title}
             </h1>
             {description && (
-              <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+              <p class="docs-description">
                 {description}
               </p>
             )}
-            <div class="bg-orange-500/20 border border-orange-500/50 rounded-lg px-4 py-2 mb-4 inline-block">
-              <span class="text-orange-400 font-semibold">📖 {category}</span>
+            <div class="docs-category-badge">
+              <span class="docs-category-label">📖 {category}</span>
               {lastModified && (
-                <span class="text-orange-300 ml-2">Updated {new Date(lastModified).toLocaleDateString()}</span>
+                <span class="docs-updated">Updated {new Date(lastModified).toLocaleDateString()}</span>
               )}
             </div>
           </div>
@@ -174,44 +177,44 @@ const keywords = [
       </div>
 
       <!-- Enhanced Markdown Content Container -->
-      <div class="bg-gray-950">
+      <div class="docs-content">
         <div class="markdown-content-enhanced">
           <slot />
         </div>
       </div>
     </main>
     
-    <footer class="border-t border-gray-800 mt-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div class="col-span-2">
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="font-mono text-xl font-bold text-blue-400">RUNE</div>
-              <span class="text-gray-400">CLI</span>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="footer-logo-text">RUNE</div>
+              <span class="footer-logo-subtitle">CLI</span>
             </div>
-            <p class="text-gray-400 max-w-md">
+            <p class="footer-description">
               Ancient wisdom for modern workflows. A developer-first CLI productivity platform.
             </p>
           </div>
-          <div>
-            <h3 class="text-gray-200 font-semibold mb-4">Documentation</h3>
-            <ul class="space-y-2">
-              <li><a href="/getting-started" class="text-gray-400 hover:text-blue-400 transition-colors">Getting Started</a></li>
-              <li><a href="/docs/commands" class="text-gray-400 hover:text-blue-400 transition-colors">Commands</a></li>
-              <li><a href="/docs/configuration" class="text-gray-400 hover:text-blue-400 transition-colors">Configuration</a></li>
-              <li><a href="/examples" class="text-gray-400 hover:text-blue-400 transition-colors">Examples</a></li>
+          <div class="footer-section">
+            <h3>Documentation</h3>
+            <ul class="footer-links">
+              <li><a href="/getting-started">Getting Started</a></li>
+              <li><a href="/docs/commands">Commands</a></li>
+              <li><a href="/docs/configuration">Configuration</a></li>
+              <li><a href="/examples">Examples</a></li>
             </ul>
           </div>
-          <div>
-            <h3 class="text-gray-200 font-semibold mb-4">Community</h3>
-            <ul class="space-y-2">
-              <li><a href="https://github.com/ferg-cod3s/rune" class="text-gray-400 hover:text-blue-400 transition-colors">GitHub</a></li>
-              <li><a href="https://github.com/ferg-cod3s/rune/issues" class="text-gray-400 hover:text-blue-400 transition-colors">Issues</a></li>
-              <li><a href="https://github.com/ferg-cod3s/rune/discussions" class="text-gray-400 hover:text-blue-400 transition-colors">Discussions</a></li>
+          <div class="footer-section">
+            <h3>Community</h3>
+            <ul class="footer-links">
+              <li><a href="https://github.com/ferg-cod3s/rune">GitHub</a></li>
+              <li><a href="https://github.com/ferg-cod3s/rune/issues">Issues</a></li>
+              <li><a href="https://github.com/ferg-cod3s/rune/discussions">Discussions</a></li>
             </ul>
           </div>
         </div>
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <div class="footer-bottom">
           <p>© 2024 Rune CLI. Licensed under MIT.</p>
         </div>
       </div>

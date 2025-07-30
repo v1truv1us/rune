@@ -2,12 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Rune CLI - Ancient wisdom for modern workflows">
-  <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
+<BaseLayout 
+  title="Rune CLI - Developer Time Tracking & Productivity Automation Tool | Watson Alternative"
+  description="Open-source CLI time tracking tool for developers. Intelligent project detection, focus mode, and workflow automation. The modern Watson and Timewarrior alternative built for developer productivity."
+  type="website"
+>
+  <div class="hero">
     <!-- Hero Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+    <div class="hero-content">
       <div class="text-center">
-        <pre class="text-blue-400 text-sm md:text-base font-mono mb-8 inline-block">
+        <pre class="hero-ascii">
  ______     __  __     __   __     ______   
 /\  == \   /\ \/\ \   /\ "-.\ \   /\  ___\  
 \ \  __&lt;   \ \ \_\ \  \ \ \-.  \  \ \  __\  
@@ -16,93 +20,102 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </pre>
         
         <!-- Beta Banner -->
-        <div class="bg-orange-500/20 border border-orange-500/50 rounded-lg px-4 py-2 mb-8 inline-block">
-          <span class="text-orange-400 font-semibold">🚀 Beta Now Available!</span>
-          <span class="text-orange-300 ml-2">v0.9.0-beta.1 - MVP Feature Complete</span>
+        <div class="beta-banner">
+          <span class="beta-label">🚀 Beta Now Available!</span>
+          <span class="beta-version">v0.9.0-beta.1 - MVP Feature Complete</span>
         </div>
 
-        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
-          Automate Your Entire<br />
-          <span class="text-blue-400">Developer Workflow</span>
+        <h1 class="hero-title">
+          <span class="hero-highlight">Developer Time Tracking CLI</span><br />
+          That Actually Works
         </h1>
         
-        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-          Intelligent time tracking, cross-platform focus mode, and custom ritual automation. 
-          Built by developers, for developers. Zero cloud dependencies.
+        <p class="hero-description">
+          The modern Watson and Timewarrior alternative. Command line productivity tool with intelligent project detection, automatic focus mode, and workflow automation. Built by developers, for developers.
         </p>
         
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/getting-started" 
-             class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+        <div class="hero-buttons">
+          <a href="/getting-started" class="btn btn-primary">
             Try Beta Now
           </a>
-          <a href="https://github.com/ferg-cod3s/rune" 
-             class="px-8 py-3 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 font-semibold rounded-lg transition-colors">
+          <a href="https://github.com/ferg-cod3s/rune" class="btn btn-secondary">
             View on GitHub
           </a>
-          <a href="/docs" 
-             class="px-8 py-3 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 font-semibold rounded-lg transition-colors">
+          <a href="/docs" class="btn btn-secondary">
             Documentation
           </a>
         </div>
+        
+        <!-- Demo Section -->
+        <section class="demo-section">
+          <figure class="demo-figure">
+            <img src="/rune-demo.gif" 
+                 alt="Rune CLI Demo - Project detection, time tracking, and workflow automation" 
+                 class="demo-image"
+                 loading="lazy" />
+            <figcaption class="demo-caption">
+              ✨ Full workflow demo: project detection → time tracking → pause/resume → reporting
+            </figcaption>
+          </figure>
+        </section>
       </div>
     </div>
   </div>
 
   <!-- Features Section -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl font-bold text-white mb-4">Why Rune?</h2>
-      <p class="text-gray-400 max-w-2xl mx-auto">
-        Built for developers who want to automate their workflow without sacrificing control.
+  <div class="features">
+    <div class="features-header">
+      <h2 class="features-title">Why Choose Rune Over Watson & Timewarrior?</h2>
+      <p class="features-subtitle">
+        Modern CLI time tracking with developer-focused features that Watson and Timewarrior users have been waiting for. Intelligent automation, cross-platform focus mode, and zero configuration project detection.
       </p>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-        <div class="text-blue-400 text-2xl mb-4">⏱️</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Intelligent Time Tracking</h3>
-        <p class="text-gray-400">
-          Automatic project detection via <code>Git</code>, <code>package.json</code>, <code>go.mod</code>. Session persistence across restarts.
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⏱️</div>
+        <h3 class="feature-title">Intelligent Time Tracking CLI</h3>
+        <p class="feature-description">
+          Smart project detection via <code>Git</code>, <code>package.json</code>, <code>go.mod</code>. Unlike Watson, maintains session state across system restarts with zero configuration.
         </p>
       </div>
       
-      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-        <div class="text-blue-400 text-2xl mb-4">🔕</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Cross-Platform Focus Mode</h3>
-        <p class="text-gray-400">
+      <div class="feature-card">
+        <div class="feature-icon">🔕</div>
+        <h3 class="feature-title">Cross-Platform Focus Mode</h3>
+        <p class="feature-description">
           Automatic Do Not Disturb on macOS, Windows, and Linux. 6+ desktop environments supported.
         </p>
       </div>
       
-      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-        <div class="text-blue-400 text-2xl mb-4">🤖</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Ritual Automation</h3>
-        <p class="text-gray-400">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3 class="feature-title">Ritual Automation</h3>
+        <p class="feature-description">
           Custom commands that run when you start/stop work. <code>YAML</code> configuration with error handling.
         </p>
       </div>
       
-      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-        <div class="text-blue-400 text-2xl mb-4">🔄</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Migration Tools</h3>
-        <p class="text-gray-400">
-          Import data from <code>Watson</code> and <code>Timewarrior</code> with project mapping and dry-run preview.
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">Watson & Timewarrior Migration</h3>
+        <p class="feature-description">
+          Seamless migration from <code>Watson</code> and <code>Timewarrior</code> with intelligent project mapping and data validation. Keep your existing time tracking history.
         </p>
       </div>
       
-      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-        <div class="text-blue-400 text-2xl mb-4">📊</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Beautiful Reporting</h3>
-        <p class="text-gray-400">
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Beautiful Reporting</h3>
+        <p class="feature-description">
           Colored <code>CLI</code> output with themes. Daily/weekly summaries and project breakdowns.
         </p>
       </div>
       
-      <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-        <div class="text-blue-400 text-2xl mb-4">🛡️</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Privacy-First</h3>
-        <p class="text-gray-400">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">Privacy-First</h3>
+        <p class="feature-description">
           All data stored locally. No cloud dependencies. Optional telemetry with full transparency.
         </p>
       </div>
@@ -110,33 +123,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <!-- Quick Start Section -->
-  <div class="bg-gray-800/30 py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-white mb-4">Quick Start</h2>
-        <p class="text-gray-400">Get up and running in minutes</p>
+  <div class="quick-start">
+    <div class="quick-start-container">
+      <div class="quick-start-header">
+        <h2 class="quick-start-title">Quick Start</h2>
+        <p class="quick-start-subtitle">Get up and running in minutes</p>
       </div>
       
-      <div class="bg-gray-900 rounded-lg p-6 font-mono text-sm overflow-x-auto">
-        <div class="text-gray-400 mb-2"># Install via curl (macOS/Linux)</div>
-        <div class="text-green-400">$ curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | bash</div>
+      <div class="code-block">
+        <div class="code-comment"># Install via curl (macOS/Linux)</div>
+        <div class="code-command">$ curl -fsSL https://raw.githubusercontent.com/ferg-cod3s/rune/main/install.sh | bash</div>
         <br/>
-        <div class="text-gray-400 mb-2"># Or via Homebrew</div>
-        <div class="text-green-400">$ brew install --cask ferg-cod3s/tap/rune</div>
+        <div class="code-comment"># Or via Homebrew</div>
+        <div class="code-command">$ brew install --cask ferg-cod3s/tap/rune</div>
         <br/>
-        <div class="text-gray-400 mb-2"># Interactive setup</div>
-        <div class="text-green-400">$ rune init --guided</div>
+        <div class="code-comment"># Interactive setup</div>
+        <div class="code-command">$ rune init --guided</div>
         <br/>
-        <div class="text-gray-400 mb-2"># Start tracking (auto-detects project, enables <code>DND</code>)</div>
-        <div class="text-green-400">$ rune start</div>
+        <div class="code-comment"># Start tracking (auto-detects project, enables <code>DND</code>)</div>
+        <div class="code-command">$ rune start</div>
         <br/>
-        <div class="text-gray-400 mb-2"># View your daily report</div>
-        <div class="text-green-400">$ rune report today</div>
+        <div class="code-comment"># View your daily report</div>
+        <div class="code-command">$ rune report today</div>
       </div>
       
-      <div class="text-center mt-8">
-        <a href="/getting-started" 
-           class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+      <div class="quick-start-link">
+        <a href="/getting-started">
           View detailed installation guide →
         </a>
       </div>

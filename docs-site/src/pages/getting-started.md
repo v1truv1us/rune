@@ -1,7 +1,7 @@
 ---
 layout: ../layouts/DocsLayout.astro
-title: "Getting Started with Rune CLI | Installation & Quick Setup Guide"
-description: "Complete installation guide for Rune CLI. Learn how to install, configure, and start using this developer productivity tool on macOS, Linux, and Windows in minutes."
+title: "Install Rune CLI - Developer Time Tracking Tool | Watson Alternative Setup"
+description: "Step-by-step guide to install Rune CLI, the modern Watson and Timewarrior alternative. Quick setup for developer time tracking, project detection, and productivity automation on macOS, Linux, and Windows."
 image: "/og-getting-started.png"
 category: "Getting Started"
 lastModified: "2024-07-23T00:00:00Z"
