@@ -10,17 +10,23 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+coverage.html
+coverage.txt
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Dependency directories
+vendor/
 
 # Go workspace file
 go.work
+go.work.sum
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # IDE files
 .vscode/
@@ -28,6 +34,8 @@ go.work
 *.swp
 *.swo
 *~
+.vim/
+.netrwhist
 
 # OS generated files
 .DS_Store
@@ -37,12 +45,85 @@ go.work
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
 # Build artifacts
 /rune
+/bin/
 /dist/
 /build/
+/target/
+
+# Node.js (for docs-site and other JS projects)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+.npm
+.yarn-integrity
+.pnp.*
+.next/
+.nuxt/
+.cache/
+
+# Logs
+logs
+*.log
+*.log.*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+.nyc_output
+
+# Temporary folders
+tmp/
+temp/
+.tmp/
+.temp/
 
 # Config files with secrets (users should use .env instead)
 config.yaml
-.rune/config.yamlhomebrew-tap/
+.rune/config.yaml
+
+# Release and build artifacts
+goreleaser/
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+checksums.txt
+*.sig
+*.pem
+
+# Test artifacts
+test-results/
+test-output/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Local development
+.local/
+.cache/
+
+# Documentation build artifacts
+docs-site/dist/
+docs-site/.astro/
+docs-site/node_modules/
+
+# Demo and recording files
+*.cast
+*.gif
+demo_project/
+test_project/
