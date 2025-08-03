@@ -27,30 +27,21 @@ func NewClient(userSegmentKey, userSentryDSN string) *Client {
 	// Debug logging
 	if os.Getenv("RUNE_DEBUG") == "true" {
 		fmt.Printf("DEBUG: Telemetry enabled: %v\n", enabled)
-		fmt.Printf("DEBUG: User Segment Key: %s\n", userSegmentKey)
-		fmt.Printf("DEBUG: User Sentry DSN: %s\n", userSentryDSN)
-		fmt.Printf("DEBUG: Build-time Segment Key: %s\n", segmentWriteKey)
-		fmt.Printf("DEBUG: Build-time Sentry DSN: %s\n", sentryDSN)
+		fmt.Printf("DEBUG: User Segment Key: %s\n", maskKey(userSegmentKey))
+		fmt.Printf("DEBUG: User Sentry DSN: %s\n", maskKey(userSentryDSN))
 	}
 
 	// Generate or load user ID (anonymous)
 	userID := getUserID()
 
-	// Use build-time keys if user hasn't provided their own
+	// Use provided runtime keys - no fallback to embedded secrets
 	finalSegmentKey := userSegmentKey
-	if finalSegmentKey == "" {
-		finalSegmentKey = segmentWriteKey
-	}
-
 	finalSentryDSN := userSentryDSN
-	if finalSentryDSN == "" {
-		finalSentryDSN = sentryDSN
-	}
 
 	// Debug logging for final values
 	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Final Segment Key: %s\n", finalSegmentKey)
-		fmt.Printf("DEBUG: Final Sentry DSN: %s\n", finalSentryDSN)
+		fmt.Printf("DEBUG: Final Segment Key: %s\n", maskKey(finalSegmentKey))
+		fmt.Printf("DEBUG: Final Sentry DSN: %s\n", maskKey(finalSentryDSN))
 		fmt.Printf("DEBUG: User ID: %s\n", userID)
 	}
 
@@ -64,18 +55,25 @@ func NewClient(userSegmentKey, userSentryDSN string) *Client {
 	// Initialize Segment client if enabled and write key provided
 	if enabled && finalSegmentKey != "" {
 		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Initializing Segment client with key: %s\n", finalSegmentKey)
+			fmt.Printf("DEBUG: Initializing Segment client with key: %s\n", maskKey(finalSegmentKey))
 		}
 		segmentClient := analytics.New(finalSegmentKey)
 		client.segmentClient = segmentClient
-	} else if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Segment client not initialized - enabled: %v, key: %s\n", enabled, finalSegmentKey)
+	} else {
+		if os.Getenv("RUNE_DEBUG") == "true" {
+			fmt.Printf("DEBUG: Segment client not initialized - enabled: %v, key provided: %v\n", enabled, finalSegmentKey != "")
+		}
+		if !enabled {
+			fmt.Printf("INFO: Telemetry disabled via RUNE_TELEMETRY_DISABLED environment variable\n")
+		} else if finalSegmentKey == "" {
+			fmt.Printf("INFO: Segment analytics not available - no API key configured\n")
+		}
 	}
 
 	// Initialize Sentry if enabled and DSN provided
 	if enabled && finalSentryDSN != "" {
 		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Initializing Sentry with DSN: %s\n", finalSentryDSN)
+			fmt.Printf("DEBUG: Initializing Sentry with DSN: %s\n", maskKey(finalSentryDSN))
 		}
 		err := sentry.Init(sentry.ClientOptions{
 			Dsn:              finalSentryDSN,
@@ -103,13 +101,19 @@ func NewClient(userSegmentKey, userSentryDSN string) *Client {
 			if os.Getenv("RUNE_DEBUG") == "true" {
 				fmt.Printf("DEBUG: Sentry initialization failed: %v\n", err)
 			}
+			fmt.Printf("WARNING: Sentry error tracking initialization failed - error reporting disabled\n")
 			// Silently fail for telemetry initialization
 			client.sentryEnabled = false
 		} else if os.Getenv("RUNE_DEBUG") == "true" {
 			fmt.Printf("DEBUG: Sentry initialized successfully\n")
 		}
-	} else if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Sentry not initialized - enabled: %v, DSN: %s\n", enabled, finalSentryDSN)
+	} else {
+		if os.Getenv("RUNE_DEBUG") == "true" {
+			fmt.Printf("DEBUG: Sentry not initialized - enabled: %v, DSN provided: %v\n", enabled, finalSentryDSN != "")
+		}
+		if enabled && finalSentryDSN == "" {
+			fmt.Printf("INFO: Sentry error tracking not available - no DSN configured\n")
+		}
 	}
 
 	return client
@@ -369,11 +373,16 @@ func (c *Client) EndCommand(command string, success bool, duration time.Duration
 	})
 }
 
-// Build-time variables set via ldflags
-var (
-	segmentWriteKey string
-	sentryDSN       string
-)
+// maskKey masks sensitive keys for logging purposes
+func maskKey(key string) string {
+	if key == "" {
+		return "[not provided]"
+	}
+	if len(key) < 8 {
+		return "[masked]"
+	}
+	return key[:4] + "****" + key[len(key)-4:]
+}
 
 // Build-time version variable set via ldflags
 var version string

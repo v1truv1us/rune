@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest  # Changed to macOS for Apple code signing
     steps:
     - uses: actions/checkout@v4
       with:
@@ -32,6 +32,32 @@ jobs:
       uses: sigstore/cosign-installer@v3.7.0
       with:
         cosign-release: 'v2.4.1'
+
+    - name: Import Apple Code Signing Certificate
+      if: github.event_name != 'workflow_dispatch' || github.ref_type == 'tag'
+      env:
+        MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+        MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      run: |
+        # Create variables
+        CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+        KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+        # Import certificate from secrets
+        echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+
+        # Create temporary keychain
+        security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+        security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+        security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+        # Import certificate to keychain
+        security import $CERTIFICATE_PATH -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+        security list-keychain -d user -s $KEYCHAIN_PATH
+
+        # Verify certificate is available
+        security find-identity -v -p codesigning $KEYCHAIN_PATH
 
     - name: Run tests
       run: go test -v ./... -skip "TestMigrateWatsonCommandErrors|TestMigrateTimewarriorCommandIntegration|TestMigrateTimewarriorCommandErrors|TestMigrateEdgeCases"
@@ -85,6 +111,14 @@ jobs:
         RUNE_SEGMENT_WRITE_KEY: ${{ secrets.RUNE_SEGMENT_WRITE_KEY }}
         RUNE_SENTRY_DSN: ${{ secrets.RUNE_SENTRY_DSN }}
         COSIGN_EXPERIMENTAL: 1
+        # Apple Code Signing
+        MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
+        MACOS_SIGN_P12: ${{ secrets.MACOS_SIGN_P12 }}
+        MACOS_SIGN_PASSWORD: ${{ secrets.MACOS_SIGN_PASSWORD }}
+        # Apple Notarization
+        MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
+        MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
+        MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
 
     - name: Test Telemetry Integration
       run: |
@@ -111,3 +145,11 @@ jobs:
         environment: production
         version: ${{ github.ref_name }}
         finalize: true
+
+    - name: Clean up keychain
+      if: always() && (github.event_name != 'workflow_dispatch' || github.ref_type == 'tag')
+      run: |
+        KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+        if [ -f "$KEYCHAIN_PATH" ]; then
+          security delete-keychain $KEYCHAIN_PATH
+        fi

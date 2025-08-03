@@ -39,7 +39,7 @@ Rune is a developer-first CLI productivity platform written in Go that automates
 ### Building
 - `make build` - Build the binary
 - `make dev` - Build with race detection for development
-- `make build-telemetry` - Build with telemetry support (embeds API keys)
+- `make build-telemetry` - Build with runtime telemetry support (no embedded keys)
 
 ### Testing
 - `make test` - Run all tests
@@ -86,10 +86,15 @@ Rune uses YAML configuration at `~/.rune/config.yaml` with the following structu
 ## Telemetry Integration
 
 Rune includes optional telemetry for usage analytics and error reporting:
-- **Segment** for usage analytics (embedded key: starts with `ZkEZXHRWH96y8EviNkbYJUByqGR9QI4G`)
-- **Sentry** for error tracking (DSN: `https://3b20acb23bbbc5958448bb41900cdca2@sentry.fergify.work/10`)
+- **Segment** for usage analytics
+- **Sentry** for error tracking
+- **No keys embedded by default** - telemetry keys must be provided at runtime
+- Keys loaded from:
+  1. Environment variables: `RUNE_SEGMENT_WRITE_KEY`, `RUNE_SENTRY_DSN`
+  2. Config file: `~/.rune/config.yaml` under `integrations.telemetry`
 - Telemetry can be disabled via `RUNE_TELEMETRY_DISABLED=true`
 - Debug mode: `RUNE_DEBUG=true`
+- **Beta users get clean experience** - no telemetry sent without explicit key configuration
 
 ## Code Signing
 

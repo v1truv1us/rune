@@ -168,6 +168,55 @@
   - [x] Handle edge cases: "just now", "yesterday", "2 days ago", etc.
   - [x] Issue: Documentation shows example with "(2h 30m ago)" but feature doesn't exist in code
 
+## Specialist Analysis Findings (July 2025)
+
+### High Priority Items from Code Review
+- [ ] **Implement structured logging and consistent error propagation**
+  - [ ] Replace fmt.Printf debug statements with structured logging framework
+  - [ ] Add consistent error context throughout application
+  - [ ] Implement configurable log levels and output formatting
+
+- [ ] **Increase test coverage from 34.8% to 80%+**
+  - [ ] Focus on Commands module (currently 15.3% coverage)
+  - [ ] Add comprehensive testing for Rituals engine (currently 0% coverage)
+  - [ ] Add integration tests and fix skipped tests in migration module
+
+- [ ] **Launch marketing website (docs.rune.dev) with SEO optimization**
+  - [ ] Create professional landing page with clear value proposition
+  - [ ] Implement SEO-optimized documentation site
+  - [ ] Set up automated deployment and search functionality
+
+### Security Enhancements (Revised Understanding)
+- [ ] **Add security testing to CI/CD pipeline including vulnerability scanning**
+  - [ ] Implement automated dependency scanning
+  - [ ] Add static analysis security testing
+  - [ ] Create security-focused test cases
+
+- [ ] **Add config file integrity validation** (checksum/signature to detect tampering)
+- [ ] **Implement environment variable filtering** (avoid leaking sensitive vars to ritual commands)
+
+### UI/UX & Accessibility Improvements
+- [ ] **Implement enhanced help system with categorized command overview**
+  - [ ] Add command suggestions for typos using Levenshtein distance
+  - [ ] Create progressive disclosure for advanced features
+  - [ ] Improve error message standards with consistent, actionable formatting
+
+- [ ] **Add accessibility mode with text-only output** option for screen readers
+
+### Testing & Quality Assurance
+- [ ] **Implement end-to-end workflow testing** for user journeys
+- [ ] **Add performance benchmark tests** for database operations and CLI commands
+
+### Error Handling & Debugging
+- [ ] **Implement retry mechanisms with exponential backoff** for network operations
+- [ ] **Add error classification system** with specific error types and codes
+- [ ] **Create comprehensive troubleshooting documentation**
+
+### Marketing & Growth Strategy
+- [ ] **Create 2-minute demo and setup videos** for onboarding
+- [ ] **Start weekly blog series** on developer productivity patterns
+- [ ] **Expand community presence** on dev.to, Reddit, and Discord
+
 ### Release & Distribution
 - [x] **GoReleaser Configuration** ✅ COMPLETED (January 2025)
   - [x] Fix homebrew_casks syntax issues (completed January 2025)

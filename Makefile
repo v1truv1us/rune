@@ -6,12 +6,8 @@ BINARY_NAME=rune
 MAIN_PATH=./cmd/rune
 BUILD_DIR=./bin
 VERSION?=dev
-# Default telemetry keys (can be overridden by environment variables)
-DEFAULT_SEGMENT_KEY=ZkEZXHRWH96y8EviNkbYJUByqGR9QI4G
-DEFAULT_SENTRY_DSN=https://3b20acb23bbbc5958448bb41900cdca2@sentry.fergify.work/10
-SEGMENT_KEY?=$(if $(RUNE_SEGMENT_WRITE_KEY),$(RUNE_SEGMENT_WRITE_KEY),$(DEFAULT_SEGMENT_KEY))
-SENTRY_DSN?=$(if $(RUNE_SENTRY_DSN),$(RUNE_SENTRY_DSN),$(DEFAULT_SENTRY_DSN))
-LDFLAGS=-ldflags "-X github.com/ferg-cod3s/rune/internal/commands.version=$(VERSION) -X github.com/ferg-cod3s/rune/internal/telemetry.version=$(VERSION) -X github.com/ferg-cod3s/rune/internal/telemetry.segmentWriteKey=$(SEGMENT_KEY) -X github.com/ferg-cod3s/rune/internal/telemetry.sentryDSN=$(SENTRY_DSN)"
+# Build flags without embedded secrets - telemetry keys loaded at runtime
+LDFLAGS=-ldflags "-X github.com/ferg-cod3s/rune/internal/commands.version=$(VERSION) -X github.com/ferg-cod3s/rune/internal/telemetry.version=$(VERSION)"
 
 # Default target
 all: build
@@ -127,11 +123,12 @@ test-auto-tmux:
 test-scripts: test-telemetry test-auto-tmux
 	@echo "All shell script tests completed"
 
-# Build with telemetry (ensures telemetry keys are embedded)
+# Build with telemetry notice (keys loaded at runtime from environment/config)
 build-telemetry:
-	@echo "Building $(BINARY_NAME) with telemetry support..."
-	@echo "Segment Key: $(shell echo $(SEGMENT_KEY) | cut -c1-10)..."
-	@echo "Sentry DSN: $(shell echo $(SENTRY_DSN) | cut -c1-30)..."
+	@echo "Building $(BINARY_NAME) with runtime telemetry support..."
+	@echo "NOTE: Telemetry keys are loaded at runtime from environment variables or config file"
+	@echo "      Set RUNE_SEGMENT_WRITE_KEY and RUNE_SENTRY_DSN environment variables"
+	@echo "      or configure them in ~/.rune/config.yaml"
 	@mkdir -p $(BUILD_DIR)
 	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PATH)
 	@echo "Testing telemetry integration..."
@@ -173,14 +170,22 @@ security-secrets:
 security-build:
 	@echo "Checking binary for embedded secrets..."
 	@if [ -f "./bin/rune" ]; then \
-		if strings ./bin/rune | grep -E "(password|secret|key|token)" | grep -v -E "(segmentWriteKey|sentryDSN|RUNE_)" ; then \
-			echo "❌ Potential secrets found in binary"; \
+		echo "Checking for hardcoded telemetry secrets..."; \
+		if strings ./bin/rune | grep -E "(ZkEZXHRWH96y8EviNkbYJUByqGR9QI4G|sentry\.fergify\.work)" ; then \
+			echo "❌ Hardcoded telemetry secrets found in binary"; \
 			exit 1; \
 		else \
-			echo "✅ No obvious secrets found in binary"; \
+			echo "✅ No hardcoded telemetry secrets found"; \
+		fi; \
+		echo "Checking for other potential API keys/tokens..."; \
+		if strings ./bin/rune | grep -E "(sk-[a-zA-Z0-9]{48}|xoxb-[0-9]+-[0-9]+-[a-zA-Z0-9]+|ghp_[a-zA-Z0-9]{36})" ; then \
+			echo "❌ Potential API keys found in binary"; \
+			exit 1; \
+		else \
+			echo "✅ No obvious API keys found in binary"; \
 		fi \
 	else \
-		echo "Binary not found, run 'make build' first"; \
+		echo "❌ Binary not found. Run 'make build' first."; \
 		exit 1; \
 	fi
 
@@ -209,7 +214,7 @@ pre-commit-security: fmt vet lint test test-scripts validate-workflows security-
 help:
 	@echo "Available targets:"
 	@echo "  build        - Build the binary"
-	@echo "  build-telemetry - Build with telemetry support (embeds keys)"
+	@echo "  build-telemetry - Build with runtime telemetry support (keys from env/config)"
 	@echo "  dev          - Build for development with race detection"
 	@echo "  test         - Run tests"
 	@echo "  test-coverage- Run tests with coverage report"

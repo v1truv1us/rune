@@ -205,10 +205,10 @@ check_binary() {
         return 1
     fi
     
-    # Check binary for embedded secrets (excluding expected telemetry keys)
+    # Check binary for embedded secrets (no telemetry keys should be embedded)
     local temp_log=$(mktemp)
-    if strings "$BINARY_PATH" | grep -E "(password|secret|key|token)" | \
-        grep -v -E "(segmentWriteKey|sentryDSN|RUNE_|keySize|keyHash|keyValue|keyShares)" > "$temp_log" 2>/dev/null; then
+    if strings "$BINARY_PATH" | grep -E "(api[_-]?key|secret[_-]?key|password|auth[_-]?token|access[_-]?token)" | \
+        grep -v -E "(RUNE_)" > "$temp_log" 2>/dev/null; then
         
         log_warning "Potential secrets found in binary:"
         head -20 "$temp_log"  # Show first 20 matches

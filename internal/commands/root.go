@@ -6,6 +6,7 @@ import (
 
 	"github.com/ferg-cod3s/rune/internal/colors"
 	"github.com/ferg-cod3s/rune/internal/config"
+	"github.com/ferg-cod3s/rune/internal/logger"
 	"github.com/ferg-cod3s/rune/internal/telemetry"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -36,7 +37,7 @@ func Execute() error {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig, initTelemetry, initColors)
+	cobra.OnInitialize(initConfig, initLogger, initTelemetry, initColors)
 
 	// Version template will be set dynamically in initColors
 
@@ -76,38 +77,65 @@ func initConfig() {
 	}
 }
 
+// initLogger initializes the structured logging system
+func initLogger() {
+	if err := logger.InitializeFromViper(); err != nil {
+		// Fallback to stderr output if initialization fails
+		fmt.Fprintf(os.Stderr, "Warning: Failed to initialize logger: %v\n", err)
+	}
+	
+	// Log initialization
+	log := logger.GetLogger()
+	log.Debug("logger initialized", "debug_mode", os.Getenv("RUNE_DEBUG") == "true")
+}
+
 // initTelemetry initializes telemetry tracking
 func initTelemetry() {
+	log := logger.TelemetryLogger()
+	
 	// Get telemetry configuration from environment variables or config
 	segmentWriteKey := os.Getenv("RUNE_SEGMENT_WRITE_KEY")
 	sentryDSN := os.Getenv("RUNE_SENTRY_DSN")
 
-	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: initTelemetry called\n")
-		fmt.Printf("DEBUG: Env Segment Key: %s\n", segmentWriteKey)
-		fmt.Printf("DEBUG: Env Sentry DSN: %s\n", sentryDSN)
-	}
+	log.Debug("initializing telemetry",
+		"env_segment_key", maskTelemetryKey(segmentWriteKey),
+		"env_sentry_dsn", maskTelemetryKey(sentryDSN))
 
 	// Try to load from config if environment variables are not set
 	if cfg, err := config.Load(); err == nil {
 		if segmentWriteKey == "" {
 			segmentWriteKey = cfg.Integrations.Telemetry.SegmentWriteKey
+			log.Debug("using segment key from config", "source", "config_file")
 		}
 		if sentryDSN == "" {
 			sentryDSN = cfg.Integrations.Telemetry.SentryDSN
-		}
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Config loaded - Segment: %s, Sentry: %s\n", cfg.Integrations.Telemetry.SegmentWriteKey, cfg.Integrations.Telemetry.SentryDSN)
+			log.Debug("using sentry DSN from config", "source", "config_file")
 		}
 	} else if os.Getenv("RUNE_DEBUG") == "true" {
 		fmt.Printf("DEBUG: Config load failed: %v\n", err)
 	}
 
 	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Final keys - Segment: %s, Sentry: %s\n", segmentWriteKey, sentryDSN)
+		fmt.Printf("DEBUG: Final keys - Segment: %s, Sentry: %s\n", maskTelemetryKey(segmentWriteKey), maskTelemetryKey(sentryDSN))
+	}
+
+	// Validate keys before initialization
+	if segmentWriteKey == "" && sentryDSN == "" {
+		log.Info("telemetry keys not configured - telemetry disabled")
 	}
 
 	telemetry.Initialize(segmentWriteKey, sentryDSN)
+}
+
+// maskTelemetryKey masks sensitive telemetry keys for logging
+func maskTelemetryKey(key string) string {
+	if key == "" {
+		return "[not configured]"
+	}
+	if len(key) < 8 {
+		return "[configured]"
+	}
+	return key[:4] + "****" + key[len(key)-4:]
 }
 
 // initColors initializes the color system

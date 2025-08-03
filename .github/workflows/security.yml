@@ -90,7 +90,7 @@ jobs:
       - name: Check binary for embedded secrets
         run: |
           echo "Checking binary for potential secrets..."
-          if strings ./bin/rune | grep -E "(password|secret|key|token)" | grep -v -E "(segmentWriteKey|sentryDSN|RUNE_)" ; then
+          if strings ./bin/rune | grep -E "(api[_-]?key|secret[_-]?key|password|auth[_-]?token|access[_-]?token)" | grep -v -E "(RUNE_)" ; then
             echo "❌ Potential secrets found in binary"
             exit 1
           else

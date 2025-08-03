@@ -278,7 +278,7 @@ rune report today --format json
 | **Attribute** | **Details** |
 |---------------|-------------|
 | **Name** | Rune CLI |
-| **Version** | v0.9.0-beta.1 |
+| **Version** | v0.2.0-beta.1 |
 | **Release Date** | July 16, 2025 |
 | **License** | MIT (Open Source) |
 | **Language** | Go 1.23+ |

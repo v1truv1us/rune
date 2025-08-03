@@ -1,4 +1,4 @@
-# 🚀 Rune CLI v0.9.0-beta.1 - MVP Feature Complete!
+# 🚀 Rune CLI v0.2.0-beta.1 - MVP Feature Complete!
 
 **Welcome to the Rune CLI Beta Program!** 
 
@@ -306,7 +306,7 @@ Ready to transform your development workflow?
 
 ---
 
-**Release**: v0.9.0-beta.1  
+**Release**: v0.2.0-beta.1  
 **Date**: July 16, 2025  
 **Compatibility**: macOS 11+, Linux (most distributions), Windows 10/11  
-**Download**: [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.9.0-beta.1)
+**Download**: [GitHub Releases](https://github.com/ferg-cod3s/rune/releases/tag/v0.2.0-beta.1)
