@@ -24,34 +24,7 @@ builds:
     mod_timestamp: '{{ .CommitTimestamp }}'
     hooks:
       post:
-        - cmd: |
-            if [[ "{{ .Os }}" == "darwin" && -n "{{ .Env.MACOS_SIGN_IDENTITY }}" ]]; then
-              echo "Signing macOS binary: {{ .Path }}"
-              codesign --sign "{{ .Env.MACOS_SIGN_IDENTITY }}" --timestamp --options=runtime --entitlements ./entitlements.plist "{{ .Path }}"
-              
-              # Notarize if we have notarization credentials
-              if [[ -n "{{ .Env.MACOS_NOTARY_ISSUER_ID }}" && -n "{{ .Env.MACOS_NOTARY_KEY_ID }}" ]]; then
-                echo "Notarizing macOS binary: {{ .Path }}"
-                # Create a temporary zip for notarization
-                NOTARY_ZIP="/tmp/{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}.zip"
-                ditto -c -k --keepParent "{{ .Path }}" "$NOTARY_ZIP"
-                
-                # Submit for notarization
-                xcrun notarytool submit "$NOTARY_ZIP" \
-                  --issuer "{{ .Env.MACOS_NOTARY_ISSUER_ID }}" \
-                  --key-id "{{ .Env.MACOS_NOTARY_KEY_ID }}" \
-                  --key "{{ .Env.MACOS_NOTARY_KEY }}" \
-                  --wait \
-                  --timeout 10m
-                
-                # Clean up temporary zip
-                rm -f "$NOTARY_ZIP"
-                echo "Notarization completed for: {{ .Path }}"
-              fi
-            fi
-          env:
-            - GOOS={{ .Os }}
-            - GOARCH={{ .Arch }}
+        - ./scripts/sign-macos.sh "{{ .Path }}" "{{ .Os }}"
 
 archives:
   - formats: [tar.gz]
@@ -119,9 +92,7 @@ homebrew_casks:
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     dependencies:
       - formula: git
-    # Apple code signing verification
-    signed: true
-    verified: true
+    # Note: GoReleaser will automatically detect signed binaries
     completions:
       bash: completions/rune.bash
       zsh: completions/rune.zsh

@@ -127,3 +127,7 @@ docs-site/node_modules/
 *.gif
 demo_project/
 test_project/
+
+# Certificate files
+*.p8
+*.cer

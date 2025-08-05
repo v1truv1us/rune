@@ -83,7 +83,7 @@ func initLogger() {
 		// Fallback to stderr output if initialization fails
 		fmt.Fprintf(os.Stderr, "Warning: Failed to initialize logger: %v\n", err)
 	}
-	
+
 	// Log initialization
 	log := logger.GetLogger()
 	log.Debug("logger initialized", "debug_mode", os.Getenv("RUNE_DEBUG") == "true")
@@ -92,7 +92,7 @@ func initLogger() {
 // initTelemetry initializes telemetry tracking
 func initTelemetry() {
 	log := logger.TelemetryLogger()
-	
+
 	// Get telemetry configuration from environment variables or config
 	segmentWriteKey := os.Getenv("RUNE_SEGMENT_WRITE_KEY")
 	sentryDSN := os.Getenv("RUNE_SENTRY_DSN")

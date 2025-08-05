@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 400 400"
+     xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <text x="200" y="200"
+        font-size="240"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        fill="#88C0D0"
+        font-family="serif"
+        filter="url(#glow)">ᚱ</text>
+</svg>

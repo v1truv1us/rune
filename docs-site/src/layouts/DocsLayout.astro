@@ -1,4 +1,5 @@
 ---
+import "../styles/global.css";
 export interface Props {
   title: string;
   description?: string;
@@ -9,9 +10,9 @@ export interface Props {
   category?: string;
 }
 
-const { 
-  title, 
-  description = "Ancient wisdom for modern workflows - Rune CLI Documentation", 
+const {
+  title,
+  description = "Ancient wisdom for modern workflows - Rune CLI Documentation",
   image = "/og-docs.png",
   canonical,
   noindex = false,
@@ -22,11 +23,11 @@ const {
 const currentUrl = canonical || Astro.url.href;
 const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
 const keywords = [
-  "CLI documentation", 
-  "developer tools guide", 
-  "productivity automation", 
-  "time tracking setup", 
-  "workflow automation", 
+  "CLI documentation",
+  "developer tools guide",
+  "productivity automation",
+  "time tracking setup",
+  "workflow automation",
   "focus mode configuration",
   "ritual automation",
   "project detection",
@@ -39,7 +40,7 @@ const keywords = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -48,10 +49,10 @@ const keywords = [
     <meta name="author" content="Rune CLI Team" />
     <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
     {lastModified && <meta name="article:modified_time" content={lastModified} />}
-    
+
     <!-- Canonical URL -->
     {canonical && <link rel="canonical" href={canonical} />}
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
     <meta property="og:url" content={currentUrl} />
@@ -67,7 +68,7 @@ const keywords = [
     <meta property="article:tag" content="CLI" />
     <meta property="article:tag" content="Documentation" />
     <meta property="article:tag" content="Developer Tools" />
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={currentUrl} />
@@ -77,7 +78,7 @@ const keywords = [
     <meta property="twitter:image:alt" content={`${title} - Rune CLI Documentation`} />
     <meta property="twitter:creator" content="@RuneCLI" />
     <meta property="twitter:site" content="@RuneCLI" />
-    
+
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -86,14 +87,14 @@ const keywords = [
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#0f172a" />
     <meta name="msapplication-TileColor" content="#0f172a" />
-    
+
     <!-- Global CSS -->
     <link rel="stylesheet" href="/src/styles/global.css" />
-    
+
     <!-- Additional Meta -->
     <meta name="generator" content={Astro.generator} />
     <meta name="format-detection" content="telephone=no" />
-    
+
     <!-- Structured Data for Documentation -->
     <script type="application/ld+json">
       {JSON.stringify({
@@ -152,7 +153,7 @@ const keywords = [
         </div>
       </div>
     </nav>
-    
+
     <main id="main">
       <!-- Documentation Hero Section -->
       <div class="docs-hero">
@@ -183,7 +184,7 @@ const keywords = [
         </div>
       </div>
     </main>
-    
+
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-grid">

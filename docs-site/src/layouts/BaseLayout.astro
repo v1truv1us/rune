@@ -1,4 +1,5 @@
 ---
+import "../styles/global.css";
 export interface Props {
   title: string;
   description?: string;
@@ -8,9 +9,9 @@ export interface Props {
   type?: string;
 }
 
-const { 
-  title, 
-  description = "Ancient wisdom for modern workflows - Rune CLI Documentation", 
+const {
+  title,
+  description = "Ancient wisdom for modern workflows - Rune CLI Documentation",
   image = "/og-image.png",
   canonical,
   noindex = false,
@@ -26,7 +27,7 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -34,10 +35,10 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <meta name="keywords" content="developer time tracking CLI, command line productivity tools, Watson alternative, Timewarrior alternative, CLI time tracker, developer productivity, workflow automation, focus mode, project time tracking, code time tracking, git time tracking" />
     <meta name="author" content="Rune CLI Team" />
     <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
-    
+
     <!-- Canonical URL -->
     {canonical && <link rel="canonical" href={canonical} />}
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
     <meta property="og:url" content={currentUrl} />
@@ -49,7 +50,7 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <meta property="og:image:alt" content="Rune CLI - Ancient wisdom for modern workflows" />
     <meta property="og:site_name" content="Rune CLI" />
     <meta property="og:locale" content="en_US" />
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={currentUrl} />
@@ -59,7 +60,7 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <meta property="twitter:image:alt" content="Rune CLI - Ancient wisdom for modern workflows" />
     <meta property="twitter:creator" content="@RuneCLI" />
     <meta property="twitter:site" content="@RuneCLI" />
-    
+
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -68,14 +69,14 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#0f172a" />
     <meta name="msapplication-TileColor" content="#0f172a" />
-    
+
     <!-- Global CSS -->
     <link rel="stylesheet" href="/src/styles/global.css" />
-    
+
     <!-- Additional Meta -->
     <meta name="generator" content={Astro.generator} />
     <meta name="format-detection" content="telephone=no" />
-    
+
     <!-- Structured Data -->
     <script type="application/ld+json">
       {JSON.stringify({
@@ -121,11 +122,11 @@ const fullImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
         </div>
       </div>
     </nav>
-    
+
     <main id="main">
       <slot />
     </main>
-    
+
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-grid">

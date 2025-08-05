@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1500 500"
+     xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .ascii{font-family:'Courier New',monospace;font-weight:600}
+      .tag{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:400}
+    </style>
+  </defs>
+
+  <rect width="1500" height="500" fill="url(#bg)"/>
+
+  <!-- subtle rings -->
+  <g opacity=".08">
+    <circle cx="750" cy="250" r="220" stroke="#6B46C1" stroke-width="1" fill="none"/>
+    <circle cx="750" cy="250" r="180" stroke="#2E3440" stroke-width="1" fill="none"/>
+    <circle cx="750" cy="250" r="140" stroke="#2E3440" stroke-width="1" fill="none"/>
+  </g>
+
+  <!-- rune -->
+  <text x="750" y="180" font-size="140" text-anchor="middle" dominant-baseline="middle"
+        fill="#88C0D0" font-family="serif" filter="url(#glow)">ᚱ</text>
+
+  <!-- ascii logo -->
+  <g transform="translate(750,280)" text-anchor="middle">
+    <text class="ascii" font-size="16" fill="#FFB700">
+      <tspan x="0" dy="0"> ______     __  __     __   __     ______   </tspan>
+      <tspan x="0" dy="20">/\  == \   /\ \/\ \   /\ "-.\ \   /\  ___\  </tspan>
+      <tspan x="0" dy="20">\ \  __&lt;   \ \ \_\ \  \ \ \-.  \  \ \  __\  </tspan>
+      <tspan x="0" dy="20"> \ \_\ \_\  \ \_____\  \ \_\\"\_\  \ \_____\ </tspan>
+      <tspan x="0" dy="20">  \/_/ /_/   \/_____/   \/_/ \/_/   \/_____/ </tspan>
+    </text>
+  </g>
+
+  <!-- tagline -->
+  <text x="750" y="410" class="tag" font-size="22" fill="#2E3440" text-anchor="middle">
+    Ancient wisdom for modern workflows
+  </text>
+
+  <!-- blinking cursor -->
+  <rect x="860" y="400" width="12" height="22" fill="#88C0D0" opacity="1">
+    <animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+</svg>

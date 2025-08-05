@@ -2,6 +2,7 @@ package logger
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"log/slog"
@@ -30,7 +31,7 @@ func TestInitialize(t *testing.T) {
 			verify: func(t *testing.T) {
 				logger := GetLogger()
 				assert.NotNil(t, logger)
-				assert.True(t, logger.Enabled(nil, slog.LevelDebug))
+				assert.True(t, logger.Enabled(context.TODO(), slog.LevelDebug))
 			},
 		},
 		{
@@ -43,8 +44,8 @@ func TestInitialize(t *testing.T) {
 			verify: func(t *testing.T) {
 				logger := GetLogger()
 				assert.NotNil(t, logger)
-				assert.True(t, logger.Enabled(nil, slog.LevelInfo))
-				assert.False(t, logger.Enabled(nil, slog.LevelDebug))
+				assert.True(t, logger.Enabled(context.TODO(), slog.LevelInfo))
+				assert.False(t, logger.Enabled(context.TODO(), slog.LevelDebug))
 			},
 		},
 		{
@@ -57,8 +58,8 @@ func TestInitialize(t *testing.T) {
 			verify: func(t *testing.T) {
 				logger := GetLogger()
 				assert.NotNil(t, logger)
-				assert.True(t, logger.Enabled(nil, slog.LevelError))
-				assert.False(t, logger.Enabled(nil, slog.LevelWarn))
+				assert.True(t, logger.Enabled(context.TODO(), slog.LevelError))
+				assert.False(t, logger.Enabled(context.TODO(), slog.LevelWarn))
 			},
 		},
 	}
@@ -82,7 +83,7 @@ func TestInitializeFromViper(t *testing.T) {
 		require.NoError(t, err)
 
 		logger := GetLogger()
-		assert.True(t, logger.Enabled(nil, slog.LevelDebug))
+		assert.True(t, logger.Enabled(context.TODO(), slog.LevelDebug))
 	})
 
 	t.Run("default configuration", func(t *testing.T) {
@@ -92,8 +93,8 @@ func TestInitializeFromViper(t *testing.T) {
 		require.NoError(t, err)
 
 		logger := GetLogger()
-		assert.True(t, logger.Enabled(nil, slog.LevelInfo))
-		assert.False(t, logger.Enabled(nil, slog.LevelDebug))
+		assert.True(t, logger.Enabled(context.TODO(), slog.LevelInfo))
+		assert.False(t, logger.Enabled(context.TODO(), slog.LevelDebug))
 	})
 }
 
@@ -253,7 +254,7 @@ func TestLogDuration(t *testing.T) {
 
 	start := time.Now().Add(-100 * time.Millisecond)
 	LogDuration(start, "test_operation", "component", "test")
-	
+
 	output := buf.String()
 	assert.Contains(t, output, "operation completed")
 	assert.Contains(t, output, "operation=test_operation")
@@ -275,14 +276,14 @@ func TestJSONFormat(t *testing.T) {
 	defaultLogger = slog.New(handler)
 
 	Info("test json message", "key", "value", "number", 42)
-	
+
 	output := strings.TrimSpace(buf.String())
-	
+
 	// Parse as JSON to verify structure
 	var parsed map[string]interface{}
 	err := json.Unmarshal([]byte(output), &parsed)
 	require.NoError(t, err)
-	
+
 	assert.Equal(t, "INFO", parsed["level"])
 	assert.Equal(t, "test json message", parsed["msg"])
 	assert.Equal(t, "value", parsed["key"])
@@ -305,7 +306,7 @@ func TestWithContext(t *testing.T) {
 
 	logger := With("session_id", "abc123", "user", "testuser")
 	logger.Info("test message")
-	
+
 	output := buf.String()
 	assert.Contains(t, output, "session_id=abc123")
 	assert.Contains(t, output, "user=testuser")
