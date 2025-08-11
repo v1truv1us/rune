@@ -15,6 +15,7 @@ export default defineConfig({
       entryLimit: 10000,
     })
   ],
+  output: 'static',
   markdown: {
     shikiConfig: {
       theme: "github-dark-dimmed",

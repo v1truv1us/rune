@@ -1,0 +1,25 @@
+Rune Telemetry End-to-End Test Report
+=====================================
+Date: Sun Aug 10 10:12:21 MDT 2025
+Binary: ./bin/rune
+Test Events: 5
+
+Test Results:
+- Basic telemetry functionality: ✅
+- Event generation: ✅
+- Command tracking: ✅
+- Telemetry disable: ✅
+- Network connectivity: ✅
+- Performance impact: ✅
+
+Configuration:
+- OTLP test endpoint: Not provided
+- Sentry test DSN: Not provided
+- Debug mode: Functional
+
+Recommendations:
+1. Monitor your OTLP collector for test logs
+2. Verify event properties and timing
+3. Check error rates in Sentry
+4. Monitor performance impact in production
+

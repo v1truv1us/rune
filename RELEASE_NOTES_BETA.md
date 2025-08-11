@@ -267,7 +267,7 @@ Your feedback shapes Rune's future! Please share:
 ### **Dependencies**
 - Minimal external dependencies for security and reliability
 - No cloud services or external APIs required
-- Optional telemetry via Segment (can be disabled)
+- Optional telemetry via OpenTelemetry (OTLP logs) and Sentry (can be disabled)
 - Platform-specific integrations use native APIs
 
 ### **Security**

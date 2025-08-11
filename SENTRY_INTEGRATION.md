@@ -42,7 +42,8 @@ Rune CLI includes comprehensive Sentry integration for error tracking, performan
 #### Method 1: Environment Variables (Recommended)
 ```bash
 export RUNE_SENTRY_DSN="https://your_public_key@sentry.io/your_project_id"
-export RUNE_SEGMENT_WRITE_KEY="your_segment_key"  # Optional
+# Optional: configure OTLP logs endpoint for OpenTelemetry
+export RUNE_OTLP_ENDPOINT="http://localhost:4318/v1/logs"
 ```
 
 #### Method 2: Configuration File
@@ -52,7 +53,8 @@ integrations:
   telemetry:
     enabled: true
     sentry_dsn: "https://your_public_key@sentry.io/your_project_id"
-    segment_write_key: "your_segment_key"  # Optional
+    # Optional OpenTelemetry logs endpoint
+    otlp_endpoint: "http://localhost:4318/v1/logs"
 ```
 
 #### Method 3: Example Configuration

@@ -253,23 +253,24 @@ Rune collects anonymous usage analytics to help improve the tool. This includes:
 - Error occurrences (to identify bugs)
 - Performance metrics (command execution times)
 - System information (OS, architecture)
+- OpenTelemetry logs (if RUNE_OTLP_ENDPOINT is configured)
 
 **No personal data, file contents, or command arguments are collected.**
 
 ### Telemetry Configuration
 
-For telemetry to work, you need to configure your API keys using environment variables:
+For telemetry to work, you can configure Sentry and/or an OTLP logs endpoint using environment variables:
 
 ```bash
 # Copy the example environment file
 cp .env.example .env
 
 # Edit .env and add your keys:
-# RUNE_SEGMENT_WRITE_KEY=your_segment_write_key_here
+# RUNE_OTLP_ENDPOINT=http://localhost:4318/v1/logs
 # RUNE_SENTRY_DSN=https://your_sentry_dsn@sentry.io/project_id
 ```
 
-**Important**: Never commit API keys to version control. Always use environment variables or the `.env` file.
+**Important**: Never commit secrets to version control. Always use environment variables or the `.env` file.
 
 ### Disable Telemetry
 

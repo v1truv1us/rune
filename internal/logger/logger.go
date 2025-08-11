@@ -2,15 +2,22 @@ package logger
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
+	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/spf13/viper"
 )
 
-var defaultLogger *slog.Logger
+var (
+	defaultLogger *slog.Logger
+	errorLogger   *StructuredErrorLogger
+)
 
 // LogLevel represents the log level
 type LogLevel string
@@ -24,9 +31,91 @@ const (
 
 // Config holds logger configuration
 type Config struct {
-	Level  LogLevel `yaml:"level" mapstructure:"level"`
-	Format string   `yaml:"format" mapstructure:"format"` // "json" or "text"
-	Output string   `yaml:"output" mapstructure:"output"` // "stdout", "stderr", or file path
+	Level     LogLevel `yaml:"level" mapstructure:"level"`
+	Format    string   `yaml:"format" mapstructure:"format"`         // "json" or "text"
+	Output    string   `yaml:"output" mapstructure:"output"`         // "stdout", "stderr", or file path
+	ErrorFile string   `yaml:"error_file" mapstructure:"error_file"` // JSON file for structured error logging
+}
+
+// StructuredErrorLogger handles JSON file logging for errors and structured data
+type StructuredErrorLogger struct {
+	file  *os.File
+	mutex sync.Mutex
+	path  string
+}
+
+// StructuredLogEntry represents a structured log entry for JSON logging
+type StructuredLogEntry struct {
+	Time      time.Time              `json:"time"`
+	Level     string                 `json:"level"`
+	Message   string                 `json:"msg"`
+	Component string                 `json:"component,omitempty"`
+	Command   string                 `json:"command,omitempty"`
+	Error     string                 `json:"error,omitempty"`
+	Context   map[string]interface{} `json:"context,omitempty"`
+}
+
+// NewStructuredErrorLogger creates a new structured error logger
+func NewStructuredErrorLogger(filePath string) (*StructuredErrorLogger, error) {
+	if filePath == "" {
+		return nil, nil // No structured logging
+	}
+
+	// Ensure directory exists
+	dir := filepath.Dir(filePath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return nil, err
+	}
+
+	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return nil, err
+	}
+
+	return &StructuredErrorLogger{
+		file: file,
+		path: filePath,
+	}, nil
+}
+
+// Log writes a structured log entry to the JSON file
+func (sel *StructuredErrorLogger) Log(entry StructuredLogEntry) error {
+	if sel == nil || sel.file == nil {
+		return nil // No structured logging configured
+	}
+
+	sel.mutex.Lock()
+	defer sel.mutex.Unlock()
+
+	// Set timestamp if not provided
+	if entry.Time.IsZero() {
+		entry.Time = time.Now()
+	}
+
+	jsonBytes, err := json.Marshal(entry)
+	if err != nil {
+		return err
+	}
+
+	// Write JSON line
+	_, err = sel.file.WriteString(string(jsonBytes) + "\n")
+	if err != nil {
+		return err
+	}
+
+	return sel.file.Sync()
+}
+
+// Close closes the structured error logger
+func (sel *StructuredErrorLogger) Close() error {
+	if sel == nil || sel.file == nil {
+		return nil
+	}
+
+	sel.mutex.Lock()
+	defer sel.mutex.Unlock()
+
+	return sel.file.Close()
 }
 
 // Initialize sets up the global logger with the given configuration
@@ -82,15 +171,35 @@ func Initialize(cfg Config) error {
 	}
 
 	defaultLogger = slog.New(handler)
+	// Ensure slog.Default uses our configured logger
+	slog.SetDefault(defaultLogger)
+
+	// Initialize structured error logger if configured
+	var err error
+	errorLogger, err = NewStructuredErrorLogger(cfg.ErrorFile)
+	if err != nil {
+		return fmt.Errorf("failed to initialize structured error logger: %w", err)
+	}
+
 	return nil
 }
 
 // InitializeFromViper initializes logging from viper configuration
 func InitializeFromViper() error {
+	// Default to ~/.rune/logs/rune-session-YYYYMMDD-HHMMSS.log for structured error logging
+	home, _ := os.UserHomeDir()
+	defaultErrorFile := ""
+	if home != "" {
+		sessionTimestamp := time.Now().Format("20060102-150405")
+		logFileName := fmt.Sprintf("rune-session-%s.log", sessionTimestamp)
+		defaultErrorFile = filepath.Join(home, ".rune", "logs", logFileName)
+	}
+
 	cfg := Config{
-		Level:  LevelInfo,
-		Format: "text",
-		Output: "stderr",
+		Level:     LevelInfo,
+		Format:    "text",
+		Output:    "stderr",
+		ErrorFile: defaultErrorFile,
 	}
 
 	// Check for debug mode from environment
@@ -107,6 +216,9 @@ func InitializeFromViper() error {
 	}
 	if viper.IsSet("logging.output") {
 		cfg.Output = viper.GetString("logging.output")
+	}
+	if viper.IsSet("logging.error_file") {
+		cfg.ErrorFile = viper.GetString("logging.error_file")
 	}
 
 	return Initialize(cfg)
@@ -197,4 +309,50 @@ func LogDuration(start time.Time, operation string, args ...any) {
 	duration := time.Since(start)
 	allArgs := append([]any{"operation", operation, "duration_ms", duration.Milliseconds()}, args...)
 	GetLogger().Info("operation completed", allArgs...)
+}
+
+// LogStructuredError logs an error to both the regular logger and the structured JSON file
+func LogStructuredError(err error, component, command, message string, context map[string]interface{}) {
+	// Log to regular logger
+	LogError(err, message, "component", component, "command", command)
+
+	// Log to structured file if available
+	if errorLogger != nil {
+		entry := StructuredLogEntry{
+			Level:     "error",
+			Message:   message,
+			Component: component,
+			Command:   command,
+			Error:     err.Error(),
+			Context:   context,
+		}
+		_ = errorLogger.Log(entry) // Ignore errors in error logging
+	}
+}
+
+// LogStructuredEvent logs a structured event to the JSON file
+func LogStructuredEvent(level, message, component, command string, context map[string]interface{}) {
+	if errorLogger != nil {
+		entry := StructuredLogEntry{
+			Level:     level,
+			Message:   message,
+			Component: component,
+			Command:   command,
+			Context:   context,
+		}
+		_ = errorLogger.Log(entry) // Ignore errors in logging
+	}
+}
+
+// GetStructuredLogger returns the structured error logger (can be nil)
+func GetStructuredLogger() *StructuredErrorLogger {
+	return errorLogger
+}
+
+// CloseStructuredLogger closes the structured error logger
+func CloseStructuredLogger() error {
+	if errorLogger != nil {
+		return errorLogger.Close()
+	}
+	return nil
 }

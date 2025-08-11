@@ -207,5 +207,6 @@ integrations:
     block_calendar: false  # Flexible for team needs
   telemetry:
     enabled: true  # Important for team metrics
-    segment_write_key: ""
+    # Optional OpenTelemetry logs endpoint (prefer environment variable)
+    # otlp_endpoint: "http://localhost:4318/v1/logs"
     sentry_dsn: ""

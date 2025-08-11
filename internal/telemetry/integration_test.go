@@ -1,12 +1,8 @@
 package telemetry
 
 import (
-	"encoding/json"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"os"
-	"strings"
 	"testing"
 	"time"
 
@@ -14,41 +10,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestSegmentIntegration tests actual Segment event delivery using a mock server
-func TestSegmentIntegration(t *testing.T) {
+// TestOTLPIntegration placeholder for future OTLP log delivery tests using a mock collector
+func TestOTLPIntegration(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	// Create a mock Segment server
-	var receivedEvents []map[string]interface{}
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
-
-		if !strings.Contains(r.URL.Path, "/track") {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-
-		// Parse the request body
-		var event map[string]interface{}
-		if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-
-		receivedEvents = append(receivedEvents, event)
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte(`{"success": true}`))
-	}))
-	defer server.Close()
-
-	// Note: This test would need modification to the Segment client to use a custom endpoint
+	// Placeholder: In future, spin up a mock OTLP HTTP endpoint to assert log ingestion
 	// For now, we'll test the client creation and method calls
-	client := NewClient("test_segment_key", "")
+	client := NewClient("")
 	require.NotNil(t, client)
 
 	// Test tracking an event
@@ -84,7 +54,7 @@ func TestSentryIntegration(t *testing.T) {
 		t.Skip("RUNE_TEST_SENTRY_DSN not set, skipping Sentry integration test")
 	}
 
-	client := NewClient("", testDSN)
+	client := NewClient(testDSN)
 	require.NotNil(t, client)
 	assert.True(t, client.sentryEnabled)
 
@@ -109,20 +79,34 @@ func TestSentryIntegration(t *testing.T) {
 	client.Close()
 }
 
-// TestTelemetryWithRealKeys tests with actual API keys if available
+// TestTelemetryWithRealKeys tests with actual telemetry endpoints/keys if available
 func TestTelemetryWithRealKeys(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test in short mode")
 	}
 
-	segmentKey := os.Getenv("RUNE_TEST_SEGMENT_WRITE_KEY")
+	otlpEndpoint := os.Getenv("RUNE_TEST_OTLP_ENDPOINT")
 	sentryDSN := os.Getenv("RUNE_TEST_SENTRY_DSN")
 
-	if segmentKey == "" && sentryDSN == "" {
-		t.Skip("No test API keys provided, skipping real integration test")
+	if otlpEndpoint == "" && sentryDSN == "" {
+		t.Skip("No test telemetry configuration provided, skipping real integration test")
 	}
 
-	client := NewClient(segmentKey, sentryDSN)
+	// If an OTLP test endpoint is provided, set it for this test run
+	var restoreOTLP string
+	if otlpEndpoint != "" {
+		restoreOTLP = os.Getenv("RUNE_OTLP_ENDPOINT")
+		_ = os.Setenv("RUNE_OTLP_ENDPOINT", otlpEndpoint)
+		defer func() {
+			if restoreOTLP == "" {
+				_ = os.Unsetenv("RUNE_OTLP_ENDPOINT")
+			} else {
+				_ = os.Setenv("RUNE_OTLP_ENDPOINT", restoreOTLP)
+			}
+		}()
+	}
+
+	client := NewClient(sentryDSN)
 	require.NotNil(t, client)
 
 	// Send a test event
@@ -147,13 +131,13 @@ func TestTelemetryWithRealKeys(t *testing.T) {
 	// Close to ensure events are sent
 	client.Close()
 
-	t.Log("Integration test completed - check your analytics dashboards for events")
+	t.Log("Integration test completed - check your OTLP collector and/or Sentry project for events")
 }
 
 // TestMiddlewareIntegration tests the middleware functions
 func TestMiddlewareIntegration(t *testing.T) {
 	// Initialize global client for testing
-	Initialize("test_key", "")
+	Initialize("")
 	defer Close()
 
 	// Test global functions
@@ -173,7 +157,7 @@ func TestMiddlewareIntegration(t *testing.T) {
 
 // TestEventProperties tests that events contain expected properties
 func TestEventProperties(t *testing.T) {
-	client := NewClient("test_key", "")
+	client := NewClient("")
 	require.NotNil(t, client)
 
 	// We can't easily test the actual properties sent to external services

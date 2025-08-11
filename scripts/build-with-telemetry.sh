@@ -32,8 +32,7 @@ VERSION=${VERSION:-$(git describe --tags --always --dirty)}
 echo "Building Rune with runtime telemetry support..."
 echo "Version: $VERSION"
 echo "NOTE: Telemetry keys are loaded at runtime from:"
-echo "  - Environment variables: RUNE_SEGMENT_WRITE_KEY, RUNE_SENTRY_DSN"
-echo "  - Configuration file: ~/.rune/config.yaml"
+echo "  - Environment variables: RUNE_OTLP_ENDPOINT, RUNE_SENTRY_DSN"echo "  - Configuration file: ~/.rune/config.yaml"
 
 # Build the binary WITHOUT embedded secrets
 go build -ldflags "\

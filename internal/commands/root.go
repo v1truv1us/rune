@@ -27,12 +27,34 @@ with existing developer workflows.
 
 Cast your daily runes and master your workflow.`,
 	Version: version,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		// Handle --log flag
+		if viper.GetBool("log") {
+			// Run logs command with default options
+			logsCmd := cmd.Root().Commands()[len(cmd.Root().Commands())-1] // Get logs command
+			for _, subCmd := range cmd.Root().Commands() {
+				if subCmd.Name() == "logs" {
+					logsCmd = subCmd
+					break
+				}
+			}
+			return logsCmd.RunE(logsCmd, []string{})
+		}
+
+		// Show help if no subcommand provided
+		return cmd.Help()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 func Execute() error {
-	// Ensure telemetry is properly closed on exit
+	// Ensure telemetry and logging are properly closed on exit
 	defer telemetry.Close()
+	defer func() {
+		if err := logger.CloseStructuredLogger(); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to close structured logger: %v\n", err)
+		}
+	}()
 	return rootCmd.Execute()
 }
 
@@ -45,10 +67,12 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.rune/config.yaml)")
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().Bool("no-color", false, "disable colored output")
+	rootCmd.PersistentFlags().Bool("log", false, "print recent logs")
 
 	// Bind flags to viper
 	_ = viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 	_ = viper.BindPFlag("no-color", rootCmd.PersistentFlags().Lookup("no-color"))
+	_ = viper.BindPFlag("log", rootCmd.PersistentFlags().Lookup("log"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -94,41 +118,35 @@ func initTelemetry() {
 	log := logger.TelemetryLogger()
 
 	// Get telemetry configuration from environment variables or config
-	segmentWriteKey := os.Getenv("RUNE_SEGMENT_WRITE_KEY")
 	sentryDSN := os.Getenv("RUNE_SENTRY_DSN")
 
 	log.Debug("initializing telemetry",
-		"env_segment_key", maskTelemetryKey(segmentWriteKey),
-		"env_sentry_dsn", maskTelemetryKey(sentryDSN))
+		"env_sentry_dsn", maskTelemetryKeyForLogging(sentryDSN))
 
 	// Try to load from config if environment variables are not set
 	if cfg, err := config.Load(); err == nil {
-		if segmentWriteKey == "" {
-			segmentWriteKey = cfg.Integrations.Telemetry.SegmentWriteKey
-			log.Debug("using segment key from config", "source", "config_file")
-		}
 		if sentryDSN == "" {
 			sentryDSN = cfg.Integrations.Telemetry.SentryDSN
 			log.Debug("using sentry DSN from config", "source", "config_file")
 		}
 	} else if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Config load failed: %v\n", err)
+		logger.TelemetryLogger().Debug("config load failed", "error", err)
 	}
 
 	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Final keys - Segment: %s, Sentry: %s\n", maskTelemetryKey(segmentWriteKey), maskTelemetryKey(sentryDSN))
+		logger.TelemetryLogger().Debug("final telemetry keys", "sentry", maskTelemetryKeyForLogging(sentryDSN))
 	}
 
 	// Validate keys before initialization
-	if segmentWriteKey == "" && sentryDSN == "" {
+	if sentryDSN == "" {
 		log.Info("telemetry keys not configured - telemetry disabled")
 	}
 
-	telemetry.Initialize(segmentWriteKey, sentryDSN)
+	telemetry.Initialize(sentryDSN)
 }
 
-// maskTelemetryKey masks sensitive telemetry keys for logging
-func maskTelemetryKey(key string) string {
+// maskTelemetryKeyForLogging masks sensitive telemetry keys for logging
+func maskTelemetryKeyForLogging(key string) string {
 	if key == "" {
 		return "[not configured]"
 	}

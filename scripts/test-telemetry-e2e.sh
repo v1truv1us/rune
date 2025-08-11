@@ -70,10 +70,10 @@ check_prerequisites() {
     fi
     
     # Check if we have test API keys
-    if [ -z "$RUNE_TEST_SEGMENT_WRITE_KEY" ] && [ -z "$RUNE_TEST_SENTRY_DSN" ]; then
-        log_warning "No test API keys provided"
-        log_info "Set RUNE_TEST_SEGMENT_WRITE_KEY and/or RUNE_TEST_SENTRY_DSN for full testing"
-        log_info "Continuing with embedded keys..."
+    if [ -z "$RUNE_TEST_OTLP_ENDPOINT" ] && [ -z "$RUNE_TEST_SENTRY_DSN" ]; then
+        log_warning "No test telemetry config provided"
+        log_info "Set RUNE_TEST_OTLP_ENDPOINT and/or RUNE_TEST_SENTRY_DSN for full testing"
+        log_info "Continuing with defaults..."
     fi
     
     log_success "Prerequisites check passed"
@@ -112,7 +112,7 @@ test_event_generation() {
         
         RUNE_DEBUG=true $BINARY_PATH debug telemetry >> "$temp_log" 2>&1
         
-        if grep -q "Tracking event: debug_test_event" "$temp_log"; then
+        if grep -qi "Test event sent" "$temp_log" || grep -qi "tracking event" "$temp_log"; then
             log_success "Event $i generated successfully"
         else
             log_error "Event $i generation failed"
@@ -122,11 +122,11 @@ test_event_generation() {
         fi
     done
     
-    # Check for Segment events
-    if grep -q "Sending to Segment" "$temp_log"; then
-        log_success "Segment events are being sent"
+    # Check for OTLP logs export
+    if grep -q "OTLP log exporter initialized successfully" "$temp_log" || grep -q "OpenTelemetry logging initialized" "$temp_log"; then
+        log_success "OTLP/logging initialized"
     else
-        log_warning "No Segment events detected"
+        log_warning "OTLP exporter not initialized (ensure RUNE_OTLP_ENDPOINT is set if desired)"
     fi
     
     # Check for Sentry events
@@ -148,7 +148,7 @@ test_command_tracking() {
     # Run a command that should generate telemetry
     RUNE_DEBUG=true $BINARY_PATH status >> "$temp_log" 2>&1
     
-    if grep -q "Tracking event: command_executed" "$temp_log"; then
+    if grep -qi "tracking event.*command_executed" "$temp_log"; then
         log_success "Command tracking works"
     else
         log_error "Command tracking failed"
@@ -169,7 +169,7 @@ test_telemetry_disable() {
     # Run with telemetry disabled
     RUNE_TELEMETRY_DISABLED=true RUNE_DEBUG=true $BINARY_PATH status >> "$temp_log" 2>&1
     
-    if grep -q "Telemetry enabled: false" "$temp_log"; then
+    if grep -qi "telemetry disabled via env" "$temp_log"; then
         log_success "Telemetry disable works"
     else
         log_error "Telemetry disable failed"
@@ -183,35 +183,35 @@ test_telemetry_disable() {
 
 # Test with real API keys if available
 test_with_real_keys() {
-    if [ -n "$RUNE_TEST_SEGMENT_WRITE_KEY" ] || [ -n "$RUNE_TEST_SENTRY_DSN" ]; then
-        log_info "Testing with real API keys..."
+    if [ -n "$RUNE_TEST_OTLP_ENDPOINT" ] || [ -n "$RUNE_TEST_SENTRY_DSN" ]; then
+        log_info "Testing with telemetry endpoints..."
         
         local temp_log=$(mktemp)
         
         # Set test environment
-        export RUNE_SEGMENT_WRITE_KEY="$RUNE_TEST_SEGMENT_WRITE_KEY"
-        export RUNE_SENTRY_DSN="$RUNE_TEST_SENTRY_DSN"
+        if [ -n "$RUNE_TEST_OTLP_ENDPOINT" ]; then export RUNE_OTLP_ENDPOINT="$RUNE_TEST_OTLP_ENDPOINT"; fi
+        if [ -n "$RUNE_TEST_SENTRY_DSN" ]; then export RUNE_SENTRY_DSN="$RUNE_TEST_SENTRY_DSN"; fi
         
-        # Generate events with real keys
+        # Generate events with real endpoints
         RUNE_DEBUG=true $BINARY_PATH debug telemetry >> "$temp_log" 2>&1
         
-        if grep -q "Tracking event: debug_test_event" "$temp_log"; then
-            log_success "Real API key test passed"
-            log_info "Check your analytics dashboards for test events"
+        if grep -q "tracking event" "$temp_log"; then
+            log_success "Telemetry event generation OK"
+            log_info "Check your OTLP collector and/or Sentry project for test events"
         else
-            log_error "Real API key test failed"
+            log_error "Telemetry event generation failed"
             cat "$temp_log"
             rm -f "$temp_log"
             return 1
         fi
         
         # Clean up environment
-        unset RUNE_SEGMENT_WRITE_KEY
+        unset RUNE_OTLP_ENDPOINT
         unset RUNE_SENTRY_DSN
         
         rm -f "$temp_log"
     else
-        log_info "Skipping real API key test (no keys provided)"
+        log_info "Skipping endpoint test (no endpoints provided)"
     fi
 }
 
@@ -219,11 +219,11 @@ test_with_real_keys() {
 test_network_connectivity() {
     log_info "Testing network connectivity..."
     
-    # Test Segment API
-    if curl -s --head --max-time 5 "https://api.segment.io" > /dev/null 2>&1; then
-        log_success "Segment API is reachable"
+    # Test OTLP default Collector path (if local dev)
+    if curl -s --head --max-time 5 "http://localhost:4318/v1/logs" > /dev/null 2>&1; then
+        log_success "Local OTLP endpoint is reachable"
     else
-        log_warning "Segment API is not reachable (network issue?)"
+        log_warning "Local OTLP endpoint is not reachable (set RUNE_OTLP_ENDPOINT to your collector if needed)"
     fi
     
     # Test Sentry API
@@ -279,12 +279,12 @@ Test Results:
 - Performance impact: ✅
 
 Configuration:
-- Embedded keys: Available
-- Test keys: ${RUNE_TEST_SEGMENT_WRITE_KEY:+Available}${RUNE_TEST_SEGMENT_WRITE_KEY:-Not provided}
+- OTLP test endpoint: ${RUNE_TEST_OTLP_ENDPOINT:+Provided}${RUNE_TEST_OTLP_ENDPOINT:-Not provided}
+- Sentry test DSN: ${RUNE_TEST_SENTRY_DSN:+Provided}${RUNE_TEST_SENTRY_DSN:-Not provided}
 - Debug mode: Functional
 
 Recommendations:
-1. Monitor analytics dashboards for test events
+1. Monitor your OTLP collector for test logs
 2. Verify event properties and timing
 3. Check error rates in Sentry
 4. Monitor performance impact in production
@@ -330,7 +330,7 @@ main() {
     log_info "All tests passed. Telemetry system is working correctly."
     echo
     log_info "Next steps:"
-    echo "  1. Check your Segment workspace for test events"
+    echo "  1. Check your OTLP collector for test logs"
     echo "  2. Check your Sentry project for test breadcrumbs"
     echo "  3. Monitor production telemetry for any issues"
     echo "  4. Review the generated report for details"

@@ -30,13 +30,12 @@ set -e
 echo "=== Testing Telemetry Build Process ==="
 
 # Set test environment variables (using the same keys as build-with-telemetry.sh)
-export RUNE_SEGMENT_WRITE_KEY="ZkEZXHRWH96y8EviNkbYJUByqGR9QI4G"
+export RUNE_OTLP_ENDPOINT="http://localhost:4318/v1/logs"
 export RUNE_SENTRY_DSN="https://3b20acb23bbbc5958448bb41900cdca2@sentry.fergify.work/10"
 export VERSION="test-build"
 
 echo "Environment variables set:"
-echo "  RUNE_SEGMENT_WRITE_KEY: ${RUNE_SEGMENT_WRITE_KEY:0:10}..."
-echo "  RUNE_SENTRY_DSN: ${RUNE_SENTRY_DSN:0:30}..."
+echo "  RUNE_OTLP_ENDPOINT: ${RUNE_OTLP_ENDPOINT}"echo "  RUNE_SENTRY_DSN: ${RUNE_SENTRY_DSN:0:30}..."
 echo "  VERSION: $VERSION"
 
 # Test GoReleaser build (snapshot mode)

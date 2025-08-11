@@ -238,7 +238,7 @@ integrations:
 integrations:
   telemetry:
     enabled: true
-    segment_write_key: "" # Set via environment
+    otlp_endpoint: "" # Set via environment (RUNE_OTLP_ENDPOINT)
     sentry_dsn: "" # Set via environment
     collect_errors: true
     collect_usage: true
@@ -251,7 +251,7 @@ Sensitive values should be set via environment variables:
 
 ```bash
 # Telemetry
-export RUNE_SEGMENT_WRITE_KEY="your-key"
+export RUNE_OTLP_ENDPOINT="http://localhost:4318/v1/logs"
 export RUNE_SENTRY_DSN="your-dsn"
 
 # Integrations

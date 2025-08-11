@@ -3,116 +3,90 @@ package telemetry
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"runtime"
 	"time"
 
 	"github.com/ferg-cod3s/rune/internal/config"
+	"github.com/ferg-cod3s/rune/internal/otellogger"
 	"github.com/getsentry/sentry-go"
-	"github.com/segmentio/analytics-go/v3"
 )
 
 type Client struct {
-	segmentClient analytics.Client
 	sentryEnabled bool
 	enabled       bool
 	userID        string
 	sessionID     string
+	otelLogger    *otellogger.OtelLogger
 }
 
-func NewClient(userSegmentKey, userSentryDSN string) *Client {
+func NewClient(userSentryDSN string) *Client {
 	// Check if telemetry is disabled via environment variable or config
 	enabled := os.Getenv("RUNE_TELEMETRY_DISABLED") != "true"
-
-	// Debug logging
-	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Telemetry enabled: %v\n", enabled)
-		fmt.Printf("DEBUG: User Segment Key: %s\n", maskKey(userSegmentKey))
-		fmt.Printf("DEBUG: User Sentry DSN: %s\n", maskKey(userSentryDSN))
-	}
 
 	// Generate or load user ID (anonymous)
 	userID := getUserID()
 
-	// Use provided runtime keys - no fallback to embedded secrets
-	finalSegmentKey := userSegmentKey
-	finalSentryDSN := userSentryDSN
+	debugMode := os.Getenv("RUNE_DEBUG") == "true"
 
-	// Debug logging for final values
-	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Final Segment Key: %s\n", maskKey(finalSegmentKey))
-		fmt.Printf("DEBUG: Final Sentry DSN: %s\n", maskKey(finalSentryDSN))
-		fmt.Printf("DEBUG: User ID: %s\n", userID)
+	if debugMode {
+		// Use structured logging for debug output
+		log := slog.Default()
+		log.Debug("telemetry init",
+			"enabled", enabled,
+			"user_sentry_dsn", maskKey(userSentryDSN),
+			"user_id", userID,
+		)
 	}
 
 	client := &Client{
 		enabled:       enabled,
 		userID:        userID,
-		sentryEnabled: finalSentryDSN != "",
+		sentryEnabled: userSentryDSN != "",
 		sessionID:     generateSessionID(),
 	}
 
-	// Initialize Segment client if enabled and write key provided
-	if enabled && finalSegmentKey != "" {
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Initializing Segment client with key: %s\n", maskKey(finalSegmentKey))
+	if !enabled {
+		if debugMode {
+			slog.Default().Info("telemetry disabled via env", "env", "RUNE_TELEMETRY_DISABLED")
 		}
-		segmentClient := analytics.New(finalSegmentKey)
-		client.segmentClient = segmentClient
-	} else {
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Segment client not initialized - enabled: %v, key provided: %v\n", enabled, finalSegmentKey != "")
-		}
-		if !enabled {
-			fmt.Printf("INFO: Telemetry disabled via RUNE_TELEMETRY_DISABLED environment variable\n")
-		} else if finalSegmentKey == "" {
-			fmt.Printf("INFO: Segment analytics not available - no API key configured\n")
+		return client
+	}
+
+	// Initialize OpenTelemetry logging with Sentry integration
+	otelConfig := &otellogger.OtelLoggerConfig{
+		SentryDSN:      userSentryDSN,
+		ServiceName:    "rune",
+		ServiceVersion: getVersion(),
+		Environment:    getEnvironment(),
+		DebugMode:      debugMode,
+		OTLPEndpoint:   os.Getenv("RUNE_OTLP_ENDPOINT"), // Allow override via env var
+	}
+
+	// Check for additional OTLP configuration
+	if otelConfig.OTLPEndpoint == "" {
+		// Default to localhost for development, but can be overridden
+		if otelConfig.Environment == "development" {
+			otelConfig.OTLPEndpoint = "http://localhost:4318/v1/logs"
+		} else {
+			// Disable OTLP by default in production unless explicitly configured
+			otelConfig.DisableOTLP = true
 		}
 	}
 
-	// Initialize Sentry if enabled and DSN provided
-	if enabled && finalSentryDSN != "" {
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Initializing Sentry with DSN: %s\n", maskKey(finalSentryDSN))
+	otelLogger, err := otellogger.Initialize(otelConfig)
+	if err != nil {
+		if debugMode {
+			slog.Default().Debug("otel init failed", "error", err)
 		}
-		err := sentry.Init(sentry.ClientOptions{
-			Dsn:              finalSentryDSN,
-			Environment:      getEnvironment(),
-			Release:          getVersion(),
-			AttachStacktrace: true,
-			BeforeSend: func(event *sentry.Event, hint *sentry.EventHint) *sentry.Event {
-				// Add user context
-				event.User = sentry.User{
-					ID: userID,
-				}
-				// Add app context
-				event.Contexts["app"] = map[string]interface{}{
-					"name":    "rune",
-					"version": getVersion(),
-				}
-				event.Contexts["os"] = map[string]interface{}{
-					"name":    runtime.GOOS,
-					"version": getOSVersion(),
-				}
-				return event
-			},
-		})
-		if err != nil {
-			if os.Getenv("RUNE_DEBUG") == "true" {
-				fmt.Printf("DEBUG: Sentry initialization failed: %v\n", err)
-			}
-			fmt.Printf("WARNING: Sentry error tracking initialization failed - error reporting disabled\n")
-			// Silently fail for telemetry initialization
-			client.sentryEnabled = false
-		} else if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Sentry initialized successfully\n")
-		}
+		slog.Default().Warn("otel logging init failed - using local logging only")
+		// Continue without OpenTelemetry but keep basic telemetry working
+		client.otelLogger = nil
 	} else {
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Sentry not initialized - enabled: %v, DSN provided: %v\n", enabled, finalSentryDSN != "")
-		}
-		if enabled && finalSentryDSN == "" {
-			fmt.Printf("INFO: Sentry error tracking not available - no DSN configured\n")
+		client.otelLogger = otelLogger
+		if debugMode {
+			slog.Default().Debug("otel logging initialized successfully")
 		}
 	}
 
@@ -122,58 +96,34 @@ func NewClient(userSegmentKey, userSentryDSN string) *Client {
 func (c *Client) Track(event string, properties map[string]interface{}) {
 	if !c.enabled {
 		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Telemetry disabled, not tracking event: %s\n", event)
+			slog.Default().Debug("telemetry disabled - not tracking event", "event", event)
 		}
 		return
 	}
 
 	if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Tracking event: %s\n", event)
+		slog.Default().Debug("tracking event", "event", event)
 	}
 
-	// Add default properties
-	if properties == nil {
-		properties = make(map[string]interface{})
+	// Convert properties to slog attributes
+	attrs := []interface{}{"event_name", event}
+	for key, value := range properties {
+		attrs = append(attrs, key, value)
 	}
 
 	// Add system context
-	properties["app_name"] = "rune"
-	properties["app_version"] = getVersion()
-	properties["os_name"] = runtime.GOOS
-	properties["os_version"] = getOSVersion()
+	attrs = append(attrs,
+		"app_name", "rune",
+		"app_version", getVersion(),
+		"os_name", runtime.GOOS,
+		"os_version", getOSVersion(),
+		"user_id", c.userID,
+		"session_id", c.sessionID,
+	)
 
-	// Send to Segment if available
-	if c.segmentClient != nil {
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Sending to Segment: %s\n", event)
-		}
-		err := c.segmentClient.Enqueue(analytics.Track{
-			UserId:     c.userID,
-			Event:      event,
-			Properties: properties,
-			Timestamp:  time.Now(),
-		})
-		if err != nil && os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Segment enqueue error: %v\n", err)
-		}
-	} else if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Segment client not available for event: %s\n", event)
-	}
-
-	// Send to Sentry as breadcrumb for context
-	if c.sentryEnabled {
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Adding Sentry breadcrumb: %s\n", event)
-		}
-		sentry.AddBreadcrumb(&sentry.Breadcrumb{
-			Message:   event,
-			Category:  "telemetry",
-			Level:     sentry.LevelInfo,
-			Data:      properties,
-			Timestamp: time.Now(),
-		})
-	} else if os.Getenv("RUNE_DEBUG") == "true" {
-		fmt.Printf("DEBUG: Sentry not enabled for event: %s\n", event)
+	// Log with OpenTelemetry
+	if c.otelLogger != nil {
+		c.otelLogger.LogEvent(slog.LevelInfo, event, attrs...)
 	}
 }
 
@@ -182,24 +132,22 @@ func (c *Client) TrackError(err error, command string, properties map[string]int
 		return
 	}
 
-	if properties == nil {
-		properties = make(map[string]interface{})
+	// Convert properties to slog attributes
+	attrs := []interface{}{"command", command}
+	for key, value := range properties {
+		attrs = append(attrs, key, value)
 	}
 
-	properties["error"] = err.Error()
-	properties["command"] = command
-	properties["error_type"] = fmt.Sprintf("%T", err)
+	// Add system context
+	attrs = append(attrs,
+		"user_id", c.userID,
+		"session_id", c.sessionID,
+	)
 
-	// Track error event in Segment
-	c.Track("error", properties)
-
-	// Send to Sentry for error tracking
-	if c.sentryEnabled {
-		sentry.WithScope(func(scope *sentry.Scope) {
-			scope.SetTag("command", command)
-			scope.SetContext("error_details", properties)
-			sentry.CaptureException(err)
-		})
+	// Log with OpenTelemetry
+	if c.otelLogger != nil {
+		message := fmt.Sprintf("Command failed: %s", command)
+		c.otelLogger.LogError(err, message, attrs...)
 	}
 }
 
@@ -208,13 +156,19 @@ func (c *Client) TrackCommand(command string, duration time.Duration, success bo
 		return
 	}
 
-	properties := map[string]interface{}{
-		"command":  command,
-		"duration": duration.Milliseconds(),
-		"success":  success,
+	// Debug console log for tests and local visibility
+	if os.Getenv("RUNE_DEBUG") == "true" {
+		slog.Default().Debug("tracking event", "event", "command_executed", "command", command, "success", success, "duration_ms", duration.Milliseconds())
 	}
 
-	c.Track("command_executed", properties)
+	// Emit an OpenTelemetry log event for command execution
+	if c.otelLogger != nil {
+		c.otelLogger.LogEvent(slog.LevelInfo, "command_executed",
+			"command", command,
+			"duration_ms", duration.Milliseconds(),
+			"success", success,
+		)
+	}
 
 	// Add performance monitoring to Sentry
 	if c.sentryEnabled {
@@ -242,18 +196,21 @@ func (c *Client) TrackCommand(command string, duration time.Duration, success bo
 }
 
 func (c *Client) Close() {
-	if c.segmentClient != nil {
-		// Flush any pending events before closing
-		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Flushing Segment events before close\n")
-		}
-		c.segmentClient.Close()
-	}
+	// Flush Sentry events
 	if c.sentryEnabled {
 		if os.Getenv("RUNE_DEBUG") == "true" {
-			fmt.Printf("DEBUG: Flushing Sentry events before close\n")
+			slog.Default().Debug("flushing Sentry events before close")
 		}
 		sentry.Flush(5 * time.Second) // Increased timeout for better reliability
+	}
+
+	// Shutdown OpenTelemetry logger provider if initialized
+	if c.otelLogger != nil {
+		if os.Getenv("RUNE_DEBUG") == "true" {
+			slog.Default().Debug("shutting down OpenTelemetry logger provider")
+		}
+		_ = c.otelLogger.Close()
+		c.otelLogger = nil
 	}
 }
 

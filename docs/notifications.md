@@ -37,9 +37,12 @@ settings:
 
 ## Testing Notifications
 
-You can test your notification setup using the built-in test command:
+You can test your notification setup using the built-in test commands:
 
 ```bash
+# Diagnose notification tooling and setup on your OS
+rune debug notifications
+
 # Test all notification types
 rune test notifications
 

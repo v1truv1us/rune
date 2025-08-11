@@ -127,8 +127,7 @@ test-scripts: test-telemetry test-auto-tmux
 build-telemetry:
 	@echo "Building $(BINARY_NAME) with runtime telemetry support..."
 	@echo "NOTE: Telemetry keys are loaded at runtime from environment variables or config file"
-	@echo "      Set RUNE_SEGMENT_WRITE_KEY and RUNE_SENTRY_DSN environment variables"
-	@echo "      or configure them in ~/.rune/config.yaml"
+	@echo "      Set RUNE_OTLP_ENDPOINT and/or RUNE_SENTRY_DSN environment variables"	@echo "      or configure them in ~/.rune/config.yaml"
 	@mkdir -p $(BUILD_DIR)
 	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PATH)
 	@echo "Testing telemetry integration..."

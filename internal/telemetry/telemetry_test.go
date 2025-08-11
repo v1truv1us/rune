@@ -12,26 +12,22 @@ import (
 func TestNewClient(t *testing.T) {
 	tests := []struct {
 		name            string
-		segmentKey      string
 		sentryDSN       string
 		envDisabled     string
 		expectedEnabled bool
 	}{
 		{
-			name:            "valid keys",
-			segmentKey:      "test_segment_key",
+			name:            "valid sentry dsn",
 			sentryDSN:       "https://test@sentry.io/123",
 			expectedEnabled: true,
 		},
 		{
-			name:            "empty keys",
-			segmentKey:      "",
+			name:            "empty dsn",
 			sentryDSN:       "",
 			expectedEnabled: true, // Still enabled, just no external services
 		},
 		{
 			name:            "telemetry disabled via env",
-			segmentKey:      "test_segment_key",
 			sentryDSN:       "https://test@sentry.io/123",
 			envDisabled:     "true",
 			expectedEnabled: false,
@@ -46,7 +42,7 @@ func TestNewClient(t *testing.T) {
 				defer os.Unsetenv("RUNE_TELEMETRY_DISABLED")
 			}
 
-			client := NewClient(tt.segmentKey, tt.sentryDSN)
+			client := NewClient(tt.sentryDSN)
 
 			require.NotNil(t, client)
 			assert.Equal(t, tt.expectedEnabled, client.enabled)

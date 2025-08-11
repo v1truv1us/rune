@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Rune is a developer-first CLI productivity platform written in Go that automates daily work rituals, enforces healthy work-life boundaries, and integrates seamlessly with existing developer workflows. It's built using Cobra for CLI functionality, Viper for configuration management, and includes telemetry via Segment and Sentry.
+Rune is a developer-first CLI productivity platform written in Go that automates daily work rituals, enforces healthy work-life boundaries, and integrates seamlessly with existing developer workflows. It's built using Cobra for CLI functionality, Viper for configuration management, with telemetry via OpenTelemetry (OTLP HTTP logs) and Sentry.
 
 ## Architecture
 
@@ -27,7 +27,7 @@ Rune is a developer-first CLI productivity platform written in Go that automates
 - **Viper** for configuration management
 - **BBolt** for local database storage
 - **Sentry** for error tracking
-- **Segment** for analytics
+- **OpenTelemetry (OTLP logs)** for usage analytics
 
 ### Entry Point
 
@@ -86,11 +86,11 @@ Rune uses YAML configuration at `~/.rune/config.yaml` with the following structu
 ## Telemetry Integration
 
 Rune includes optional telemetry for usage analytics and error reporting:
-- **Segment** for usage analytics
+- **OpenTelemetry (OTLP logs)** for usage analytics
 - **Sentry** for error tracking
-- **No keys embedded by default** - telemetry keys must be provided at runtime
+- **No keys embedded by default** - telemetry endpoints/keys must be provided at runtime
 - Keys loaded from:
-  1. Environment variables: `RUNE_SEGMENT_WRITE_KEY`, `RUNE_SENTRY_DSN`
+  1. Environment variables: `RUNE_OTLP_ENDPOINT`, `RUNE_SENTRY_DSN`
   2. Config file: `~/.rune/config.yaml` under `integrations.telemetry`
 - Telemetry can be disabled via `RUNE_TELEMETRY_DISABLED=true`
 - Debug mode: `RUNE_DEBUG=true`

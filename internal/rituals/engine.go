@@ -11,6 +11,57 @@ import (
 	"github.com/ferg-cod3s/rune/internal/config"
 )
 
+// filterEnvironment removes sensitive environment variables before passing to subprocesses
+func filterEnvironment(env []string) []string {
+	// Define sensitive prefixes and exact names to filter out
+	sensitiveSubstrings := []string{
+		"AWS_", "AZURE_", "GOOGLE_", "GCP_", "GCLOUD_", "DO_", "DIGITALOCEAN_",
+		"SECRET", "TOKEN", "KEY", "PASSWORD", "PASS", "PRIVATE", "SSH_", "AUTH", "CREDENTIAL", "SESSION", "COOKIE", "BEARER",
+	}
+	sensitiveExact := map[string]struct{}{
+		"RUNE_SENTRY_DSN":    {},
+		"GITHUB_TOKEN":       {},
+		"NPM_TOKEN":          {},
+		"NETLIFY_AUTH_TOKEN": {},
+		"VERCEL_TOKEN":       {},
+	}
+
+	filtered := make([]string, 0, len(env))
+	for _, kv := range env {
+		// kv is in the form KEY=VALUE
+		key := kv
+		if idx := strings.IndexByte(kv, '='); idx >= 0 {
+			key = kv[:idx]
+		}
+
+		// Allowlist Rune-specific runtime flags that are safe
+		if key == "RUNE_DEBUG" || key == "RUNE_ENV" {
+			filtered = append(filtered, kv)
+			continue
+		}
+
+		// Filter exact matches
+		if _, ok := sensitiveExact[key]; ok {
+			continue
+		}
+
+		upperKey := strings.ToUpper(key)
+		blocked := false
+		for _, sub := range sensitiveSubstrings {
+			if strings.Contains(upperKey, sub) {
+				blocked = true
+				break
+			}
+		}
+		if blocked {
+			continue
+		}
+
+		filtered = append(filtered, kv)
+	}
+	return filtered
+}
+
 // Engine handles ritual execution
 type Engine struct {
 	config *config.Config
@@ -92,8 +143,8 @@ func (e *Engine) executeCommand(cmd config.Command, _ string) error {
 	// Create the command
 	execCmd := exec.CommandContext(ctx, parts[0], parts[1:]...)
 
-	// Set up environment
-	execCmd.Env = os.Environ()
+	// Set up environment with filtered variables to avoid leaking secrets
+	execCmd.Env = filterEnvironment(os.Environ())
 
 	if cmd.Background {
 		// For background commands, just start them

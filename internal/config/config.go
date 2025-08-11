@@ -17,6 +17,7 @@ type Config struct {
 	Projects     []Project    `yaml:"projects" mapstructure:"projects"`
 	Rituals      Rituals      `yaml:"rituals" mapstructure:"rituals"`
 	Integrations Integrations `yaml:"integrations" mapstructure:"integrations"`
+	Logging      Logging      `yaml:"logging" mapstructure:"logging"`
 }
 
 // Settings contains global application settings
@@ -91,9 +92,16 @@ type CalendarIntegration struct {
 
 // TelemetryIntegration contains telemetry-related settings
 type TelemetryIntegration struct {
-	Enabled         bool   `yaml:"enabled" mapstructure:"enabled"`
-	SegmentWriteKey string `yaml:"segment_write_key" mapstructure:"segment_write_key"`
-	SentryDSN       string `yaml:"sentry_dsn" mapstructure:"sentry_dsn"`
+	Enabled   bool   `yaml:"enabled" mapstructure:"enabled"`
+	SentryDSN string `yaml:"sentry_dsn" mapstructure:"sentry_dsn"`
+}
+
+// Logging contains logging configuration
+type Logging struct {
+	Level     string `yaml:"level" mapstructure:"level"`           // debug, info, warn, error
+	Format    string `yaml:"format" mapstructure:"format"`         // text, json
+	Output    string `yaml:"output" mapstructure:"output"`         // stdout, stderr, or file path
+	ErrorFile string `yaml:"error_file" mapstructure:"error_file"` // JSON file for structured error logging
 }
 
 // Load loads the configuration from the default location or specified file

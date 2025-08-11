@@ -64,9 +64,12 @@ goreleaser release --clean
 - Graceful failure - telemetry errors don't affect CLI functionality
 
 ### Configuration
-Set your telemetry write key:
+Configure telemetry endpoints:
 ```bash
-export RUNE_TELEMETRY_WRITE_KEY="your-segment-write-key"
+# OpenTelemetry OTLP logs endpoint (optional)
+export RUNE_OTLP_ENDPOINT="http://localhost:4318/v1/logs"
+# Sentry DSN (optional)
+export RUNE_SENTRY_DSN="https://public@sentry.io/project"
 ```
 
 ### Disable Telemetry
@@ -81,10 +84,10 @@ export RUNE_TELEMETRY_DISABLED=true
 - Push code to GitHub
 - Set up repository secrets if needed
 
-### 2. Set Up Telemetry Service
-- Sign up for Segment, Mixpanel, or similar
-- Get your write key
-- Set `RUNE_TELEMETRY_WRITE_KEY` environment variable
+### 2. Set Up Telemetry
+- Set up an OpenTelemetry Collector (or use a managed observability platform) for logs
+- Configure `RUNE_OTLP_ENDPOINT` to point to your Collector's logs endpoint
+- Optionally configure Sentry DSN via `RUNE_SENTRY_DSN` for errors and performance
 
 ### 3. Create Homebrew Tap (Optional)
 ```bash

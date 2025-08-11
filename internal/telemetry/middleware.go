@@ -10,8 +10,8 @@ import (
 var globalClient *Client
 
 // Initialize sets up the global telemetry client
-func Initialize(segmentWriteKey, sentryDSN string) {
-	globalClient = NewClient(segmentWriteKey, sentryDSN)
+func Initialize(sentryDSN string) {
+	globalClient = NewClient(sentryDSN)
 }
 
 // TrackCommand tracks command execution

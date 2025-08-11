@@ -8,7 +8,7 @@ import (
 
 // BenchmarkClientTrack measures the performance of event tracking
 func BenchmarkClientTrack(b *testing.B) {
-	client := NewClient("test_key", "")
+	client := NewClient("")
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -25,7 +25,7 @@ func BenchmarkClientTrack(b *testing.B) {
 
 // BenchmarkClientTrackCommand measures command tracking performance
 func BenchmarkClientTrackCommand(b *testing.B) {
-	client := NewClient("test_key", "")
+	client := NewClient("")
 	duration := 50 * time.Millisecond
 
 	b.ResetTimer()
@@ -36,7 +36,7 @@ func BenchmarkClientTrackCommand(b *testing.B) {
 
 // BenchmarkClientTrackError measures error tracking performance
 func BenchmarkClientTrackError(b *testing.B) {
-	client := NewClient("test_key", "")
+	client := NewClient("")
 	err := fmt.Errorf("benchmark test error")
 
 	b.ResetTimer()
@@ -51,7 +51,7 @@ func BenchmarkClientTrackError(b *testing.B) {
 
 // BenchmarkMiddlewareTrack measures global middleware performance
 func BenchmarkMiddlewareTrack(b *testing.B) {
-	Initialize("test_key", "")
+	Initialize("")
 	defer Close()
 
 	b.ResetTimer()
@@ -84,7 +84,7 @@ func BenchmarkSessionIDGeneration(b *testing.B) {
 func BenchmarkClientCreation(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		client := NewClient("test_key", "https://test@sentry.io/123")
+		client := NewClient("https://test@sentry.io/123")
 		_ = client
 	}
 }
@@ -110,7 +110,7 @@ func BenchmarkDisabledClient(b *testing.B) {
 
 // BenchmarkCommandStartEnd measures start/end command tracking
 func BenchmarkCommandStartEnd(b *testing.B) {
-	client := NewClient("", "") // No external services for benchmark
+	client := NewClient("") // No external services for benchmark
 	duration := 25 * time.Millisecond
 
 	b.ResetTimer()

@@ -131,21 +131,29 @@ func (nm *NotificationManager) SendIdleDetected(idleDuration time.Duration) erro
 // macOS implementation using terminal-notifier (fallback to osascript)
 func (nm *NotificationManager) sendMacOS(notification Notification) error {
 	// Try terminal-notifier first (more reliable)
-	if nm.tryTerminalNotifier(notification) == nil {
+	if err := nm.tryTerminalNotifier(notification); err == nil {
 		return nil
 	}
 
 	// Fallback to osascript
 	script := fmt.Sprintf(`
-display notification "%s" with title "%s" sound name "%s"
+ display notification "%s" with title "%s" sound name "%s"
 `, notification.Message, notification.Title, nm.getSoundName(notification))
 
 	cmd := exec.Command("osascript", "-e", script)
-	return cmd.Run()
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to send macOS notification. Consider installing terminal-notifier via Homebrew: 'brew install terminal-notifier'. Original error: %w", err)
+	}
+	return nil
 }
 
 // tryTerminalNotifier attempts to use terminal-notifier for macOS notifications
 func (nm *NotificationManager) tryTerminalNotifier(notification Notification) error {
+	// Ensure terminal-notifier is available
+	if _, err := exec.LookPath("terminal-notifier"); err != nil {
+		return fmt.Errorf("terminal-notifier not found")
+	}
+
 	args := []string{
 		"-title", notification.Title,
 		"-message", notification.Message,
