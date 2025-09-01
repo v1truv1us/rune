@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Nothing yet
 
-## [0.2.0] - 2025-08-31
+## [0.2.0-beta.7] - 2025-08-31
 
 ### Added
 - **Interactive Ritual System**: Full support for interactive commands with TTY allocation
