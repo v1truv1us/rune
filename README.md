@@ -339,3 +339,31 @@ See [TODO.md](TODO.md) for current development priorities and [PRD.md](PRD.md) f
 ---
 
 **Cast your daily runes and master your workflow** ✨
+
+## Codeflow Workflow - Claude Code
+
+This project is set up for Claude Code with native slash commands.
+
+### Available Commands
+
+- `/research` - Comprehensive codebase and documentation analysis
+- `/plan` - Create detailed implementation plans
+- `/execute` - Implement plans with verification
+- `/test` - Generate comprehensive test suites
+- `/document` - Create user guides and API documentation
+- `/commit` - Create structured git commits
+- `/review` - Validate implementations against plans
+
+### Usage
+
+Simply use the slash commands directly in Claude Code:
+
+```
+/research "Analyze the authentication system for potential OAuth integration"
+
+/plan "Create implementation plan based on the research findings"
+
+/execute "Implement the OAuth integration following the plan"
+```
+
+Commands are located in `.claude/commands/` and can be customized for this project.

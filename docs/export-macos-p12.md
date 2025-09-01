@@ -44,6 +44,21 @@ When working with Apple code signing, you will encounter both `.cer` and `.p12` 
 
 ## 1a. Alternative: Export via Terminal (CLI)
 
+### Quick Bash Script (for automation)
+
+A ready-to-use script is available in this repo:
+
+```bash
+./scripts/export-apple-identity.sh "Apple Development: Your Name" output.p12
+```
+
+- The first argument is a substring of the certificate's Common Name (CN).
+- The second argument is the output .p12 file path.
+- The script will prompt for a password to protect the .p12 file.
+
+See the script for more details and usage instructions.
+
+
 Use these commands when you prefer the terminal. Make sure you are in a GUI session (not over SSH) and that your certificate in “My Certificates” shows an attached private key.
 
 ### Quick method: export identities (fastest if you only have one)

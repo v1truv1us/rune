@@ -129,6 +129,158 @@ func TestConfig_Validate(t *testing.T) {
 			wantErr: true,
 			errMsg:  "detect patterns cannot be empty",
 		},
+		{
+			name: "template with empty session name",
+			config: Config{
+				Version: 1,
+				Settings: Settings{
+					WorkHours:     8.0,
+					BreakInterval: 50 * time.Minute,
+					IdleThreshold: 10 * time.Minute,
+				},
+				Rituals: Rituals{
+					Templates: map[string]TmuxTemplate{
+						"test-template": {
+							SessionName: "", // Empty session name
+							Windows: []TmuxWindow{
+								{Name: "main", Panes: []string{"vim"}},
+							},
+						},
+					},
+				},
+			},
+			wantErr: true,
+			errMsg:  "session_name cannot be empty",
+		},
+		{
+			name: "template with empty window name",
+			config: Config{
+				Version: 1,
+				Settings: Settings{
+					WorkHours:     8.0,
+					BreakInterval: 50 * time.Minute,
+					IdleThreshold: 10 * time.Minute,
+				},
+				Rituals: Rituals{
+					Templates: map[string]TmuxTemplate{
+						"test-template": {
+							SessionName: "test-session",
+							Windows: []TmuxWindow{
+								{Name: "", Panes: []string{"vim"}}, // Empty window name
+							},
+						},
+					},
+				},
+			},
+			wantErr: true,
+			errMsg:  "window[0] name cannot be empty",
+		},
+		{
+			name: "command references undefined template",
+			config: Config{
+				Version: 1,
+				Settings: Settings{
+					WorkHours:     8.0,
+					BreakInterval: 50 * time.Minute,
+					IdleThreshold: 10 * time.Minute,
+				},
+				Rituals: Rituals{
+					Start: RitualSet{
+						Global: []Command{
+							{
+								Name:         "test",
+								Command:      "echo test",
+								Interactive:  true,
+								TmuxTemplate: "nonexistent-template", // References undefined template
+							},
+						},
+					},
+					Templates: map[string]TmuxTemplate{}, // Empty templates
+				},
+			},
+			wantErr: true,
+			errMsg:  "references undefined template",
+		},
+		{
+			name: "interactive command without tmux configuration (PTY fallback)",
+			config: Config{
+				Version: 1,
+				Settings: Settings{
+					WorkHours:     8.0,
+					BreakInterval: 50 * time.Minute,
+					IdleThreshold: 10 * time.Minute,
+				},
+				Rituals: Rituals{
+					Start: RitualSet{
+						Global: []Command{
+							{
+								Name:        "test",
+								Command:     "echo test",
+								Interactive: true,
+								// Missing both TmuxTemplate and TmuxSession - should use PTY fallback
+							},
+						},
+					},
+				},
+			},
+			wantErr: false, // PTY fallback is now allowed
+		},
+		{
+			name: "valid interactive configuration with template",
+			config: Config{
+				Version: 1,
+				Settings: Settings{
+					WorkHours:     8.0,
+					BreakInterval: 50 * time.Minute,
+					IdleThreshold: 10 * time.Minute,
+				},
+				Rituals: Rituals{
+					Start: RitualSet{
+						Global: []Command{
+							{
+								Name:         "test",
+								Command:      "echo test",
+								Interactive:  true,
+								TmuxTemplate: "test-template",
+							},
+						},
+					},
+					Templates: map[string]TmuxTemplate{
+						"test-template": {
+							SessionName: "test-session",
+							Windows: []TmuxWindow{
+								{Name: "main", Panes: []string{"vim ."}},
+							},
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "valid interactive configuration with session",
+			config: Config{
+				Version: 1,
+				Settings: Settings{
+					WorkHours:     8.0,
+					BreakInterval: 50 * time.Minute,
+					IdleThreshold: 10 * time.Minute,
+				},
+				Rituals: Rituals{
+					Start: RitualSet{
+						Global: []Command{
+							{
+								Name:        "test",
+								Command:     "echo test",
+								Interactive: true,
+								TmuxSession: "custom-session",
+							},
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

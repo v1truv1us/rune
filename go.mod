@@ -5,6 +5,8 @@ go 1.23.0
 toolchain go1.24.5
 
 require (
+	github.com/GianlucaP106/gotmux v0.5.0
+	github.com/creack/pty v1.1.24
 	github.com/getsentry/sentry-go v0.35.0
 	github.com/getsentry/sentry-go/otel v0.34.1
 	github.com/spf13/cobra v1.9.1
@@ -17,6 +19,7 @@ require (
 	go.opentelemetry.io/otel/log v0.13.0
 	go.opentelemetry.io/otel/sdk v1.37.0
 	go.opentelemetry.io/otel/sdk/log v0.13.0
+	golang.org/x/term v0.34.0
 )
 
 require (
@@ -44,7 +47,7 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/net v0.41.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.27.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect

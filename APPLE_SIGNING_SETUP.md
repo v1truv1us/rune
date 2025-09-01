@@ -8,9 +8,52 @@ This document explains how to set up Apple Developer ID code signing and notariz
 2. **Apple Developer ID Certificate**: A valid Developer ID Application certificate from Apple
 3. **App Store Connect API Key**: For notarization service
 
+---
+
+## Understanding .cer vs .p12 Files
+
+When working with Apple code signing, you will encounter both `.cer` and `.p12` files. They serve different purposes:
+
+### What is a `.cer` file?
+- **.cer** stands for certificate.
+- Contains the **public key** and certificate holder info.
+- Downloaded from the Apple Developer portal after creating a certificate.
+- **Does not contain the private key** (cannot be used for signing on its own).
+
+### What is a `.p12` file?
+- **.p12** (PKCS#12) is a password-protected file containing both the **public certificate** and the **private key**.
+- Required for code signing and exporting certificates to other machines or CI systems.
+- Created by exporting your certificate and private key from Keychain Access.
+
+### Why does Apple only give you a `.cer` file?
+- The **private key** is generated and stored locally on your Mac when you create a Certificate Signing Request (CSR).
+- Apple only issues the public certificate (`.cer`).
+- You must combine the `.cer` with your private key (in Keychain) to export a `.p12`.
+
+### Summary Table
+
+| File Type | Contains           | Use Case                | How to Get It                |
+|-----------|--------------------|-------------------------|------------------------------|
+| `.cer`    | Public certificate | Verifying identity      | Download from Apple portal   |
+| `.p12`    | Cert + Private key | Code signing, exporting | Export from Keychain Access  |
+
+### How to Export a .p12 File from Keychain Access
+
+1. **Double-click your downloaded `.cer` file** to add it to Keychain Access (if not already present).
+2. Open **Keychain Access** (`/Applications/Utilities/Keychain Access.app`).
+3. In the left sidebar, select **"login"** and **"My Certificates"**.
+4. Find your certificate (should show a disclosure triangle; expanding it reveals the private key).
+5. **Right-click the certificate** and choose **Export**.
+6. Select **.p12** as the file format, choose a filename, and click **Save**.
+7. Set a strong password when prompted (youâ€™ll need this for CI/CD or GitHub secrets).
+
+You now have a `.p12` file containing both your certificate and private key, suitable for code signing and automation workflows.
+
+---
+
 ## Required GitHub Secrets
 
-Add the following secrets to your GitHub repository (Settings ’ Secrets and variables ’ Actions):
+Add the following secrets to your GitHub repository (Settings ï¿½ Secrets and variables ï¿½ Actions):
 
 ### Code Signing Secrets
 
@@ -45,7 +88,7 @@ base64 -i certificate.p12 | pbcopy
 ### 3. Create App Store Connect API Key
 
 1. Go to [App Store Connect](https://appstoreconnect.apple.com/)
-2. Navigate to Users and Access ’ Keys
+2. Navigate to Users and Access ï¿½ Keys
 3. Create a new API key with "Developer" role
 4. Download the .p8 key file
 5. Note the Key ID and Issuer ID

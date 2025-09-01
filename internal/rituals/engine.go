@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/ferg-cod3s/rune/internal/config"
+	"github.com/ferg-cod3s/rune/internal/tmux"
 )
 
 // filterEnvironment removes sensitive environment variables before passing to subprocesses
@@ -64,14 +65,29 @@ func filterEnvironment(env []string) []string {
 
 // Engine handles ritual execution
 type Engine struct {
-	config *config.Config
+	config         *config.Config
+	tmuxClient     *tmux.Client
+	ptySupport     bool
+	activeSessions map[string]*tmux.Client
 }
 
 // NewEngine creates a new ritual engine
 func NewEngine(cfg *config.Config) *Engine {
-	return &Engine{
-		config: cfg,
+	engine := &Engine{
+		config:         cfg,
+		activeSessions: make(map[string]*tmux.Client),
+		ptySupport:     true, // Assume PTY support is available by default
 	}
+
+	// Try to initialize tmux client
+	if tmux.IsAvailable() {
+		client, err := tmux.NewClient()
+		if err == nil {
+			engine.tmuxClient = client
+		}
+	}
+
+	return engine
 }
 
 // ExecuteStartRituals executes start rituals for the given project
@@ -127,9 +143,35 @@ func (e *Engine) executeCommands(commands []config.Command, scope string) error 
 }
 
 // executeCommand executes a single command
-func (e *Engine) executeCommand(cmd config.Command, _ string) error {
+func (e *Engine) executeCommand(cmd config.Command, scope string) error {
 	fmt.Printf("  ⚡ %s...", cmd.Name)
 
+	// Check if this is an interactive command
+	if cmd.Interactive {
+		return e.executeInteractiveCommand(cmd, scope)
+	}
+
+	return e.executeStandardCommand(cmd)
+}
+
+// executeInteractiveCommand dispatches interactive commands to appropriate handlers
+func (e *Engine) executeInteractiveCommand(cmd config.Command, scope string) error {
+	// If tmux template is specified, use template system
+	if cmd.TmuxTemplate != "" {
+		return e.executeTmuxCommand(cmd, scope)
+	}
+
+	// If tmux session is specified, use session management
+	if cmd.TmuxSession != "" {
+		return e.executeTmuxCommand(cmd, scope)
+	}
+
+	// Fallback to PTY for direct interactive commands
+	return e.executePTYCommand(cmd)
+}
+
+// executeStandardCommand executes a standard non-interactive command
+func (e *Engine) executeStandardCommand(cmd config.Command) error {
 	// Create context with timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -174,6 +216,15 @@ func (e *Engine) executeCommand(cmd config.Command, _ string) error {
 	}
 
 	return nil
+}
+
+// expandTemplate expands template variables in a string
+func (e *Engine) expandTemplate(template string, variables map[string]string) string {
+	result := template
+	for key, value := range variables {
+		result = strings.ReplaceAll(result, "{{."+key+"}}", value)
+	}
+	return result
 }
 
 // shouldShowOutput determines if command output should be displayed

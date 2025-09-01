@@ -25,6 +25,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Nothing yet
 
+## [0.2.0] - 2025-08-31
+
+### Added
+- **Interactive Ritual System**: Full support for interactive commands with TTY allocation
+- **tmux Integration**: Programmatic tmux session creation and management
+- **Template System**: YAML-based configuration for complex multi-pane development environments
+- **Session Persistence**: Save and restore tmux sessions across Rune restarts  
+- **PTY Support**: Direct pseudoterminal allocation for interactive tools like `saml2aws`
+- **Advanced Error Handling**: Graceful degradation when tmux/PTY unavailable
+- **Template Variables**: Dynamic session naming with `{{.Project}}` substitution
+- **Multi-pane Layouts**: Support for various tmux layouts (main-horizontal, tiled, etc.)
+- **Session Lifecycle Management**: Automatic cleanup and conflict resolution
+- **Enhanced Configuration**: Interactive command configuration with validation
+
+### Changed
+- Ritual engine now supports three execution modes: standard, interactive PTY, and tmux
+- Enhanced security with environment variable filtering for interactive commands
+- Improved error messages with troubleshooting guidance
+
+### Security
+- Maintained environment variable filtering to prevent secret leakage in interactive sessions
+- Added session isolation between projects
+
 ## [0.1.0-alpha.4] - 2025-01-09
 
 ### Added

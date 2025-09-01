@@ -1,5 +1,6 @@
 # Developer-Focused Rune Configuration
 # Advanced configuration for software developers with multiple projects
+# Features interactive tmux sessions and development environment templates
 
 version: 1
 
@@ -35,6 +36,12 @@ rituals:
         command: "brew update"
         optional: true
         background: true
+      # Interactive tmux session using a template
+      - name: "Setup Development Environment"
+        command: "echo 'Starting development environment...'"
+        interactive: true           # Enables interactive mode with TTY
+        tmux_template: "fullstack-dev"  # Uses template defined below
+        optional: true
 
     per_project:
       frontend:
@@ -47,6 +54,12 @@ rituals:
         - name: "Start Dev Server"
           command: "pnpm dev"
           background: true
+          optional: true
+        # Interactive session with custom session name
+        - name: "Interactive Development Session" 
+          command: "echo 'Starting interactive frontend development...'"
+          interactive: true                       # Enables interactive mode
+          tmux_session: "frontend-dev-{{.Project}}"  # Custom session name with project variable
           optional: true
 
       backend:
@@ -94,6 +107,38 @@ rituals:
         - name: "Run Security Check"
           command: "gosec ./..."
           optional: true
+
+  # Tmux session templates for interactive development environments
+  templates:
+    fullstack-dev:
+      session_name: "dev-{{.Project}}"
+      windows:
+        - name: "editor"
+          layout: "main-horizontal"
+          panes:
+            - "vim ."
+            - "git status"
+        - name: "frontend"
+          panes:
+            - "cd frontend && npm run dev"
+            - "cd frontend && npm run test:watch"
+        - name: "backend"
+          panes:
+            - "cd backend && go run main.go"
+            - "cd backend && go test ./..."
+        - name: "monitoring"
+          layout: "tiled"
+          panes:
+            - "htop"
+            - "tail -f logs/app.log"
+
+    simple-dev:
+      session_name: "simple-{{.Project}}"
+      windows:
+        - name: "main"
+          panes:
+            - "vim ."
+            - "echo 'Development environment ready'"
 
 integrations:
   git:

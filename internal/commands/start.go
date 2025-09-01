@@ -21,7 +21,12 @@ This command will:
 - Begin time tracking for your work session
 - Execute global start rituals
 - Execute project-specific start rituals (if detected)
+- Launch interactive development environments (tmux sessions, terminals)
 - Enable focus mode (Do Not Disturb) if configured
+
+Interactive rituals create tmux sessions with multi-pane layouts or launch
+interactive terminals for development work. Use 'rune ritual test start' to
+preview what will be executed without running the commands.
 
 If no project is specified, it will be auto-detected from the current directory.`,
 	RunE: runStart,

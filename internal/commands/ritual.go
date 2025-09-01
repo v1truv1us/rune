@@ -15,7 +15,11 @@ var ritualCmd = &cobra.Command{
 	Long: `Manage and test your configured rituals.
 	
 This command provides subcommands to list, run, and test rituals
-without affecting your time tracking.`,
+without affecting your time tracking. Interactive rituals (those with
+'interactive: true') create tmux sessions or terminal environments
+for development work.
+
+Use 'ritual test' to preview interactive commands before execution.`,
 }
 
 var ritualListCmd = &cobra.Command{
@@ -28,7 +32,11 @@ var ritualListCmd = &cobra.Command{
 var ritualTestCmd = &cobra.Command{
 	Use:   "test <start|stop> [project]",
 	Short: "Test a ritual without executing it",
-	Long:  `Test a ritual configuration without actually executing the commands.`,
+	Long:  `Test a ritual configuration without actually executing the commands.
+
+This shows what commands would run, including interactive rituals that would
+create tmux sessions or launch terminals. Useful for validating configuration
+before execution.`,
 	Args:  cobra.RangeArgs(1, 2),
 	RunE:  runRitualTest,
 }
