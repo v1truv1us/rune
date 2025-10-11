@@ -237,3 +237,49 @@ func TestClientStartTransaction(t *testing.T) {
 	transaction := client.StartTransaction("test_transaction", "test_operation")
 	assert.Nil(t, transaction)
 }
+
+func TestMaskKey(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "Empty string",
+			input:    "",
+			expected: "[not provided]",
+		},
+		{
+			name:     "Very short key (1 char)",
+			input:    "a",
+			expected: "[masked]",
+		},
+		{
+			name:     "Short key (7 chars)",
+			input:    "1234567",
+			expected: "[masked]",
+		},
+		{
+			name:     "Exactly 8 chars",
+			input:    "12345678",
+			expected: "1234****5678",
+		},
+		{
+			name:     "Long key",
+			input:    "abcdefghijklmnopqrstuvwxyz",
+			expected: "abcd****wxyz",
+		},
+		{
+			name:     "API key format",
+			input:    "test_live_abc123def456ghi789jkl012mno345pqr678stu901vwx234",
+			expected: "test****x234",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := maskKey(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
