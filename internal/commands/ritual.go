@@ -32,13 +32,13 @@ var ritualListCmd = &cobra.Command{
 var ritualTestCmd = &cobra.Command{
 	Use:   "test <start|stop> [project]",
 	Short: "Test a ritual without executing it",
-	Long:  `Test a ritual configuration without actually executing the commands.
+	Long: `Test a ritual configuration without actually executing the commands.
 
 This shows what commands would run, including interactive rituals that would
 create tmux sessions or launch terminals. Useful for validating configuration
 before execution.`,
-	Args:  cobra.RangeArgs(1, 2),
-	RunE:  runRitualTest,
+	Args: cobra.RangeArgs(1, 2),
+	RunE: runRitualTest,
 }
 
 var ritualRunCmd = &cobra.Command{
