@@ -1,9 +1,23 @@
 package notifications
 
 import (
+	"os"
+	"os/exec"
+	"runtime"
 	"testing"
 	"time"
 )
+
+// hasDisplay returns true if a graphical display is available
+func hasDisplay() bool {
+	return os.Getenv("DISPLAY") != "" || os.Getenv("WAYLAND_DISPLAY") != ""
+}
+
+// hasCommand returns true if the given command is available in PATH
+func hasCommand(cmd string) bool {
+	_, err := exec.LookPath(cmd)
+	return err == nil
+}
 
 func TestNotificationManager_Creation(t *testing.T) {
 	nm := NewNotificationManager(true)
@@ -68,32 +82,59 @@ func TestIsSupported(t *testing.T) {
 	t.Logf("Notifications supported on this platform: %v", supported)
 }
 
+// TestNotificationTypes tests that notifications can actually be sent.
+// This test requires a graphical environment and appropriate notification tools.
 func TestNotificationTypes(t *testing.T) {
+	// Skip if no display available (headless environment)
+	if !hasDisplay() {
+		t.Skip("Skipping notification tests: no display available (headless environment)")
+	}
+
+	// Skip if notify-send not available on Linux
+	if runtime.GOOS == "linux" {
+		if !hasCommand("notify-send") {
+			t.Skip("Skipping notification tests: notify-send not installed (install libnotify)")
+		}
+	}
+
+	// Skip if terminal-notifier not available on macOS (osascript is fallback)
+	if runtime.GOOS == "darwin" {
+		// osascript is always available on macOS, so we can proceed
+		// terminal-notifier is preferred but not required
+		if !hasCommand("terminal-notifier") {
+			t.Log("terminal-notifier not found, using osascript fallback")
+		}
+	}
+
 	nm := NewNotificationManager(true)
 
-	// Test break reminder
-	err := nm.SendBreakReminder(45 * time.Minute)
-	if err != nil {
-		t.Logf("Break reminder error (may be expected on CI): %v", err)
-	}
+	t.Run("BreakReminder", func(t *testing.T) {
+		err := nm.SendBreakReminder(45 * time.Minute)
+		if err != nil {
+			t.Errorf("SendBreakReminder failed: %v", err)
+		}
+	})
 
-	// Test end of day reminder
-	err = nm.SendEndOfDayReminder(7*time.Hour+30*time.Minute, 8.0)
-	if err != nil {
-		t.Logf("End of day reminder error (may be expected on CI): %v", err)
-	}
+	t.Run("EndOfDayReminder", func(t *testing.T) {
+		err := nm.SendEndOfDayReminder(7*time.Hour+30*time.Minute, 8.0)
+		if err != nil {
+			t.Errorf("SendEndOfDayReminder failed: %v", err)
+		}
+	})
 
-	// Test session complete
-	err = nm.SendSessionComplete(2*time.Hour, "test-project")
-	if err != nil {
-		t.Logf("Session complete error (may be expected on CI): %v", err)
-	}
+	t.Run("SessionComplete", func(t *testing.T) {
+		err := nm.SendSessionComplete(2*time.Hour, "test-project")
+		if err != nil {
+			t.Errorf("SendSessionComplete failed: %v", err)
+		}
+	})
 
-	// Test idle detected
-	err = nm.SendIdleDetected(10 * time.Minute)
-	if err != nil {
-		t.Logf("Idle detected error (may be expected on CI): %v", err)
-	}
+	t.Run("IdleDetected", func(t *testing.T) {
+		err := nm.SendIdleDetected(10 * time.Minute)
+		if err != nil {
+			t.Errorf("SendIdleDetected failed: %v", err)
+		}
+	})
 }
 
 func TestGetSoundName(t *testing.T) {
@@ -147,5 +188,26 @@ func TestGetUrgencyLevel(t *testing.T) {
 		if result != test.expected {
 			t.Errorf("getUrgencyLevel(%v) = %q, expected %q", test.priority, result, test.expected)
 		}
+	}
+}
+
+// TestTestNotification tests the TestNotification method.
+func TestTestNotification(t *testing.T) {
+	// Skip if no display available (headless environment)
+	if !hasDisplay() {
+		t.Skip("Skipping test notification: no display available (headless environment)")
+	}
+
+	// Skip if notify-send not available on Linux
+	if runtime.GOOS == "linux" {
+		if !hasCommand("notify-send") {
+			t.Skip("Skipping test notification: notify-send not installed")
+		}
+	}
+
+	nm := NewNotificationManager(true)
+	err := nm.TestNotification()
+	if err != nil {
+		t.Errorf("TestNotification failed: %v", err)
 	}
 }

@@ -140,3 +140,8 @@ cypress/screenshots/
 pnpm-debug.log*
 *.tmp
 *.temp
+
+# Test artifacts and build state
+.ralph-wiggum/
+coverage.txt
+test-results/

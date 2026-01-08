@@ -8,6 +8,8 @@ import (
 	"github.com/ferg-cod3s/rune/internal/notifications"
 )
 
+// TestWindowsFocusAssistIntegration tests Windows Focus Assist functionality.
+// Requires Windows with Focus Assist support.
 func TestWindowsFocusAssistIntegration(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Windows Focus Assist tests only run on Windows")
@@ -17,34 +19,56 @@ func TestWindowsFocusAssistIntegration(t *testing.T) {
 	dndManager := NewDNDManager(nm)
 
 	t.Run("enable_focus_assist", func(t *testing.T) {
+		// Get initial state for cleanup
+		initialEnabled, _ := dndManager.isEnabledWindowsFocusAssist()
+
 		err := dndManager.enableWindowsFocusAssist()
 		if err != nil {
-			// This might fail if we don't have proper permissions or if Focus Assist isn't available
-			t.Logf("Focus Assist enable failed (expected on some systems): %v", err)
-		} else {
-			t.Log("Focus Assist enabled successfully")
+			t.Fatalf("Focus Assist enable failed: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.isEnabledWindowsFocusAssist()
+		if err != nil {
+			t.Errorf("Failed to check Focus Assist status: %v", err)
+		} else if !enabled {
+			t.Errorf("Focus Assist should be enabled after enableWindowsFocusAssist()")
+		}
+
+		// Cleanup: restore initial state
+		if !initialEnabled {
+			_ = dndManager.disableWindowsFocusAssist()
 		}
 	})
 
 	t.Run("check_focus_assist_status", func(t *testing.T) {
 		enabled, err := dndManager.isEnabledWindowsFocusAssist()
 		if err != nil {
-			t.Logf("Focus Assist status check failed (expected on some systems): %v", err)
-		} else {
-			t.Logf("Focus Assist status: %v", enabled)
+			t.Errorf("Focus Assist status check failed: %v", err)
 		}
+		t.Logf("Focus Assist status: %v", enabled)
 	})
 
 	t.Run("disable_focus_assist", func(t *testing.T) {
+		// First enable to ensure we have something to disable
+		_ = dndManager.enableWindowsFocusAssist()
+
 		err := dndManager.disableWindowsFocusAssist()
 		if err != nil {
-			t.Logf("Focus Assist disable failed (expected on some systems): %v", err)
-		} else {
-			t.Log("Focus Assist disabled successfully")
+			t.Fatalf("Focus Assist disable failed: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.isEnabledWindowsFocusAssist()
+		if err != nil {
+			t.Errorf("Failed to check Focus Assist status after disable: %v", err)
+		} else if enabled {
+			t.Errorf("Focus Assist should be disabled after disableWindowsFocusAssist()")
 		}
 	})
 }
 
+// TestWindowsNotificationSettingsIntegration tests Windows notification settings.
 func TestWindowsNotificationSettingsIntegration(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Windows notification tests only run on Windows")
@@ -54,33 +78,56 @@ func TestWindowsNotificationSettingsIntegration(t *testing.T) {
 	dndManager := NewDNDManager(nm)
 
 	t.Run("enable_notification_dnd", func(t *testing.T) {
+		// Get initial state for cleanup
+		initialEnabled, _ := dndManager.isEnabledWindowsNotifications()
+
 		err := dndManager.enableWindowsNotificationSettings()
 		if err != nil {
-			t.Logf("Notification DND enable failed (expected on some systems): %v", err)
-		} else {
-			t.Log("Notification DND enabled successfully")
+			t.Fatalf("Notification DND enable failed: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.isEnabledWindowsNotifications()
+		if err != nil {
+			t.Errorf("Failed to check notification DND status: %v", err)
+		} else if !enabled {
+			t.Errorf("Notification DND should be enabled after enableWindowsNotificationSettings()")
+		}
+
+		// Cleanup: restore initial state
+		if !initialEnabled {
+			_ = dndManager.disableWindowsNotificationSettings()
 		}
 	})
 
 	t.Run("check_notification_status", func(t *testing.T) {
 		enabled, err := dndManager.isEnabledWindowsNotifications()
 		if err != nil {
-			t.Logf("Notification status check failed (expected on some systems): %v", err)
-		} else {
-			t.Logf("Notification DND status: %v", enabled)
+			t.Errorf("Notification status check failed: %v", err)
 		}
+		t.Logf("Notification DND status: %v", enabled)
 	})
 
 	t.Run("disable_notification_dnd", func(t *testing.T) {
+		// First enable to ensure we have something to disable
+		_ = dndManager.enableWindowsNotificationSettings()
+
 		err := dndManager.disableWindowsNotificationSettings()
 		if err != nil {
-			t.Logf("Notification DND disable failed (expected on some systems): %v", err)
-		} else {
-			t.Log("Notification DND disabled successfully")
+			t.Fatalf("Notification DND disable failed: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.isEnabledWindowsNotifications()
+		if err != nil {
+			t.Errorf("Failed to check notification DND status after disable: %v", err)
+		} else if enabled {
+			t.Errorf("Notification DND should be disabled after disableWindowsNotificationSettings()")
 		}
 	})
 }
 
+// TestWindowsDNDMethods tests the main Windows DND methods.
 func TestWindowsDNDMethods(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Windows DND tests only run on Windows")
@@ -90,83 +137,130 @@ func TestWindowsDNDMethods(t *testing.T) {
 	dndManager := NewDNDManager(nm)
 
 	t.Run("enable_windows_dnd", func(t *testing.T) {
+		// Get initial state for cleanup
+		initialEnabled, _ := dndManager.isEnabledWindows()
+
 		err := dndManager.enableWindows()
-		// This should try multiple methods and may succeed with at least one
 		if err != nil {
 			// Check if the error message is informative
 			if !strings.Contains(err.Error(), "Focus Assist") {
 				t.Errorf("Expected informative error message about Focus Assist, got: %v", err)
 			}
-			t.Logf("Windows DND enable failed (expected on some systems): %v", err)
-		} else {
-			t.Log("Windows DND enabled successfully")
+			t.Fatalf("Windows DND enable failed: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.isEnabledWindows()
+		if err != nil {
+			t.Errorf("Failed to check Windows DND status: %v", err)
+		} else if !enabled {
+			t.Errorf("Windows DND should be enabled after enableWindows()")
+		}
+
+		// Cleanup: restore initial state
+		if !initialEnabled {
+			_ = dndManager.disableWindows()
 		}
 	})
 
 	t.Run("check_windows_dnd_status", func(t *testing.T) {
 		enabled, err := dndManager.isEnabledWindows()
 		if err != nil {
-			t.Logf("Windows DND status check failed: %v", err)
-		} else {
-			t.Logf("Windows DND status: %v", enabled)
+			t.Errorf("Windows DND status check failed: %v", err)
 		}
+		t.Logf("Windows DND status: %v", enabled)
 	})
 
 	t.Run("disable_windows_dnd", func(t *testing.T) {
+		// First enable to ensure we have something to disable
+		_ = dndManager.enableWindows()
+
 		err := dndManager.disableWindows()
 		if err != nil {
 			if !strings.Contains(err.Error(), "Focus Assist") {
 				t.Errorf("Expected informative error message about Focus Assist, got: %v", err)
 			}
-			t.Logf("Windows DND disable failed (expected on some systems): %v", err)
-		} else {
-			t.Log("Windows DND disabled successfully")
+			t.Fatalf("Windows DND disable failed: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.isEnabledWindows()
+		if err != nil {
+			t.Errorf("Failed to check Windows DND status after disable: %v", err)
+		} else if enabled {
+			t.Errorf("Windows DND should be disabled after disableWindows()")
 		}
 	})
 }
 
+// TestWindowsDNDCrossPlatform tests cross-platform DND behavior on Windows.
 func TestWindowsDNDCrossPlatform(t *testing.T) {
 	nm := notifications.NewNotificationManager(false)
 	dndManager := NewDNDManager(nm)
 
 	t.Run("enable_dnd_cross_platform", func(t *testing.T) {
+		if runtime.GOOS != "windows" {
+			t.Skip("Skipping Windows cross-platform DND test on non-Windows platform")
+		}
+
+		// Get initial state for cleanup
+		initialEnabled, _ := dndManager.IsEnabled()
+
 		err := dndManager.Enable()
-		if runtime.GOOS == "windows" {
-			// On Windows, this should attempt to enable Focus Assist
-			if err != nil {
-				t.Logf("DND enable failed on Windows (expected on some systems): %v", err)
-			} else {
-				t.Log("DND enabled successfully on Windows")
-			}
-		} else {
-			// On other platforms, test behavior may vary
-			t.Logf("DND enable on %s: %v", runtime.GOOS, err)
+		if err != nil {
+			t.Fatalf("DND enable failed on Windows: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.IsEnabled()
+		if err != nil {
+			t.Errorf("Failed to check DND status: %v", err)
+		} else if !enabled {
+			t.Errorf("DND should be enabled after Enable()")
+		}
+
+		// Cleanup: restore initial state
+		if !initialEnabled {
+			_ = dndManager.Disable()
 		}
 	})
 
 	t.Run("check_dnd_status_cross_platform", func(t *testing.T) {
+		if runtime.GOOS != "windows" {
+			t.Skip("Skipping Windows cross-platform DND status test on non-Windows platform")
+		}
+
 		enabled, err := dndManager.IsEnabled()
 		if err != nil {
-			t.Logf("DND status check failed on %s: %v", runtime.GOOS, err)
-		} else {
-			t.Logf("DND status on %s: %v", runtime.GOOS, enabled)
+			t.Errorf("DND status check failed on Windows: %v", err)
 		}
+		t.Logf("DND status on Windows: %v", enabled)
 	})
 
 	t.Run("disable_dnd_cross_platform", func(t *testing.T) {
+		if runtime.GOOS != "windows" {
+			t.Skip("Skipping Windows cross-platform DND disable test on non-Windows platform")
+		}
+
+		// First enable to ensure we have something to disable
+		_ = dndManager.Enable()
+
 		err := dndManager.Disable()
-		if runtime.GOOS == "windows" {
-			if err != nil {
-				t.Logf("DND disable failed on Windows (expected on some systems): %v", err)
-			} else {
-				t.Log("DND disabled successfully on Windows")
-			}
-		} else {
-			t.Logf("DND disable on %s: %v", runtime.GOOS, err)
+		if err != nil {
+			t.Fatalf("DND disable failed on Windows: %v", err)
+		}
+
+		// Verify it worked
+		enabled, err := dndManager.IsEnabled()
+		if err != nil {
+			t.Errorf("Failed to check DND status after disable: %v", err)
+		} else if enabled {
+			t.Errorf("DND should be disabled after Disable()")
 		}
 	})
 }
 
+// TestWindowsShortcutsSetup tests the shortcuts setup check on Windows.
 func TestWindowsShortcutsSetup(t *testing.T) {
 	nm := notifications.NewNotificationManager(false)
 	dndManager := NewDNDManager(nm)
@@ -188,7 +282,7 @@ func TestWindowsShortcutsSetup(t *testing.T) {
 	})
 }
 
-// Test error handling and edge cases
+// TestWindowsDNDErrorHandling tests error handling and edge cases.
 func TestWindowsDNDErrorHandling(t *testing.T) {
 	nm := notifications.NewNotificationManager(false)
 	dndManager := NewDNDManager(nm)
@@ -224,7 +318,7 @@ func TestWindowsDNDErrorHandling(t *testing.T) {
 	})
 
 	t.Run("test_notification_methods", func(t *testing.T) {
-		// Test that notification methods work properly
+		// Test that notification methods work properly with disabled notifications
 		err := dndManager.SendBreakNotification(30 * 60 * 1000000000) // 30 minutes in nanoseconds
 		if err != nil {
 			t.Errorf("SendBreakNotification failed: %v", err)
@@ -248,6 +342,7 @@ func TestWindowsDNDErrorHandling(t *testing.T) {
 }
 
 // Benchmark tests for Windows DND operations
+
 func BenchmarkWindowsFocusAssistEnable(b *testing.B) {
 	if runtime.GOOS != "windows" {
 		b.Skip("Windows Focus Assist benchmarks only run on Windows")
@@ -277,6 +372,10 @@ func BenchmarkWindowsFocusAssistStatus(b *testing.B) {
 }
 
 func BenchmarkWindowsDNDCrossPlatform(b *testing.B) {
+	if runtime.GOOS != "windows" {
+		b.Skip("Windows DND benchmarks only run on Windows")
+	}
+
 	nm := notifications.NewNotificationManager(false)
 	dndManager := NewDNDManager(nm)
 
