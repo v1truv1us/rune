@@ -112,3 +112,18 @@ Releases are signed using cosign for verification and security:
 - `internal/config/config.go` - Configuration structure and loading
 - `internal/tracking/session.go` - Core time tracking logic
 - `internal/rituals/engine.go` - Automation execution engine
+
+## Recent Learnings
+
+### 2026-02-01: Interactive Environment Management
+- **Learning**: Rune successfully implemented sophisticated interactive tmux automation (bf724c87) - moving beyond basic ritual commands to full development environment orchestration with PTY integration and session persistence. This represents significant maturity in the ritual engine architecture.
+- **Pattern**: Feature verification is critical before documentation - recent commits (5948e322, b604afb2, 073e31df) discovered project is ~85% ready for release when actual code review contradicted initial TODOs. Always verify implementation status against actual codebase.
+- **Gotcha**: Documentation debt can obscure true project state - 4 consecutive docs commits were needed to establish correct understanding of what's actually implemented vs what's planned.
+
+### 2026-02-01: Test Coverage Gap Identified
+- **Learning**: Current test coverage at 62.9% (e71e5057) with specific gaps in telemetry masking and command integration testing. Coverage targets set at 80% overall, 85% for critical modules - clear path defined in a5bf9dd6 and 073e31df.
+- **Pattern**: Test improvement should follow strategic plan (a5bf9dd6 spec) rather than ad-hoc additions - spec defines 4-phase approach with user stories, acceptance criteria, and effort estimates for each phase.
+
+### 2026-02-01: Release Readiness Criteria
+- **Learning**: Project MVP is complete with all core features functional. Release blockers are quality-focused: test coverage gaps, documentation site deployment, and linting tool setup. Version management critical - beta.7 designation (26aa5bac) maintains clear pre-release status.
+- **Pattern**: Quality gates should precede documentation vs ship-now decisions - ensures users interact with tested, well-documented system rather than discovering gaps post-release.
