@@ -387,7 +387,7 @@ func BenchmarkEnableDisableLinux(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		dndManager.enableLinux()
-		dndManager.disableLinux()
+		_ = dndManager.enableLinux()
+		_ = dndManager.disableLinux()
 	}
 }
