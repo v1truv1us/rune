@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/dnd"
 	"github.com/ferg-cod3s/rune/internal/notifications"
 	"github.com/ferg-cod3s/rune/internal/rituals"
@@ -44,7 +43,7 @@ func runStart(cmd *cobra.Command, args []string) error {
 
 	// Load configuration to get idle threshold
 	var tracker *tracking.Tracker
-	cfg, configErr := config.Load()
+	cfg, configErr := loadConfigWithProfile()
 	if configErr != nil {
 		// Use default tracker if config fails to load
 		var err error
@@ -92,7 +91,7 @@ func runStart(cmd *cobra.Command, args []string) error {
 	// Load configuration and execute start rituals (reuse cfg if already loaded)
 	if cfg == nil {
 		var err error
-		cfg, err = config.Load()
+		cfg, err = loadConfigWithProfile()
 		if err != nil {
 			fmt.Printf("⚠ Could not load config for rituals: %v\n", err)
 		}

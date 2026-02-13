@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/ferg-cod3s/rune/internal/colors"
-	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -142,7 +141,7 @@ func listLogFiles() error {
 
 func getLogFilePath() string {
 	// Try to get from config first
-	if cfg, err := config.Load(); err == nil {
+	if cfg, err := loadConfigWithProfile(); err == nil {
 		if cfg.Logging.Output != "" && cfg.Logging.Output != "stdout" && cfg.Logging.Output != "stderr" {
 			return cfg.Logging.Output
 		}

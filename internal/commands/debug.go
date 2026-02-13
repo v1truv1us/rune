@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/telemetry"
 	"github.com/getsentry/sentry-go"
 	"github.com/spf13/cobra"
@@ -74,7 +73,7 @@ func runDebugTelemetry(cmd *cobra.Command, args []string) error {
 
 	// Configuration File
 	fmt.Printf("\n📄 Configuration:\n")
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		fmt.Printf("  Config Load Error: %v\n", err)
 	} else {
@@ -131,7 +130,7 @@ func runDebugKeys(cmd *cobra.Command, args []string) error {
 	fmt.Printf("  RUNE_SENTRY_DSN: %s\n", maskDSN(sentryEnv))
 
 	// Configuration File
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err == nil {
 		fmt.Printf("\n📄 Configuration File:\n")
 		fmt.Printf("  Sentry DSN: %s\n", maskDSN(cfg.Integrations.Telemetry.SentryDSN))
