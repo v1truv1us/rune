@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	cfgFile string
-	version = "dev"
+	cfgFile     string
+	profileName string
+	version     = "dev"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -65,6 +66,7 @@ func init() {
 
 	// Global flags
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.rune/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&profileName, "profile", "", "config profile to use (e.g., work, home)")
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().Bool("no-color", false, "disable colored output")
 	rootCmd.PersistentFlags().Bool("log", false, "print recent logs")
@@ -73,6 +75,7 @@ func init() {
 	_ = viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 	_ = viper.BindPFlag("no-color", rootCmd.PersistentFlags().Lookup("no-color"))
 	_ = viper.BindPFlag("log", rootCmd.PersistentFlags().Lookup("log"))
+	_ = viper.BindPFlag("profile", rootCmd.PersistentFlags().Lookup("profile"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -154,6 +157,15 @@ func maskTelemetryKeyForLogging(key string) string {
 		return "[configured]"
 	}
 	return key[:4] + "****" + key[len(key)-4:]
+}
+
+// loadConfigWithProfile loads config with profile support from the --profile flag
+func loadConfigWithProfile() (*config.Config, error) {
+	profile := viper.GetString("profile")
+	if profile != "" {
+		return config.LoadWithProfile(profile)
+	}
+	return config.Load()
 }
 
 // initColors initializes the color system

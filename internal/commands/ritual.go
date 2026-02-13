@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/rituals"
 	"github.com/ferg-cod3s/rune/internal/tracking"
 	"github.com/spf13/cobra"
@@ -57,7 +56,7 @@ func init() {
 }
 
 func runRitualList(cmd *cobra.Command, args []string) error {
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
 	}
@@ -110,7 +109,7 @@ func runRitualList(cmd *cobra.Command, args []string) error {
 }
 
 func runRitualTest(cmd *cobra.Command, args []string) error {
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
 	}
@@ -131,7 +130,7 @@ func runRitualTest(cmd *cobra.Command, args []string) error {
 }
 
 func runRitualRun(cmd *cobra.Command, args []string) error {
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
 	}

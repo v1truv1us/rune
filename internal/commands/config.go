@@ -127,7 +127,7 @@ func runConfigValidate(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		fmt.Printf("❌ Configuration validation failed: %v\n", err)
 		return nil // Don't return error to avoid double error message
@@ -181,7 +181,7 @@ func runConfigSetupTelemetry(cmd *cobra.Command, args []string) error {
 	}
 
 	// Load existing config or create new one
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		// If config doesn't exist, create a default one
 		cfg = &config.Config{
@@ -391,7 +391,7 @@ func showTelemetryExamples() error {
 	fmt.Println("📋 Current Status")
 	fmt.Println("-----------------")
 
-	if cfg, err := config.Load(); err == nil {
+	if cfg, err := loadConfigWithProfile(); err == nil {
 		fmt.Printf("Telemetry: %s\n", map[bool]string{true: "✅ Enabled", false: "❌ Disabled"}[cfg.Integrations.Telemetry.Enabled])
 		fmt.Printf("Sentry DSN: %s\n", maskTelemetryKey(cfg.Integrations.Telemetry.SentryDSN))
 	} else {

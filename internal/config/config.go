@@ -136,6 +136,166 @@ func Load() (*Config, error) {
 	return &cfg, nil
 }
 
+// LoadWithProfile loads the base configuration and merges a profile if specified
+func LoadWithProfile(profileName string) (*Config, error) {
+	// Load base config first
+	baseCfg, err := Load()
+	if err != nil {
+		return nil, err
+	}
+
+	// If no profile specified, return base config
+	if profileName == "" {
+		return baseCfg, nil
+	}
+
+	// Get profile config path
+	profilePath, err := GetProfilePath(profileName)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if profile exists
+	if _, err := os.Stat(profilePath); os.IsNotExist(err) {
+		return nil, fmt.Errorf("profile '%s' not found at: %s", profileName, profilePath)
+	}
+
+	// Create a new viper instance for profile
+	profileViper := viper.New()
+	profileViper.SetConfigFile(profilePath)
+	profileViper.SetConfigType("yaml")
+
+	if err := profileViper.ReadInConfig(); err != nil {
+		return nil, fmt.Errorf("failed to read profile '%s': %w", profileName, err)
+	}
+
+	// Unmarshal profile config
+	var profileCfg Config
+	if err := profileViper.Unmarshal(&profileCfg); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal profile '%s': %w", profileName, err)
+	}
+
+	// Merge profile into base config
+	mergedCfg := mergeConfigs(baseCfg, &profileCfg)
+
+	// Validate merged config
+	if err := mergedCfg.Validate(); err != nil {
+		return nil, fmt.Errorf("merged config validation failed: %w", err)
+	}
+
+	return mergedCfg, nil
+}
+
+// GetProfilePath returns the path to a profile configuration file
+func GetProfilePath(profileName string) (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("failed to get home directory: %w", err)
+	}
+
+	return filepath.Join(home, ".rune", "profiles", profileName+".yaml"), nil
+}
+
+// mergeConfigs merges profile config into base config
+// Profile values override base values for non-zero/non-empty fields
+func mergeConfigs(base, profile *Config) *Config {
+	merged := *base
+
+	// Merge version if set in profile
+	if profile.Version != 0 {
+		merged.Version = profile.Version
+	}
+
+	// Merge user ID if set in profile
+	if profile.UserID != "" {
+		merged.UserID = profile.UserID
+	}
+
+	// Merge settings
+	if profile.Settings.WorkHours != 0 {
+		merged.Settings.WorkHours = profile.Settings.WorkHours
+	}
+	if profile.Settings.BreakInterval != 0 {
+		merged.Settings.BreakInterval = profile.Settings.BreakInterval
+	}
+	if profile.Settings.IdleThreshold != 0 {
+		merged.Settings.IdleThreshold = profile.Settings.IdleThreshold
+	}
+
+	// Merge notifications (check if any notification setting is explicitly set)
+	// For booleans, we can't distinguish between false and unset, so we merge all
+	merged.Settings.Notifications = profile.Settings.Notifications
+
+	// Merge projects - profile projects append to base
+	if len(profile.Projects) > 0 {
+		merged.Projects = append(merged.Projects, profile.Projects...)
+	}
+
+	// Merge rituals - profile rituals override base
+	if len(profile.Rituals.Start.Global) > 0 {
+		merged.Rituals.Start.Global = profile.Rituals.Start.Global
+	}
+	if len(profile.Rituals.Stop.Global) > 0 {
+		merged.Rituals.Stop.Global = profile.Rituals.Stop.Global
+	}
+
+	// Merge per-project rituals
+	if profile.Rituals.Start.PerProject != nil {
+		if merged.Rituals.Start.PerProject == nil {
+			merged.Rituals.Start.PerProject = make(map[string][]Command)
+		}
+		for k, v := range profile.Rituals.Start.PerProject {
+			merged.Rituals.Start.PerProject[k] = v
+		}
+	}
+	if profile.Rituals.Stop.PerProject != nil {
+		if merged.Rituals.Stop.PerProject == nil {
+			merged.Rituals.Stop.PerProject = make(map[string][]Command)
+		}
+		for k, v := range profile.Rituals.Stop.PerProject {
+			merged.Rituals.Stop.PerProject[k] = v
+		}
+	}
+
+	// Merge templates
+	if profile.Rituals.Templates != nil {
+		if merged.Rituals.Templates == nil {
+			merged.Rituals.Templates = make(map[string]TmuxTemplate)
+		}
+		for k, v := range profile.Rituals.Templates {
+			merged.Rituals.Templates[k] = v
+		}
+	}
+
+	// Merge integrations
+	merged.Integrations.Git = profile.Integrations.Git
+	if profile.Integrations.Slack.Workspace != "" {
+		merged.Integrations.Slack = profile.Integrations.Slack
+	}
+	if profile.Integrations.Calendar.Provider != "" {
+		merged.Integrations.Calendar = profile.Integrations.Calendar
+	}
+	if profile.Integrations.Telemetry.SentryDSN != "" {
+		merged.Integrations.Telemetry = profile.Integrations.Telemetry
+	}
+
+	// Merge logging
+	if profile.Logging.Level != "" {
+		merged.Logging.Level = profile.Logging.Level
+	}
+	if profile.Logging.Format != "" {
+		merged.Logging.Format = profile.Logging.Format
+	}
+	if profile.Logging.Output != "" {
+		merged.Logging.Output = profile.Logging.Output
+	}
+	if profile.Logging.ErrorFile != "" {
+		merged.Logging.ErrorFile = profile.Logging.ErrorFile
+	}
+
+	return &merged
+}
+
 // Validate validates the configuration
 func (c *Config) Validate() error {
 	if c.Version != 1 {

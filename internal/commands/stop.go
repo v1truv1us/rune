@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/dnd"
 	"github.com/ferg-cod3s/rune/internal/notifications"
 	"github.com/ferg-cod3s/rune/internal/rituals"
@@ -59,7 +58,7 @@ func runStop(cmd *cobra.Command, args []string) error {
 	})
 
 	// Load configuration and execute stop rituals
-	cfg, err := config.Load()
+	cfg, err := loadConfigWithProfile()
 	if err != nil {
 		fmt.Printf("⚠ Could not load config for rituals: %v\n", err)
 	} else {

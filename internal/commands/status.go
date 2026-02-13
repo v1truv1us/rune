@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/ferg-cod3s/rune/internal/colors"
-	"github.com/ferg-cod3s/rune/internal/config"
 	"github.com/ferg-cod3s/rune/internal/dnd"
 	"github.com/ferg-cod3s/rune/internal/notifications"
 	"github.com/ferg-cod3s/rune/internal/telemetry"
@@ -103,7 +102,7 @@ func runStatus(cmd *cobra.Command, args []string) error {
 	}
 
 	// Check DND status
-	cfg, _ := config.Load()
+	cfg, _ := loadConfigWithProfile()
 	var notificationEnabled bool
 	if cfg != nil {
 		notificationEnabled = cfg.Settings.Notifications.Enabled
